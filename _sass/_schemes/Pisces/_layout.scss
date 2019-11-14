@@ -1,15 +1,19 @@
-.header {
-  position: relative;
-  margin: 0 auto;
-  width: $main-desktop;
+// .header {
+//   position: relative;
+//   margin: 0 auto;
+//   width: $main-desktop;
 
-  @include tablet() {
-    width: auto;
-  }
-  @include mobile() {
-    width: auto;
-  }
-}
+//   @include tablet() {
+//     width: auto;
+//   }
+//   @include mobile() {
+//     width: auto;
+//   }
+// }
+
+.header{ width: 90%; }
+.container .main-inner { width: 90%; }
+.content-wrap { width: calc(100% - 260px); }
 
 .header-inner {
   position: absolute;
@@ -46,39 +50,39 @@
   }
 }
 
-.container .main-inner {
-  width: $main-desktop;
+// .container .main-inner {
+//   width: $main-desktop;
 
-  @include tablet() {
-    width: auto;
-  }
-  @include mobile() {
-    width: auto;
-  }
-}
+//   @include tablet() {
+//     width: auto;
+//   }
+//   @include mobile() {
+//     width: auto;
+//   }
+// }
 
-.content-wrap {
-  float: right;
-  box-sizing: border-box;
-  padding: $content-desktop-padding;
-  width: $content-desktop;
-  background: white;
-  min-height: 700px;
-  box-shadow: $box-shadow-inner;
-  border-radius: $border-radius-inner;
+// .content-wrap {
+//   float: right;
+//   box-sizing: border-box;
+//   padding: $content-desktop-padding;
+//   width: $content-desktop;
+//   background: white;
+//   min-height: 700px;
+//   box-shadow: $box-shadow-inner;
+//   border-radius: $border-radius-inner;
 
-  @include tablet() {
-    width: 100%;
-    padding: 20px;
-    border-radius: initial;
-  }
-  @include mobile() {
-    width: 100%;
-    padding: 20px;
-    min-height: auto;
-    border-radius: initial;
-  }
-}
+//   @include tablet() {
+//     width: 100%;
+//     padding: 20px;
+//     border-radius: initial;
+//   }
+//   @include mobile() {
+//     width: 100%;
+//     padding: 20px;
+//     min-height: auto;
+//     border-radius: initial;
+//   }
+// }
 
 .sidebar {
   position: static;
