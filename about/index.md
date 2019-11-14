@@ -3,4 +3,4 @@ layout: page
 type: about
 ---
 
-Building...
+I, Jia, a bioinformatic master student of Tohoku.Univ, post my notes and thoughts in the blog.
