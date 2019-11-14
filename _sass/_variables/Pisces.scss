@@ -6,12 +6,15 @@ $body-bg-color                : #f5f7f9;
 
 // Borders
 // --------------------------------------------------
-$box-shadow-inner                 : initial;
-$box-shadow                       : initial;
+// $box-shadow-inner                 : initial;
+// $box-shadow                       : initial;
 
-$border-radius-inner              : initial;
-$border-radius                    : initial;
+// $border-radius-inner              : initial;
+// $border-radius                    : initial;
 
+header{ width: 100%; }
+.container .main-inner { width: 100%; }
+.content-wrap { width: calc(100% - 260px); }
 
 // Header
 // --------------------------------------------------
