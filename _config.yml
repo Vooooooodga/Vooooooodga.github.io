@@ -228,8 +228,7 @@ social_icons:
   # Icon Mappings.
   # KeyMapsToSocialItemKey: NameOfTheIconFromFontAwesome
   GitHub: github
-  知乎: fa-zhihu
-  
+  知乎: zhihu  
 
 
 # Sidebar Avatar
