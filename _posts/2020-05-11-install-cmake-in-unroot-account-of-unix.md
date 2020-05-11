@@ -1,5 +1,5 @@
 ---
-title:Install cmake in unroot account of unix
+title: Install cmake in unroot account of unix
 description: This is a tutorial about how to install softwares in your directory.
 categories:
  - unix
