@@ -24,13 +24,11 @@ $ fastqc: command not found...
 
 原因：这个网址并不可以直接下载，貌似还经过了两次重定向，所以你直接wget是不行的。
 
-参数含义：
+参数意义：
 
- --no-check-certificate表示不校验SSL证书，因为中间的两个302会访问https，会涉及到证书的问题，不校验能快一点，影响不大，
+ --no-check-certificate表示不校验SSL证书，因为中间的两个302会访问https，会涉及到证书的问题，不校验能快一点，影响不大
 
---no-cookies表示不使用cookies,当然首次在header里指定的会带上，后面重定向的就不带了，这个影响也不大，可以不加
-————————————————
-版权声明：本文为CSDN博主「lwgkzl」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/lwgkzl/java/article/details/79889983
+--no-cookies表示不使用cookies,当然首次在header里指定的会带上，后面重定向的就不带了，这个影响也不大
 
-2. 
+
+2. ···我想不起来我是怎么解决的了
