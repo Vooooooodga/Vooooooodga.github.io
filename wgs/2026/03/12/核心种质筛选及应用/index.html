@@ -1,0 +1,1608 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="流程,原理," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="摘要：核心种质（Core Set）是“从海量种质中挑出一个小而精、却能代表整体多样性”的子集，用来解决资源库规模过大、研究/育种样本难以深度分析的矛盾。本文作为“种质资源分析业务”系列总纲，覆盖业务概括、术语、核心指标、应用场景、友商产品概览、分析流程（技术栈/常用软件）与数据要求，并用多目标优化（以 Core Hunter 3 为代表）说明“多样性 vs 代表性”的平衡方法。">
+<meta name="keywords" content="流程, 原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="核心种质筛选及应用">
+<meta property="og:url" content="https://vooooooodga.github.io/wgs/2026/03/12/%E6%A0%B8%E5%BF%83%E7%A7%8D%E8%B4%A8%E7%AD%9B%E9%80%89%E5%8F%8A%E5%BA%94%E7%94%A8/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="摘要：核心种质（Core Set）是“从海量种质中挑出一个小而精、却能代表整体多样性”的子集，用来解决资源库规模过大、研究/育种样本难以深度分析的矛盾。本文作为“种质资源分析业务”系列总纲，覆盖业务概括、术语、核心指标、应用场景、友商产品概览、分析流程（技术栈/常用软件）与数据要求，并用多目标优化（以 Core Hunter 3 为代表）说明“多样性 vs 代表性”的平衡方法。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="核心种质筛选及应用">
+<meta name="twitter:description" content="摘要：核心种质（Core Set）是“从海量种质中挑出一个小而精、却能代表整体多样性”的子集，用来解决资源库规模过大、研究/育种样本难以深度分析的矛盾。本文作为“种质资源分析业务”系列总纲，覆盖业务概括、术语、核心指标、应用场景、友商产品概览、分析流程（技术栈/常用软件）与数据要求，并用多目标优化（以 Core Hunter 3 为代表）说明“多样性 vs 代表性”的平衡方法。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>核心种质筛选及应用 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/wgs/2026/03/12/%E6%A0%B8%E5%BF%83%E7%A7%8D%E8%B4%A8%E7%AD%9B%E9%80%89%E5%8F%8A%E5%BA%94%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            核心种质筛选及应用
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-03-12T17:34:13+08:00">
+                2026-03-12
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-03-13T11:44:53+08:00">
+                  2026-03-13
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/WGS" itemprop="url" rel="index">
+                    <span itemprop="name">WGS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <div id="protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-e5-8f-8a-e5-ba-94-e7-94-a8-form" class="post-protect-form">
+      <p>本页面已设置访问密码，请输入密码查看全文：</p>
+      <input type="password" id="protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-e5-8f-8a-e5-ba-94-e7-94-a8-input" />
+      <button type="button" onclick="window.checkPassword_protect_wgs_2026_03_12_e6_a0_b8_e5_bf_83_e7_a7_8d_e8_b4_a8_e7_ad_9b_e9_80_89_e5_8f_8a_e5_ba_94_e7_94_a8 && window.checkPassword_protect_wgs_2026_03_12_e6_a0_b8_e5_bf_83_e7_a7_8d_e8_b4_a8_e7_ad_9b_e9_80_89_e5_8f_8a_e5_ba_94_e7_94_a8()">确认</button>
+      <p id="protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-e5-8f-8a-e5-ba-94-e7-94-a8-message" style="color:red;"></p>
+    </div>
+    <div id="protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-e5-8f-8a-e5-ba-94-e7-94-a8-content" style="display:none;">
+      <blockquote>
+  <p>摘要：核心种质（Core Set）是“从海量种质中挑出一个小而精、却能代表整体多样性”的子集，用来解决资源库规模过大、研究/育种样本难以深度分析的矛盾。本文作为“种质资源分析业务”系列总纲，覆盖业务概括、术语、核心指标、应用场景、友商产品概览、分析流程（技术栈/常用软件）与数据要求，并用多目标优化（以 Core Hunter 3 为代表）说明“多样性 vs 代表性”的平衡方法。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="本业务的概括">本业务的概括</h3>
+
+<p>“种质资源分析业务”可以理解为：围绕<strong>种质材料（样本）</strong>与其<strong>遗传变异/表型数据</strong>，完成从数据质控、群体理解、代表性子集构建到下游应用交付的一套产品化流程。典型交付物包括但不限于：</p>
+
+<ul>
+  <li><strong>核心种质集合</strong>：用于缩小研究与育种的样本规模，同时尽量保留群体多样性与结构代表性。</li>
+  <li><strong>DNA 指纹图谱/位点面板</strong>：用于品种鉴定、产权保护、合规追溯（常见输出形态为位点列表 + 分型矩阵 + 可视化/二维码等）。</li>
+  <li><strong>群体结构/亲缘关系报告</strong>：PCA、系统发育树、群体结构推断、差异与聚类解释。</li>
+</ul>
+
+<p>本业务的关键难点是把“统计学可解释”与“业务可用/可交付”统一起来：既要在指标上证明核心集“足够代表整体”，也要在应用侧满足育种/管理/合规约束（例如必须覆盖某些地理来源或特定亚群）。</p>
+
+<hr />
+
+<h3 id="基本概念及术语">基本概念及术语</h3>
+
+<ul>
+  <li><strong>种质资源（Germplasm Resources）</strong>：携带可遗传信息、可用于研究与育种的生物材料集合。</li>
+  <li><strong>核心种质（Core Set）</strong>：从原始种质集合中抽取的高度代表性子集，目标是在更小规模下覆盖尽可能多的遗传/表型多样性，并尽量减少冗余。</li>
+  <li><strong>DNA 指纹图谱（DNA Fingerprint Map）</strong>：使用分子标记（常见为 SNP/SSR）为样本建立可复用的“身份标识”，用于鉴定、保护与追溯。</li>
+  <li><strong>代表性（Representativeness/Coverage）</strong>：核心集合对原始集合的覆盖程度；强调“原始集合里的每个个体/类型，都能被核心集合中的某个个体较好地代表”。</li>
+  <li><strong>内部多样性（Internal Diversity）</strong>：核心集合内部个体彼此差异的程度；强调“核心集合自身不要过于相似”。</li>
+</ul>
+
+<hr />
+
+<h3 id="核心评价指标">核心评价指标</h3>
+
+<p>指标建议按“距离覆盖、遗传变异、标记信息量/质控、结构约束”四类组织，便于与不同客户目标对齐。</p>
+
+<h4 id="距离空间类覆盖与代表性">距离/空间类（覆盖与代表性）</h4>
+
+<ol>
+  <li><strong>A-NE（Accession-to-Nearest-Entry mean distance）</strong>
+    <ul>
+      <li><strong>定义</strong>：原始集合中每个个体到核心集合中最近（最相似）个体的距离取平均。</li>
+      <li><strong>解读</strong>：<strong>越低越好</strong>，代表性越强（整体平均“被代表得更近”）。</li>
+    </ul>
+  </li>
+  <li><strong>AL（Average distance to the entire collection）</strong>
+    <ul>
+      <li><strong>定义</strong>：核心集合中每个个体到原始集合所有个体的平均距离，再对核心集合取平均。</li>
+      <li><strong>解读</strong>：通常越低代表覆盖越贴近整体，但解释直观性不如 A-NE。</li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="遗传变异类多样性与变异捕获">遗传变异类（多样性与变异捕获）</h4>
+
+<ol>
+  <li><strong>NA / AR（等位基因数目/丰富度）</strong>：越高越好，衡量变异保留程度。</li>
+  <li><strong>RA（稀有等位基因捕获比例）</strong>：越高越好，对保护稀有遗传资源尤关键。</li>
+  <li><strong>(H_e)（期望杂合度）</strong>：越高通常代表遗传多样性越丰富。</li>
+  <li><strong>Shannon-Wiener 指数 (H’)</strong>：综合丰富度与均匀度；在小样本核心集场景下建议使用无偏估计/校正版本，以降低样本量偏差。</li>
+</ol>
+
+<h4 id="标记信息量与质控指标指纹图谱生信qc常用">标记信息量与质控指标（指纹图谱/生信QC常用）</h4>
+
+<ol>
+  <li><strong>PIC（多态性信息含量）</strong>：衡量单个位点区分个体的能力。经验上 (PIC&gt;0.5) 常视为高多态。</li>
+  <li><strong>MAF（次要等位基因频率）</strong>：用于剔除极低频位点与潜在噪声位点（如设定阈值 (MAF&lt;0.01) 或 (&lt;0.05) 过滤）。</li>
+</ol>
+
+<h4 id="结构约束类业务可用性">结构/约束类（业务可用性）</h4>
+
+<ol>
+  <li><strong>PC（比例贡献）</strong>：核心集各亚群占比与原始集合占比保持一致（或按设定比例）。</li>
+  <li><strong>MC（最小贡献）</strong>：保证每个亚群至少有若干代表进入核心集。</li>
+</ol>
+
+<blockquote>
+  <p>业务建议：把“核心集目标”显式拆成两条线——<strong>代表性（覆盖）</strong>与<strong>内部多样性</strong>。前者优先看 A-NE/AL；后者可用内部距离类指标（如 E-NE/DMIN）或多样性/等位基因类指标做佐证。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="主要应用场景">主要应用场景</h3>
+
+<ol>
+  <li><strong>精准育种</strong>：在可控样本规模内做 GWAS、QTL 定位、全基因组选择（GS），提升发现效率与统计功效。</li>
+  <li><strong>产权保护与合规追溯</strong>：构建标准化指纹图谱，用于品种鉴定、侵权取证与质量追踪（常见为二维码/条码化交付）。</li>
+  <li><strong>资源库管理优化</strong>：识别冗余、降低维护成本、优化保存与更新策略。</li>
+  <li><strong>保护遗传学/保护基因组学</strong>：从濒危或小群体中选取遗传多样性高且结构均衡的个体作为奠基群体。</li>
+  <li><strong>泛基因组研究（Pangenome Selection）</strong>：在结构变异丰富的物种中选择能覆盖主要结构单倍型/变异的代表材料。</li>
+</ol>
+
+<hr />
+
+<h3 id="友商产品情况概览">友商产品情况（概览）</h3>
+
+<p>友商通常以“指纹图谱标准产品 + 群体遗传分析报告 + 位点开发/育种决策支持”的组合交付：</p>
+
+<ul>
+  <li><strong>综合型服务商</strong>：强调从下机数据质控、变异检测、群体分析到 KASP/芯片位点开发的一站式。</li>
+  <li><strong>垂直领域厂商</strong>：更强调把核心种质与功能基因组/育种决策（亲本选择、材料分层）绑定在一起。</li>
+</ul>
+
+<p>差异化思路（可选）：把“核心种质筛选”产品化为<strong>资源管理与研究提效</strong>卖点，把“指纹图谱/位点面板”定位为<strong>下游应用工具链</strong>，用一套可复用的指标体系贯穿两者（代表性、多样性、结构约束、质控）。</p>
+
+<hr />
+
+<h3 id="分析流程技术栈及常用软件">分析流程（技术栈）及常用软件</h3>
+
+<p>这里给出一套可交付的“标准两阶段流程”。核心原则是：先得到<strong>可用的高质量基因型矩阵</strong>，再做核心集优化，最后对结果做“指标 + 可视化 + 业务约束”的三重验收。</p>
+
+<h4 id="输入与质控得到可用的-snp基因型矩阵">输入与质控（得到可用的 SNP/基因型矩阵）</h4>
+
+<ul>
+  <li><strong>数据清洗</strong>：缺失率过滤、样本/位点质量过滤、去除明显异常样本。</li>
+  <li><strong>LD 相关处理</strong>：按项目目标选择 LD pruning（用于结构推断/降维）或保留（用于某些下游分析）。</li>
+  <li><strong>基础结构理解</strong>：PCA/聚类/亲缘关系，用于发现群体分层与潜在批次效应。</li>
+</ul>
+
+<h4 id="核心种质筛选核心集构建--代表性验证">核心种质筛选（核心集构建 + 代表性验证）</h4>
+
+<ol>
+  <li><strong>目标与约束设定</strong>：明确要优先“代表性”还是“内部多样性”，以及是否有结构约束（PC/MC 等）。</li>
+  <li><strong>梯度模拟（推荐）</strong>：按不同比例（如 (10\%\sim 90\%)）构建候选核心集，观察 A-NE、等位基因覆盖等指标的拐点，选择成本/收益最优规模。</li>
+  <li><strong>有效性评估</strong>：
+    <ul>
+      <li><strong>指标对比</strong>：核心集 vs 全集合（A-NE/AL、NA/RA/(H_e)、结构覆盖等）。</li>
+      <li><strong>可视化验证</strong>：PCA/聚类/系统发育树，确保核心集在主要结构上覆盖原始集合的趋势与分布。</li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="下游交付以指纹图谱为例">下游交付（以指纹图谱为例）</h4>
+
+<ul>
+  <li><strong>标记精筛</strong>：更严格的位点标准（例如位点完整度、MAF/PIC 阈值等），形成稳定可复用的位点集/面板。</li>
+  <li><strong>遗传分析与可视化</strong>：树、结构、PCA、分型分布图等。</li>
+  <li><strong>标识生成与交付物</strong>：位点列表、分型矩阵、样本指纹 ID、二维码/条码等。</li>
+</ul>
+
+<h4 id="方法学补充抽样策略与多目标优化以-core-hunter-3-为例">方法学补充：抽样策略与多目标优化（以 Core Hunter 3 为例）</h4>
+
+<p>核心种质构建不是“抽多少”这么简单，更重要的是“按什么目标去选”。常见策略可归纳为：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>方法</th>
+      <th>核心做法</th>
+      <th>优点</th>
+      <th>缺点</th>
+      <th>典型场景</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>简单随机抽样</strong></td>
+      <td>随机选择指定数量个体</td>
+      <td>简单、无系统偏差</td>
+      <td>易漏稀有变异，效率低</td>
+      <td>初步探索、无先验结构</td>
+    </tr>
+    <tr>
+      <td><strong>分层抽样</strong></td>
+      <td>按地理/亚群分层，再按比例抽样</td>
+      <td>保证子群代表</td>
+      <td>依赖分层质量</td>
+      <td>群体结构明显、需均衡覆盖</td>
+    </tr>
+    <tr>
+      <td><strong>基于距离的方法</strong></td>
+      <td>依据遗传/表型距离最大化多样性或代表性</td>
+      <td>目标明确</td>
+      <td>计算量大</td>
+      <td>已有距离矩阵、追求明确目标</td>
+    </tr>
+    <tr>
+      <td><strong>逐步排除/去冗余</strong></td>
+      <td>逐步剔除最相似个体</td>
+      <td>收敛快</td>
+      <td>易偏向某类指标</td>
+      <td>快速缩减规模、资源库去冗余</td>
+    </tr>
+    <tr>
+      <td><strong>等位基因富集</strong></td>
+      <td>最大化等位基因/稀有等位基因覆盖</td>
+      <td>保留变异强</td>
+      <td>可能牺牲结构平衡</td>
+      <td>遗传资源保护导向</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>多目标优化的关键在于把“代表性 vs 多样性”同时纳入目标函数（并可加权/加约束）：</p>
+
+<ul>
+  <li><strong>E-NE（Entry-to-Nearest-Entry mean distance）</strong>：核心集内部多样性，通常 <strong>越高越多样</strong>。</li>
+  <li><strong>A-NE（Accession-to-Nearest-Entry mean distance）</strong>：整体代表性，通常 <strong>越低越代表</strong>。</li>
+</ul>
+
+<h4 id="常用软件参考">常用软件（参考）</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>流程环节</th>
+      <th>软件/工具</th>
+      <th>主要用途</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>变异过滤/基础质控</td>
+      <td><code class="language-plaintext highlighter-rouge">vcftools</code> / <code class="language-plaintext highlighter-rouge">PLINK</code></td>
+      <td>缺失率/MAF/LD 处理、样本与位点过滤</td>
+    </tr>
+    <tr>
+      <td>核心集筛选</td>
+      <td><code class="language-plaintext highlighter-rouge">Core Hunter 3</code> / <code class="language-plaintext highlighter-rouge">GenoCore</code></td>
+      <td>多目标优化或基于指标的核心集构建</td>
+    </tr>
+    <tr>
+      <td>群体结构</td>
+      <td><code class="language-plaintext highlighter-rouge">ADMIXTURE</code></td>
+      <td>祖先成分推断、结构分层</td>
+    </tr>
+    <tr>
+      <td>PCA/矩阵计算</td>
+      <td><code class="language-plaintext highlighter-rouge">SNPRelate</code>（R）</td>
+      <td>高性能 PCA 与相关计算</td>
+    </tr>
+    <tr>
+      <td>系统发育/树</td>
+      <td><code class="language-plaintext highlighter-rouge">FastTree</code></td>
+      <td>快速构建树并辅助解释</td>
+    </tr>
+    <tr>
+      <td>标识生成</td>
+      <td><code class="language-plaintext highlighter-rouge">qrencode</code></td>
+      <td>将指纹信息生成二维码等输出</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="数据要求上游样本要求测序数据要求等">数据要求（上游样本要求、测序数据要求等）</h3>
+
+<p>数据要求建议拆成“样本设计”和“测序与变异数据”两部分，并明确哪些是硬性门槛、哪些可通过算法补救（如缺失可通过 imputation 缓解，但前提是群体结构与参考面板足够支撑）。</p>
+
+<h4 id="上游样本要求样本设计">上游样本要求（样本设计）</h4>
+
+<ul>
+  <li><strong>样本覆盖</strong>：尽量覆盖地理来源、类型/生态型、育种阶段与已知亚群；避免样本集中在单一区域或单一血缘。</li>
+  <li><strong>样本规模</strong>：不宜机械采用“10% 规则”，更推荐用梯度模拟寻找拐点（核心集规模常见在 (5\%\sim 25\%) 波动，取决于结构复杂度与下游目标）。</li>
+  <li><strong>元数据完整性</strong>：地理来源、品种类型、表型记录、批次信息等，会直接影响分层/约束与结果可解释性。</li>
+</ul>
+
+<h4 id="测序与变异数据要求数据形态与深度策略">测序与变异数据要求（数据形态与深度策略）</h4>
+
+<ul>
+  <li><strong>浅层重测序（约 1×–4×）</strong>：适合超大规模初筛；通常需要配合高质量参考面板与可靠 imputation。</li>
+  <li><strong>标准重测序（约 5×–15×）</strong>：行业主流折中方案，适用于多数群体结构与核心集构建任务。</li>
+  <li><strong>高深度测序（约 30× 及以上）</strong>：用于高质量参考基因组、极低频变异或更苛刻的变异检测需求。</li>
+</ul>
+
+<h4 id="技术趋势可选关注">技术趋势（可选关注）</h4>
+
+<ul>
+  <li><strong>图泛基因组（Graph Pangenome）</strong>：面向结构变异丰富物种可降低参考偏差。</li>
+  <li><strong>深度学习变异检测（如 DeepVariant/DeepTrio）</strong>：复杂基因组场景下有潜力提升变异检测精度（需结合成本评估）。</li>
+  <li><strong>基因型填充（Imputation）</strong>：低深度/高缺失矩阵常用；强分层群体可考虑“先聚类、后填充”。</li>
+</ul>
+
+    </div>
+    <script>
+      (function() {
+        var CORRECT = "LC2434";
+        var formId = "protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-e5-8f-8a-e5-ba-94-e7-94-a8-form";
+        var contentId = "protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-e5-8f-8a-e5-ba-94-e7-94-a8-content";
+        var inputId = "protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-e5-8f-8a-e5-ba-94-e7-94-a8-input";
+        var msgId = "protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-e5-8f-8a-e5-ba-94-e7-94-a8-message";
+
+        function check() {
+          var input = document.getElementById(inputId);
+          var msg = document.getElementById(msgId);
+          if (!input) return;
+          if (input.value === CORRECT) {
+            var form = document.getElementById(formId);
+            var content = document.getElementById(contentId);
+            if (form) form.style.display = "none";
+            if (content) content.style.display = "block";
+          } else {
+            if (msg) msg.textContent = "密码错误，请重试。";
+          }
+        }
+
+        window.checkPassword_protect_wgs_2026_03_12_e6_a0_b8_e5_bf_83_e7_a7_8d_e8_b4_a8_e7_ad_9b_e9_80_89_e5_8f_8a_e5_ba_94_e7_94_a8 = check;
+      })();
+    </script>
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/%E6%B5%81%E7%A8%8B" rel="tag"># 流程</a>
+          
+            
+            <a href="/tag/#/%E5%8E%9F%E7%90%86" rel="tag"># 原理</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/wgs/2026/03/11/GWAS-%E6%96%87%E4%BB%B6-%E7%BB%93%E6%9E%9C%E8%A7%A3%E8%AF%BB/" rel="prev" title="GWAS文件、常见结果与可视化解读">
+                GWAS文件、常见结果与可视化解读 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-3"> <a class="nav-link" href="#本业务的概括"> <span class="nav-number">1</span> <span class="nav-text">本业务的概括</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#基本概念及术语"> <span class="nav-number">2</span> <span class="nav-text">基本概念及术语</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#核心评价指标"> <span class="nav-number">3</span> <span class="nav-text">核心评价指标</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#距离空间类覆盖与代表性"> <span class="nav-number">3.1</span> <span class="nav-text">距离/空间类（覆盖与代表性）</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#遗传变异类多样性与变异捕获"> <span class="nav-number">3.2</span> <span class="nav-text">遗传变异类（多样性与变异捕获）</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#标记信息量与质控指标指纹图谱生信qc常用"> <span class="nav-number">3.3</span> <span class="nav-text">标记信息量与质控指标（指纹图谱/生信QC常用）</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#结构约束类业务可用性"> <span class="nav-number">3.4</span> <span class="nav-text">结构/约束类（业务可用性）</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#主要应用场景"> <span class="nav-number">4</span> <span class="nav-text">主要应用场景</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#友商产品情况概览"> <span class="nav-number">5</span> <span class="nav-text">友商产品情况（概览）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#分析流程技术栈及常用软件"> <span class="nav-number">6</span> <span class="nav-text">分析流程（技术栈）及常用软件</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#输入与质控得到可用的-snp基因型矩阵"> <span class="nav-number">6.1</span> <span class="nav-text">输入与质控（得到可用的 SNP/基因型矩阵）</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#核心种质筛选核心集构建--代表性验证"> <span class="nav-number">6.2</span> <span class="nav-text">核心种质筛选（核心集构建 + 代表性验证）</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#下游交付以指纹图谱为例"> <span class="nav-number">6.3</span> <span class="nav-text">下游交付（以指纹图谱为例）</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#方法学补充抽样策略与多目标优化以-core-hunter-3-为例"> <span class="nav-number">6.4</span> <span class="nav-text">方法学补充：抽样策略与多目标优化（以 Core Hunter 3 为例）</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#常用软件参考"> <span class="nav-number">6.5</span> <span class="nav-text">常用软件（参考）</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#数据要求上游样本要求测序数据要求等"> <span class="nav-number">7</span> <span class="nav-text">数据要求（上游样本要求、测序数据要求等）</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#上游样本要求样本设计"> <span class="nav-number">7.1</span> <span class="nav-text">上游样本要求（样本设计）</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#测序与变异数据要求数据形态与深度策略"> <span class="nav-number">7.2</span> <span class="nav-text">测序与变异数据要求（数据形态与深度策略）</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#技术趋势可选关注"> <span class="nav-number">7.3</span> <span class="nav-text">技术趋势（可选关注）</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

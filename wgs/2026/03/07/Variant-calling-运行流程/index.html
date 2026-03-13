@@ -1,0 +1,2899 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="variant calling,流程,软件,参数," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这篇笔记整理了根据项目实战来学习variant calling（SNP和InDel）的流程。">
+<meta name="keywords" content="variant calling, 流程, 软件, 参数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Variant calling 流程">
+<meta property="og:url" content="https://vooooooodga.github.io/wgs/2026/03/07/Variant-calling-%E8%BF%90%E8%A1%8C%E6%B5%81%E7%A8%8B/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="这篇笔记整理了根据项目实战来学习variant calling（SNP和InDel）的流程。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/Pasted image 20260311095854.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Variant calling 流程">
+<meta name="twitter:description" content="这篇笔记整理了根据项目实战来学习variant calling（SNP和InDel）的流程。">
+<meta name="twitter:image" content="/assets/images/Pasted image 20260311095854.png">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>Variant calling 流程 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/wgs/2026/03/07/Variant-calling-%E8%BF%90%E8%A1%8C%E6%B5%81%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            Variant calling 流程
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-03-07T01:00:00+08:00">
+                2026-03-07
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-03-12T16:07:37+08:00">
+                  2026-03-12
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/WGS" itemprop="url" rel="index">
+                    <span itemprop="name">WGS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <p>这篇笔记整理了根据项目实战来学习variant calling（SNP和InDel）的流程。</p>
+
+<h2 id="重测序一键sop配置参数">重测序一键SOP配置参数</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>参考格式</th>
+      <th>意义</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>partition</td>
+      <td>P3</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>only_QC</td>
+      <td>F</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ref_db</td>
+      <td>/path/to/genome_db/Sus_scrofa/Ensembl_V111/03_genome/genome.fa</td>
+      <td>参考基因组序列</td>
+    </tr>
+    <tr>
+      <td>ref_anno</td>
+      <td>/path/to/genome_db/Sus_scrofa/Ensembl_V111/03_genome/genome.gff</td>
+      <td>参考基因组注释</td>
+    </tr>
+    <tr>
+      <td>ref_annotation</td>
+      <td>NA</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>SnpEff_version</td>
+      <td>Sus_scrofa_Ensembl_V111</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><strong>chr_num</strong></td>
+      <td>65</td>
+      <td>若 &gt;65 则认为 scaffold 多，设 <code class="language-plaintext highlighter-rouge">$link="link"</code>，否则 <code class="language-plaintext highlighter-rouge">"no"</code>。</td>
+    </tr>
+    <tr>
+      <td>rmdup</td>
+      <td>T</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>population</td>
+      <td>T</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>tool</td>
+      <td>H</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>node</td>
+      <td>NA</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>interval</td>
+      <td>30</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>maxFailed</td>
+      <td>0</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>maxProc</td>
+      <td>10000</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>INPUT</td>
+      <td>Input</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>CLEANDATA</td>
+      <td>CleanData</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>PROCESSDATA</td>
+      <td>ProcessData</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>OUTPUT</td>
+      <td>Output</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>DONE</td>
+      <td>Done</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>SAMPLE_INFO</td>
+      <td>Sample_Info.txt</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>data_QC_threads</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>n_base_limit</td>
+      <td>5</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>overlap_len_require</td>
+      <td>30</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>length_requried</td>
+      <td>15</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>map_soft</td>
+      <td>GPU</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>mapping_threads</td>
+      <td>4</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>min_seed_len</td>
+      <td>32</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>sort_mem</td>
+      <td>768M</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>rmdup_mem</td>
+      <td>30G</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>max_depth</td>
+      <td>150</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>numGPUs</td>
+      <td>1</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>GPU</td>
+      <td>GPU2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>GATK_threads</td>
+      <td>10</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>GATK_mem</td>
+      <td>20G</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ploidy</td>
+      <td>2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>cut_len</td>
+      <td>5000000</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>cut_num</td>
+      <td>800</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>QD</td>
+      <td>“QD &lt; 2.0”</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>QUAL</td>
+      <td>“QUAL &lt; 30.0”</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>SOR</td>
+      <td>“SOR &gt; 3.0”</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>FS</td>
+      <td>“FS &gt; 60.0”</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>MQ</td>
+      <td>“MQ &lt; 40.0”</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>MQRankSum</td>
+      <td>“MQRankSum &lt; -12.5”</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ReadPosRankSum</td>
+      <td>“ReadPosRankSum &lt; -8.0”</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>QD_indel</td>
+      <td>“QD &lt; 2.0”</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>QUAL_indel</td>
+      <td>“QUAL &lt; 30.0”</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>FS_indel</td>
+      <td>“FS &gt; 200.0”</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ReadPosRankSum_indel</td>
+      <td>“ReadPosRankSum &lt; -20.0”</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>SnpEff_db</td>
+      <td>/path/to/snpEff_4.3/snpEff</td>
+      <td>SnpEff 安装目录</td>
+    </tr>
+    <tr>
+      <td>anno_mem</td>
+      <td>80G</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ud</td>
+      <td>1000</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>SV</td>
+      <td>T</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>CNV</td>
+      <td>T</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>minExpectedGC</td>
+      <td>0.35</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>maxExpectedGC</td>
+      <td>0.55</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>上述参数传递到<code class="language-plaintext highlighter-rouge">ACGT101_Reseq.sh</code>，保存为<code class="language-plaintext highlighter-rouge">parameter_ACGT101_ReSeq.txt</code>文件：</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47<br/>48<br/>49<br/>50<br/>51<br/>52<br/>53<br/>54<br/>55<br/>56<br/>57<br/>58<br/>59<br/>60<br/>61<br/>62<br/>63<br/>64<br/>65<br/>66<br/>67<br/>68<br/>69<br/>70<br/>71<br/>72<br/>73<br/>74<br/>75<br/>76<br/>77<br/>78<br/>79<br/>80<br/>81<br/>82<br/>83<br/>84<br/>85<br/>86<br/>87<br/>88<br/>89<br/>90<br/>91<br/>92<br/>93<br/>94<br/>95<br/>96<br/>97</pre></td><td class="code"><pre class="highlight"><code><span class="c">##------------------核心参数----------------------</span>
+<span class="c">#-----------------分析集群----------------------</span>
+<span class="nv">partition</span><span class="o">=</span>P3
+<span class="c">#-----------------是否只质控项目-------------------</span>
+<span class="c">##如果是只质控项目，后续所有参数都不需要填写</span>
+<span class="nv">only_QC</span><span class="o">=</span>F
+<span class="c">#-------------------参考基因组信息------------------</span>
+<span class="nv">ref_db</span><span class="o">=</span>/path/to/genome_db/Sus_scrofa/Ensembl_V111/03_genome/genome.fa
+<span class="nv">ref_anno</span><span class="o">=</span>/path/to/genome_db/Sus_scrofa/Ensembl_V111/03_genome/genome.gff
+<span class="nv">ref_annotation</span><span class="o">=</span>NA
+<span class="nv">SnpEff_version</span><span class="o">=</span>Sus_scrofa_Ensembl_V111
+
+<span class="c">#-------------------染色体条数-----------</span>
+<span class="nv">chr_num</span><span class="o">=</span>65
+<span class="c">#-------------------是否去dup(非简化基因组项目去dup)-------------------</span>
+<span class="nv">rmdup</span><span class="o">=</span>T
+<span class="c">#--------------------------个体重测序还是群体重测序----------------------</span>
+<span class="nv">population</span><span class="o">=</span>T
+<span class="c">#---------------变异检测方式，UnifiedGenotyper(U) 或者 HaplotypeCaller(H)</span>
+<span class="c">#混池样本一定用U！</span>
+<span class="nv">tool</span><span class="o">=</span>H
+
+
+<span class="c">##------------------集群配置----------------------</span>
+<span class="nv">node</span><span class="o">=</span>NA
+<span class="nv">interval</span><span class="o">=</span>30
+<span class="nv">maxFailed</span><span class="o">=</span>0
+<span class="nv">maxProc</span><span class="o">=</span>10000
+
+<span class="c">##------------------主要文件夹----------------------</span>
+<span class="nv">INPUT</span><span class="o">=</span>Input
+<span class="nv">CLEANDATA</span><span class="o">=</span>CleanData
+<span class="nv">PROCESSDATA</span><span class="o">=</span>ProcessData
+<span class="nv">OUTPUT</span><span class="o">=</span>Output
+<span class="nv">DONE</span><span class="o">=</span>Done
+
+<span class="c">##-----------------样本信息------------------------</span>
+<span class="c">#样本信息文件</span>
+<span class="nv">SAMPLE_INFO</span><span class="o">=</span>Sample_Info.txt
+
+<span class="c">##----------------原始数据质控参数------------------</span>
+<span class="c">#这里的质控参数，一般针对PE150的重测序项目，是不需要修改的</span>
+<span class="nv">data_QC_threads</span><span class="o">=</span>2
+<span class="nv">n_base_limit</span><span class="o">=</span>5
+<span class="nv">overlap_len_require</span><span class="o">=</span>30
+<span class="nv">length_required</span><span class="o">=</span>15
+
+<span class="c">##-------------------比对参数----------------------</span>
+<span class="c">#这里的参数一般也不需要修改，如果基因组特别大，或者有单条染色体特别大，可以把sort_mem改大一些（2G左右）即可</span>
+<span class="nv">map_soft</span><span class="o">=</span>GPU
+<span class="nv">mapping_threads</span><span class="o">=</span>4
+<span class="nv">min_seed_len</span><span class="o">=</span>32
+<span class="nv">sort_mem</span><span class="o">=</span>768M
+<span class="nv">rmdup_mem</span><span class="o">=</span>30G
+
+<span class="c">##-------------------比对结果绘图----------------</span>
+<span class="c">#各深度下位点比例图、各深度下位点比例累积图, 图上展示的横坐标最大深度(仅用于画图，深度高的不会展示出来)</span>
+<span class="nv">max_depth</span><span class="o">=</span>150
+
+<span class="c">##-----------------call变异（SNP &amp; InDel）----------</span>
+<span class="nv">numGPUs</span><span class="o">=</span>1
+<span class="nv">GPU</span><span class="o">=</span>GPU2
+<span class="nv">GATK_threads</span><span class="o">=</span>10
+<span class="nv">GATK_mem</span><span class="o">=</span>20G
+<span class="nv">ploidy</span><span class="o">=</span>2
+<span class="c">#用于切割染色体</span>
+<span class="nv">cut_len</span><span class="o">=</span>5000000
+<span class="c">#用于切割样本数，尽量平均</span>
+<span class="nv">cut_num</span><span class="o">=</span>800
+<span class="c">#------------------SNP过滤--------------------</span>
+<span class="nv">QD</span><span class="o">=</span><span class="s2">"QD &lt; 2.0"</span>
+<span class="nv">QUAL</span><span class="o">=</span><span class="s2">"QUAL &lt; 30.0"</span>
+<span class="nv">SOR</span><span class="o">=</span><span class="s2">"SOR &gt; 3.0"</span>
+<span class="nv">FS</span><span class="o">=</span><span class="s2">"FS &gt; 60.0"</span>
+<span class="nv">MQ</span><span class="o">=</span><span class="s2">"MQ &lt; 40.0"</span>
+<span class="nv">MQRankSum</span><span class="o">=</span><span class="s2">"MQRankSum &lt; -12.5"</span>
+<span class="nv">ReadPosRankSum</span><span class="o">=</span><span class="s2">"ReadPosRankSum &lt; -8.0"</span>
+
+<span class="c">#------------------INDEL过滤---------------------</span>
+<span class="nv">QD_indel</span><span class="o">=</span><span class="s2">"QD &lt; 2.0"</span>
+<span class="nv">QUAL_indel</span><span class="o">=</span><span class="s2">"QUAL &lt; 30.0"</span>
+<span class="nv">FS_indel</span><span class="o">=</span><span class="s2">"FS &gt; 200.0"</span>
+<span class="nv">ReadPosRankSum_indel</span><span class="o">=</span><span class="s2">"ReadPosRankSum &lt; -20.0"</span>
+
+<span class="c">#-------------------SnpEff注释参数----------------</span>
+<span class="nv">SnpEff_db</span><span class="o">=</span>/path/to/snpEff_4.3/snpEff
+<span class="nv">anno_mem</span><span class="o">=</span>80G
+<span class="c">#Set upstream downstream interval length (in base)</span>
+<span class="nv">ud</span><span class="o">=</span>1000
+
+<span class="c">#------------------call SV----------------------</span>
+<span class="nv">SV</span><span class="o">=</span>T
+
+<span class="c">#------------------call CNV---------------------</span>
+<span class="nv">CNV</span><span class="o">=</span>T
+<span class="nv">minExpectedGC</span><span class="o">=</span>0.35
+<span class="nv">maxExpectedGC</span><span class="o">=</span>0.55
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="脚本整体功能">脚本整体功能</h2>
+
+<p><strong>脚本用途</strong>：</p>
+
+<p><code class="language-plaintext highlighter-rouge">ACGT101_ReSeq_4.6_gpu.pl</code> 是一个自动化重测序（Reseq）分析流程，基于 Slurm + Singularity 容器，在集群环境中完成从原始测序数据到变异结果与统计报告的全流程分析。支持：</p>
+
+<ul>
+  <li><strong>单个体或群体重测序</strong></li>
+  <li><strong>CPU 或 GPU 加速比对（Parabricks）</strong></li>
+  <li><strong>GATK UnifiedGenotyper / HaplotypeCaller 两种变异检测模式</strong></li>
+  <li>自动完成 <strong>SNP / InDel / SV / CNV 检测与注释</strong>，并生成各类统计图表和汇总报告。</li>
+</ul>
+
+<hr />
+
+<h2 id="主流程步骤">主流程步骤</h2>
+
+<h3 id="参数读取与环境准备">参数读取与环境准备</h3>
+
+<ul>
+  <li>通过 <code class="language-plaintext highlighter-rouge">-i parameter_ACGT101_ReSeq.txt</code> 读取参数文件（<code class="language-plaintext highlighter-rouge">get_params</code> 子函数）。</li>
+  <li>加载：</li>
+  <li>集群配置（队列、CPU、内存、GPU 等）</li>
+  <li>输入输出目录（<code class="language-plaintext highlighter-rouge">INPUT / CLEANDATA / PROCESSDATA / OUTPUT / DONE</code>）</li>
+  <li>样本信息文件（<code class="language-plaintext highlighter-rouge">SAMPLE_INFO</code>）</li>
+  <li>参考基因组与注释文件</li>
+  <li>各软件路径与容器配置（<code class="language-plaintext highlighter-rouge">config.pl</code> 与 <code class="language-plaintext highlighter-rouge">sing_config.pl</code>）</li>
+  <li>创建必要目录：</li>
+  <li>原始数据：<code class="language-plaintext highlighter-rouge">INPUT</code></li>
+  <li>质控后数据：<code class="language-plaintext highlighter-rouge">CLEANDATA</code></li>
+  <li>中间结果：<code class="language-plaintext highlighter-rouge">PROCESSDATA</code></li>
+  <li>最终结果：<code class="language-plaintext highlighter-rouge">OUTPUT</code></li>
+  <li>标记步骤完成的 <code class="language-plaintext highlighter-rouge">DONE</code> 目录</li>
+  <li>当次运行的 shell、log、error 目录：<code class="language-plaintext highlighter-rouge">sh_xxx / log_xxx / error</code></li>
+</ul>
+
+<h3 id="样本信息与数据列表构建">样本信息与数据列表构建</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">sample_info(SAMPLE_INFO)</code>：</li>
+</ul>
+
+<p>从 <code class="language-plaintext highlighter-rouge">Sample_Info.txt</code> 读取样本名和文库名，输出逗号分隔的样本列表 <code class="language-plaintext highlighter-rouge">smp_list</code>。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">fastq_list</code>：</li>
+  <li>在 <code class="language-plaintext highlighter-rouge">INPUT</code> 下根据 <code class="language-plaintext highlighter-rouge">smp_list</code> 搜索各样本的 <code class="language-plaintext highlighter-rouge">R1/R2</code> fastq.gz，生成 <code class="language-plaintext highlighter-rouge">input_list.txt</code>（样本名与对应双端文件路径）。
+    <ul>
+      <li>输出：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">./input_list.txt</code></li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/fastq_list_PE.done</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>后续在 <code class="language-plaintext highlighter-rouge">CLEANDATA</code> 中再次调用，得到 <code class="language-plaintext highlighter-rouge">cleandata_list.txt</code>。
+    <ul>
+      <li>输出：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/cleandata_list.txt</code></li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/fastq_list_PE.done</code>（同名 done 文件，表示该步骤完成）</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="原始数据质控fastp--fastqc">原始数据质控（fastp + FastQC）</h3>
+
+<ol>
+  <li><strong>fastp 质控（<code class="language-plaintext highlighter-rouge">data_QC</code>）</strong>
+    <ul>
+      <li>对 <code class="language-plaintext highlighter-rouge">input_list.txt</code> 中每个样本的 PE 读长进行质控：</li>
+      <li>去接头、剪切低质量碱基、去 N 碱基等。</li>
+      <li>输出：</li>
+      <li>Clean reads（<code class="language-plaintext highlighter-rouge">CLEANDATA/&lt;sample&gt;/&lt;sample&gt;_CleanData_R1/2.fastq.gz</code>）</li>
+      <li>fastp 统计 <code class="language-plaintext highlighter-rouge">json/html</code>（<code class="language-plaintext highlighter-rouge">OUTPUT/fastp_result</code>）
+        <ul>
+          <li>具体文件名格式：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">CLEANDATA/&lt;sample&gt;/&lt;sample&gt;_CleanData_R1.fastq.gz</code></li>
+      <li><code class="language-plaintext highlighter-rouge">CLEANDATA/&lt;sample&gt;/&lt;sample&gt;_CleanData_R2.fastq.gz</code></li>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/fastp_result/&lt;sample&gt;/&lt;sample&gt;_fastp.json</code></li>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/fastp_result/&lt;sample&gt;/&lt;sample&gt;_fastp.html</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/fastp/&lt;sample&gt;_fastp.done</code></li>
+    </ul>
+  </li>
+  <li><strong>质控统计汇总（<code class="language-plaintext highlighter-rouge">data_stat</code>）</strong>
+    <ul>
+      <li>调用 <code class="language-plaintext highlighter-rouge">fastp_stat.py</code>，对所有样本 fastp 报告进行整合，生成 <code class="language-plaintext highlighter-rouge">OUTPUT/data_stat.txt</code>。
+        <ul>
+          <li>输出：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/data_stat.txt</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/data_stat.done</code></li>
+    </ul>
+  </li>
+  <li><strong>FastQC 质控报告（<code class="language-plaintext highlighter-rouge">data_FastQC</code>）</strong>
+    <ul>
+      <li>对 Clean data 运行 FastQC，输出 zip/html 报告于 <code class="language-plaintext highlighter-rouge">OUTPUT/FastQC_result</code>。
+        <ul>
+          <li>具体文件名格式（每个样本）：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/FastQC_result/&lt;sample&gt;/&lt;sample&gt;_CleanData_R1_fastqc.zip</code></li>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/FastQC_result/&lt;sample&gt;/&lt;sample&gt;_CleanData_R2_fastqc.zip</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/FastQC/&lt;sample&gt;_R1_FastQC.done</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/FastQC/&lt;sample&gt;_R2_FastQC.done</code></li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote>
+  <p>若 <code class="language-plaintext highlighter-rouge">only_QC=T</code>，脚本在比对前退出，只完成 QC 部分。</p>
+</blockquote>
+
+<h3 id="参考基因组处理与索引构建">参考基因组处理与索引构建</h3>
+
+<ol>
+  <li><strong>染色体 GC/长度计算（<code class="language-plaintext highlighter-rouge">ref_GC_len</code>）</strong>
+    <ul>
+      <li>对 <code class="language-plaintext highlighter-rouge">ref_db</code> 计算 GC 含量、序列长度，输出 <code class="language-plaintext highlighter-rouge">genome.fa.len</code>。
+        <ul>
+          <li>输出：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/ref_len/genome.fa.len</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/ref_GC_len.done</code></li>
+    </ul>
+  </li>
+  <li><strong>主要染色体选择与 ID 列表</strong>
+    <ul>
+      <li>统计注释 GFF 中染色体条数 <code class="language-plaintext highlighter-rouge">uu</code>，若 <code class="language-plaintext highlighter-rouge">&gt;65</code> 认为 scaffold 多，需要“连接处理”（<code class="language-plaintext highlighter-rouge">link</code> 模式）。</li>
+      <li>根据 <code class="language-plaintext highlighter-rouge">chr_num</code> 从长度信息中筛选主染色体，生成 <code class="language-plaintext highlighter-rouge">chr_id.txt</code>。
+        <ul>
+          <li>输出：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/ref_len/chr_id.txt</code></li>
+    </ul>
+  </li>
+  <li><strong>参考基因组精简与重命名（<code class="language-plaintext highlighter-rouge">prepare_ref</code>）</strong>
+    <ul>
+      <li>在 <code class="language-plaintext highlighter-rouge">ref_dir/Ref</code> 下生成：</li>
+      <li><code class="language-plaintext highlighter-rouge">ref.genome.fa</code>（按主染色体重排/重命名后的参考）</li>
+      <li><code class="language-plaintext highlighter-rouge">ref.genome.gff</code>（复制原 GFF）</li>
+      <li>重新计算 GC/len
+        <ul>
+          <li>输出（当 <code class="language-plaintext highlighter-rouge">link</code> 模式触发时会生成/使用）：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">&lt;ref_dir&gt;/Ref/ref.genome.fa</code></li>
+      <li><code class="language-plaintext highlighter-rouge">&lt;ref_dir&gt;/Ref/ref.genome.gff</code></li>
+      <li><code class="language-plaintext highlighter-rouge">&lt;ref_dir&gt;/Ref/ref.genome.fa.len</code></li>
+      <li><code class="language-plaintext highlighter-rouge">&lt;ref_dir&gt;/Ref/&lt;原ref文件basename&gt;</code>（拷贝一份原参考到 Ref 目录）</li>
+      <li><code class="language-plaintext highlighter-rouge">&lt;ref_dir&gt;/Ref/id_table.txt</code>（后续坐标还原会用到）</li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/refine_ref.done</code></li>
+    </ul>
+  </li>
+  <li><strong>构建索引</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">bwa_index</code>：<code class="language-plaintext highlighter-rouge">bwa index -a bwtsw ref.genome.fa</code></li>
+      <li><code class="language-plaintext highlighter-rouge">samtools_index</code>：<code class="language-plaintext highlighter-rouge">samtools faidx ref.genome.fa</code></li>
+      <li><code class="language-plaintext highlighter-rouge">picard_index</code>：<code class="language-plaintext highlighter-rouge">CreateSequenceDictionary</code> 生成 <code class="language-plaintext highlighter-rouge">.dict</code>
+        <ul>
+          <li>输出（以 <code class="language-plaintext highlighter-rouge">ref.genome.fa</code> 为例）：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li>BWA：<code class="language-plaintext highlighter-rouge">ref.genome.fa.pac / .amb / .ann / .bwt</code>（以及其它 bwa index 相关文件）</li>
+      <li>samtools：<code class="language-plaintext highlighter-rouge">ref.genome.fa.fai</code></li>
+      <li>Picard：<code class="language-plaintext highlighter-rouge">ref.genome.dict</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/bwa_index.done</code>、<code class="language-plaintext highlighter-rouge">DONE/samtools_index.done</code>、<code class="language-plaintext highlighter-rouge">DONE/picard_index.done</code></li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote>
+  <p>若 scaffold 数量不多（<code class="language-plaintext highlighter-rouge">&lt;=65</code>），则直接使用原始 <code class="language-plaintext highlighter-rouge">ref_db</code>。</p>
+</blockquote>
+
+<h3 id="比对cpu-或-gpu">比对（CPU 或 GPU）</h3>
+
+<ul>
+  <li>判断 <code class="language-plaintext highlighter-rouge">map_soft</code>：</li>
+  <li><strong>CPU：<code class="language-plaintext highlighter-rouge">CPU</code></strong></li>
+  <li><code class="language-plaintext highlighter-rouge">mapping</code>：<code class="language-plaintext highlighter-rouge">bwa mem</code> → <code class="language-plaintext highlighter-rouge">samtools view</code> → <code class="language-plaintext highlighter-rouge">samtools sort</code>，输出 <code class="language-plaintext highlighter-rouge">*.sort.bam</code>。
+    <ul>
+      <li>输出（每个样本）：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.bam</code></li>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.sort.bam</code></li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/mapping/&lt;sample&gt;_sam.done</code>、<code class="language-plaintext highlighter-rouge">DONE/mapping/&lt;sample&gt;_bam.done</code>、<code class="language-plaintext highlighter-rouge">DONE/mapping/&lt;sample&gt;_sort.done</code></li>
+        </ul>
+      </li>
+      <li>备注：中间的 <code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.sam</code> 会在 sort 完成后被清理删除。</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">mark_dup</code>：Picard <code class="language-plaintext highlighter-rouge">MarkDuplicates</code>，输出 <code class="language-plaintext highlighter-rouge">*.rmdup.bam</code> 和 metrics。
+    <ul>
+      <li>输出（每个样本）：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.rmdup.bam</code></li>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.metrics</code></li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/mark_dup/&lt;sample&gt;_mark_dup.done</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>GPU：<code class="language-plaintext highlighter-rouge">GPU</code></strong></li>
+  <li><code class="language-plaintext highlighter-rouge">mapping_gpu</code>：调用 Parabricks <code class="language-plaintext highlighter-rouge">pbrun fq2bam</code>，直接完成比对 + 排序 + MarkDuplicates，输出 <code class="language-plaintext highlighter-rouge">*.rmdup.bam</code>。 (Parabricks是一款由 NVIDIA 开发的基于 GPU 加速的基因组学分析软件套件，专门用于新一代测序 (NGS) 数据处理的二级分析。它通过 GPU 并行计算将传统的 BWA-MEM、GATK、Mutect2 等 CPU 软件的运行速度提升数十倍，能在一小时内完成全基因组 (WGS) 分析。该软件不仅显著降低了计算成本，还保证了与业界标准工具完全一致的准确性，适用于种系变异、体细胞变异、RNA 序列分析等多种应用场景。)
+    <ul>
+      <li>输出（每个样本）：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.rmdup.bam</code></li>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.OUT_DUPLICATE_METRICS.txt</code></li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/mapping/&lt;sample&gt;_sort.markdup.done</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="插入片段比对质量与深度统计">插入片段、比对质量与深度统计</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">insertsize</code>：Picard <code class="language-plaintext highlighter-rouge">CollectInsertSizeMetrics</code>，按样本输出插入片段分布图和表。
+    <ul>
+      <li>输出：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/InsertSize_result/&lt;sample&gt;/&lt;sample&gt;.InsertSizePlot.pdf</code></li>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/InsertSize_result/&lt;sample&gt;/&lt;sample&gt;.InsertSizeMetrics.txt</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">mapped_stat</code>：<code class="language-plaintext highlighter-rouge">samtools flagstat</code>，输出每个样本的比对统计。
+    <ul>
+      <li>输出：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;_aln_stat.txt</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">depth_per_site</code> → <code class="language-plaintext highlighter-rouge">depth_stat</code>：</li>
+  <li><code class="language-plaintext highlighter-rouge">samtools depth</code> 生成碱基水平深度文件。
+    <ul>
+      <li>输出（中间文件，后续可能会被清理）：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.depth</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">depth_stat.pl</code> 汇总成 per-chrom/全基因组平均深度、不同深度的覆盖比例等。
+    <ul>
+      <li>输出：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.mean_depth.txt</code></li>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.depth_frac.txt</code></li>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.depth_frac_cum.txt</code></li>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.sample_mean_depth.txt</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">mean_depth_plot</code> / <code class="language-plaintext highlighter-rouge">depth_frac_plot</code> / <code class="language-plaintext highlighter-rouge">coverage_stat</code> / <code class="language-plaintext highlighter-rouge">coverage_plot</code>：</li>
+  <li>取所有样本或子集（&gt;10 个样本时取 10 个子样本）绘制：</li>
+  <li>每条染色体平均深度柱状图
+    <ul>
+      <li>输出：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/mean_depth_barplot.txt</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>各深度覆盖位点比例曲线图
+    <ul>
+      <li>输出：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/depth_frac.png</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>覆盖度统计与总览图
+    <ul>
+      <li>输出：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/coverage_stat_4plot.txt</code></li>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/coverage_plot.png</code>
+<img src="/assets/images/Pasted image 20260311095854.png" alt="Pasted image 20260311095854" /></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="bam-索引与整体对齐统计汇总">BAM 索引与整体对齐统计汇总</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">index_bam</code>：对 <code class="language-plaintext highlighter-rouge">rmdup.bam</code> 或 <code class="language-plaintext highlighter-rouge">sort.bam</code> 生成 <code class="language-plaintext highlighter-rouge">.bai</code> 索引。
+    <ul>
+      <li>输出（每个样本，取决于 <code class="language-plaintext highlighter-rouge">rmdup</code> 参数）：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.rmdup.bam.bai</code> 或 <code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.sort.bam.bai</code></li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/index_bam/&lt;sample&gt;_index_bam.done</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">mapped_cover_stat</code> / <code class="language-plaintext highlighter-rouge">mapped_cover_statupload</code>：</li>
+  <li>汇总数据量、比对率、去重率、平均深度、覆盖度等到 <code class="language-plaintext highlighter-rouge">mapped_cover_stat.txt</code>。
+    <ul>
+      <li>输出：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/mapped_cover_stat.txt</code></li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/mapped_cover_stat.done</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>调用 PHP/awk 脚本生成可上传的统计表。
+    <ul>
+      <li>输出（项目根目录下）：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">./data_Stat_tmp.txt</code></li>
+          <li><code class="language-plaintext highlighter-rouge">./data_Stat_&lt;run_start_time&gt;.txt</code>（带“文库名称/分析路径/运行时间”等列，供上传/展示）</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="变异检测snp--indel">变异检测：SNP &amp; InDel</h3>
+
+<p>根据 <code class="language-plaintext highlighter-rouge">tool</code> 和 <code class="language-plaintext highlighter-rouge">population</code> 分两大分支。</p>
+
+<h4 id="unifiedgenotyper-模式toolu">UnifiedGenotyper 模式（<code class="language-plaintext highlighter-rouge">tool=U</code>）</h4>
+
+<ol>
+  <li><strong>Realign（<code class="language-plaintext highlighter-rouge">realign</code>）</strong>
+    <ul>
+      <li>对 <code class="language-plaintext highlighter-rouge">rmdup.bam</code> 或 <code class="language-plaintext highlighter-rouge">sort.bam</code> 做 GATK3 <code class="language-plaintext highlighter-rouge">RealignerTargetCreator</code> + <code class="language-plaintext highlighter-rouge">IndelRealigner</code>，输出 <code class="language-plaintext highlighter-rouge">*.realign.bam</code>。
+        <ul>
+          <li>输出（每个样本）：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.realign.intervals</code></li>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.realign.bam</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/realign/&lt;sample&gt;_realign_target.done</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/realign/&lt;sample&gt;_realign.done</code></li>
+    </ul>
+  </li>
+  <li><strong>Call 变异</strong>
+    <ul>
+      <li>若 <code class="language-plaintext highlighter-rouge">population=T</code>：</li>
+      <li><code class="language-plaintext highlighter-rouge">gatk_pop</code>：对所有样本联合调用（按染色体拆分），最后 <code class="language-plaintext highlighter-rouge">CatVariants</code> 合并为 <code class="language-plaintext highlighter-rouge">OUTPUT/pop_variants/pop.vcf</code>。
+        <ul>
+          <li>输出：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">PROCESSDATA/pop_variants/pop.&lt;chr&gt;.gatk.vcf</code>（按染色体拆分的中间 VCF）</li>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/pop_variants/pop.vcf</code>（合并后的群体 VCF）</li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/gatk_pop_chr/&lt;chr&gt;_gatk_pop.done</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/pop_vcf.done</code>
+    - 若 <code class="language-plaintext highlighter-rouge">population=F</code>：
+    - <code class="language-plaintext highlighter-rouge">gatk_single</code>：对每个样本单独调用，输出 <code class="language-plaintext highlighter-rouge">sample.vcf</code>。
+      - 输出（每个样本）：</li>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.vcf</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/gatk_unified_smp/&lt;sample&gt;_gatk_unified_smp.done</code></li>
+    </ul>
+  </li>
+  <li><strong>按类型拆分</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">select_snp_gatk3</code> / <code class="language-plaintext highlighter-rouge">select_indel_gatk3</code>：</li>
+      <li>使用 GATK3 <code class="language-plaintext highlighter-rouge">SelectVariants</code> 将 VCF 拆成 SNP/INDEL VCF。
+        <ul>
+          <li>输出：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">*.snp.vcf</code></li>
+      <li><code class="language-plaintext highlighter-rouge">*.indel.vcf</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/select_snp/*_select_snp.done</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/select_indel/*_select_indel.done</code></li>
+    </ul>
+  </li>
+  <li><strong>变异过滤</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">filter_snp_gatk3</code> / <code class="language-plaintext highlighter-rouge">filter_indel_gatk3</code>：</li>
+      <li>GATK3 <code class="language-plaintext highlighter-rouge">VariantFiltration</code> 打标签，再用 <code class="language-plaintext highlighter-rouge">awk</code> 保留 <code class="language-plaintext highlighter-rouge">PASS</code> 记录，得到 <code class="language-plaintext highlighter-rouge">.filtered.vcf</code>。
+        <ul>
+          <li>输出：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">*.filter_label.vcf</code>（带过滤标签）</li>
+      <li><code class="language-plaintext highlighter-rouge">*.filtered.vcf</code>（只保留 PASS）</li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/filter_snp/*_filter_snp.done</code>、<code class="language-plaintext highlighter-rouge">DONE/filter_snp/*_filter_snp_awk.done</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/filter_indel/*_filter_indel.done</code>、<code class="language-plaintext highlighter-rouge">DONE/filter_indel/*_filter_indel_awk.done</code></li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="haplotypecaller-模式toolh">HaplotypeCaller 模式（<code class="language-plaintext highlighter-rouge">tool=H</code>）</h4>
+
+<ol>
+  <li><strong>GVCF 生成（支持 GPU）</strong>
+    <ul>
+      <li>推荐使用 GPU 版 <code class="language-plaintext highlighter-rouge">gatk_gvcf_gpu</code>：</li>
+      <li>对每个样本的 <code class="language-plaintext highlighter-rouge">rmdup.bam</code> 调用 Parabricks <code class="language-plaintext highlighter-rouge">haplotypecaller</code>，输出 <code class="language-plaintext highlighter-rouge">sample.g.vcf.gz</code>。
+        <ul>
+          <li>输出（每个样本）：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.g.vcf.gz</code></li>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.g.vcf.gz.tbi</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/gatk_gvcf_chr/&lt;sample&gt;_gatk_gvcf.done</code></li>
+      <li><code class="language-plaintext highlighter-rouge">PROCESSDATA/&lt;sample&gt;/</code>（Parabricks 临时目录）</li>
+    </ul>
+  </li>
+  <li><strong>合并 Genotype（<code class="language-plaintext highlighter-rouge">genotype_vcf_pop</code> / <code class="language-plaintext highlighter-rouge">genotype_vcf_single</code>）</strong>
+    <ul>
+      <li>若 <code class="language-plaintext highlighter-rouge">population=T</code>：</li>
+      <li>调用 <code class="language-plaintext highlighter-rouge">easy_JVC.pl</code> 按染色体与区间切分 gVCF，生成多个 <code class="language-plaintext highlighter-rouge">CombineGVCFs</code>/<code class="language-plaintext highlighter-rouge">GenotypeGVCFs</code> 的 shell，最后汇总成 <code class="language-plaintext highlighter-rouge">Final.GenotypeGVCFs.vcf.gz</code>，gunzip 为 <code class="language-plaintext highlighter-rouge">pop.vcf</code>。
+        <ul>
+          <li>输出（群体）：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/gvcfs.list</code></li>
+      <li><code class="language-plaintext highlighter-rouge">PROCESSDATA/pop_variants/gatk/shell/CombineGVCFs.sh</code></li>
+      <li><code class="language-plaintext highlighter-rouge">PROCESSDATA/pop_variants/gatk/shell/GenotypeGVCFs.sh</code></li>
+      <li><code class="language-plaintext highlighter-rouge">PROCESSDATA/pop_variants/gatk/shell/GenotypeGVCFs_cat.sh</code></li>
+      <li><code class="language-plaintext highlighter-rouge">PROCESSDATA/pop_variants/gatk/gatk/Final.GenotypeGVCFs.vcf.gz</code></li>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/pop_variants/pop.vcf</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/pop_vcf_gunzip.done</code>
+    - 若 <code class="language-plaintext highlighter-rouge">population=F</code>：
+    - 对单样本 <code class="language-plaintext highlighter-rouge">GenotypeGVCFs</code> 输出 <code class="language-plaintext highlighter-rouge">sample.vcf</code>。
+      - 输出（每个样本）：</li>
+      <li><code class="language-plaintext highlighter-rouge">OUTPUT/&lt;sample&gt;/&lt;sample&gt;.vcf</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/genotype_vcf_smp/&lt;sample&gt;_genotype_vcf.done</code></li>
+    </ul>
+  </li>
+  <li><strong>按类型拆分 + 过滤</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">select_snp</code> / <code class="language-plaintext highlighter-rouge">select_indel</code>：GATK4 <code class="language-plaintext highlighter-rouge">SelectVariants</code> 拆分出 SNP/INDEL VCF。</li>
+      <li><code class="language-plaintext highlighter-rouge">filter_snp</code> / <code class="language-plaintext highlighter-rouge">filter_indel</code>：GATK4 <code class="language-plaintext highlighter-rouge">VariantFiltration</code> + <code class="language-plaintext highlighter-rouge">awk</code> PASS，输出 <code class="language-plaintext highlighter-rouge">.filtered.vcf</code>。
+        <ul>
+          <li>输出：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">*.snp.vcf</code> / <code class="language-plaintext highlighter-rouge">*.indel.vcf</code></li>
+      <li><code class="language-plaintext highlighter-rouge">*.filter_label.vcf</code> / <code class="language-plaintext highlighter-rouge">*.filtered.vcf</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/select_snp/*_select_snp.done</code>、<code class="language-plaintext highlighter-rouge">DONE/select_indel/*_select_indel.done</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/filter_snp/*_filter_snp.done</code>、<code class="language-plaintext highlighter-rouge">DONE/filter_indel/*_filter_indel.done</code></li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="坐标还原link-scaffold-项目">坐标还原（link scaffold 项目）</h3>
+<ul>
+  <li>若参考基因组使用 <code class="language-plaintext highlighter-rouge">link</code> 模式（大量 scaffold 被重新拼接），则：</li>
+  <li><code class="language-plaintext highlighter-rouge">filter_pos_convert</code> / <code class="language-plaintext highlighter-rouge">result_pos_convert</code>：</li>
+  <li>利用 <code class="language-plaintext highlighter-rouge">id_table.txt</code> 将在精简参考上的坐标转换回原参考坐标。</li>
+  <li>转换后的 VCF 覆盖原 filtered VCF 供后续注释与统计使用。
+    <ul>
+      <li>输出（在过滤结果目录下生成转换目录）：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">&lt;filtered_vcf_dir&gt;/snp_posconvert/ConvertPos.vcf</code></li>
+          <li><code class="language-plaintext highlighter-rouge">&lt;filtered_vcf_dir&gt;/indel_posconvert/ConvertPos.vcf</code></li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/convertpos.done</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="snpeff-建库与功能注释">SnpEff 建库与功能注释</h3>
+
+<ol>
+  <li><strong>建库（<code class="language-plaintext highlighter-rouge">SnpEff_build</code>）</strong>
+    <ul>
+      <li>调用 <code class="language-plaintext highlighter-rouge">SnpEff_db_build.pl</code>，利用 <code class="language-plaintext highlighter-rouge">ref_db + ref_anno</code> 在 <code class="language-plaintext highlighter-rouge">$SnpEff_db</code> 下生成 <code class="language-plaintext highlighter-rouge">snpEffectPredictor.bin</code>。
+        <ul>
+          <li>输出：</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">&lt;SnpEff_db&gt;/data/&lt;SnpEff_version&gt;/snpEffectPredictor.bin</code></li>
+      <li><code class="language-plaintext highlighter-rouge">DONE/SnpEff_build.done</code></li>
+    </ul>
+  </li>
+  <li><strong>注释（<code class="language-plaintext highlighter-rouge">anno_variant</code>）</strong></li>
+</ol>
+
+<ul>
+  <li>
+    <p>对过滤后的 SNP / InDel VCF：</p>
+  </li>
+  <li>
+    <p>SnpEff <code class="language-plaintext highlighter-rouge">ann</code> 生成功能注释 VCF 和统计 <code class="language-plaintext highlighter-rouge">csv/html</code>。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">extract_ANN.pl</code> 提取 ANN 字段生成 <code class="language-plaintext highlighter-rouge">*.anno.txt</code>。</p>
+  </li>
+  <li>
+    <p>返回所有样本/群体的 <code class="language-plaintext highlighter-rouge">*.anno.csv</code> 列表。</p>
+    <ul>
+      <li>输出（对每个输入 VCF，按 prefix 生成）：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">&lt;prefix&gt;.anno.vcf</code></li>
+          <li><code class="language-plaintext highlighter-rouge">&lt;prefix&gt;.anno.html</code></li>
+          <li><code class="language-plaintext highlighter-rouge">&lt;prefix&gt;.anno.csv</code>（<code class="language-plaintext highlighter-rouge">-csvStats</code> 输出）</li>
+          <li><code class="language-plaintext highlighter-rouge">&lt;prefix&gt;.anno.txt</code>（提取 ANN 后的文本）</li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/anno_variant/*_anno.done</code>、<code class="language-plaintext highlighter-rouge">DONE/anno_variant/*_snp_txt.done</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="变异统计与绘图">变异统计与绘图</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">snp_mut_stat</code>：对 SNP VCF 计算 Ti/Tv、Het/Hom 比例等，输出列表和统计。
+    <ul>
+      <li>输出（每个 SNP VCF）：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">&lt;prefix&gt;.list</code></li>
+          <li><code class="language-plaintext highlighter-rouge">&lt;prefix&gt;.stat.txt</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">snp_stat</code> / <code class="language-plaintext highlighter-rouge">indel_stat</code>：</p>
+  </li>
+  <li>基于 <code class="language-plaintext highlighter-rouge">*.anno.csv</code> 统计变异在不同基因区域（exon/intron/UTR…）与功能类别（synonymous/nonsynonymous…）的分布。
+    <ul>
+      <li>输出（每个 <code class="language-plaintext highlighter-rouge">*.anno.csv</code>，按 prefix 生成）：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">&lt;prefix&gt;_pos.txt</code></li>
+          <li><code class="language-plaintext highlighter-rouge">&lt;prefix&gt;_effect.txt</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">snp_plot</code> / <code class="language-plaintext highlighter-rouge">indel_plot</code>：</p>
+  </li>
+  <li>调用 R 脚本 <code class="language-plaintext highlighter-rouge">PieChart.R</code> 绘制 SNP / INDEL 功能注释的饼图。
+    <ul>
+      <li>输出（每个 <code class="language-plaintext highlighter-rouge">*.anno.csv</code>，按 prefix 生成）：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">&lt;prefix&gt;_PieChart.png</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="sv-与-cnv-检测">SV 与 CNV 检测</h3>
+
+<h4 id="svsvt">SV（<code class="language-plaintext highlighter-rouge">SV=T</code>）</h4>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">call_sv</code>：</p>
+  </li>
+  <li>利用 <code class="language-plaintext highlighter-rouge">samtools</code> 提取配对异常/拆分比对 reads，调用 <code class="language-plaintext highlighter-rouge">lumpy</code> 生成结构变异 VCF（DEL/INS/INV 等）。
+    <ul>
+      <li>输出（每个样本，位于 <code class="language-plaintext highlighter-rouge">OUTPUT/SV_result/&lt;sample&gt;/</code>）：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">&lt;sample&gt;.discordants.unsorted.bam</code></li>
+          <li><code class="language-plaintext highlighter-rouge">&lt;sample&gt;.discordants.bam</code></li>
+          <li><code class="language-plaintext highlighter-rouge">&lt;sample&gt;.splitters.unsorted.bam</code></li>
+          <li><code class="language-plaintext highlighter-rouge">&lt;sample&gt;.splitters.bam</code></li>
+          <li><code class="language-plaintext highlighter-rouge">&lt;sample&gt;.sv.vcf</code></li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/call_sv/&lt;sample&gt;_*.done</code>（view/sort/split/split_sort/lumpy 等）</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">sv_stat</code>：</p>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">SV_stat.pl</code> 对 SV 类型、大小、数量等进行统计。
+    <ul>
+      <li>输出：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">OUTPUT/SV_result/&lt;sample&gt;/&lt;sample&gt;.sv.stat</code></li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/sv_stat/&lt;sample&gt;_sv_stat.done</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="cnvcnvt">CNV（<code class="language-plaintext highlighter-rouge">CNV=T</code>）</h4>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">split_fa_chr</code>：将参考基因组按染色体拆分。
+    <ul>
+      <li>输出：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">&lt;ref_dir&gt;/chrs/&lt;chr&gt;.fa</code>（拆分后的每条染色体 fasta）</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">call_CNV</code>：</p>
+  </li>
+  <li>调用 <code class="language-plaintext highlighter-rouge">call_CNV.pl</code>，利用 <code class="language-plaintext highlighter-rouge">rmdup.bam</code>、参考序列和 GC 区间，检测 CNV，输出拷贝数变异结果和 ratio 文件。
+    <ul>
+      <li>输出（每个样本，位于 <code class="language-plaintext highlighter-rouge">OUTPUT/CNV_result/&lt;sample&gt;/</code>）：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">&lt;sample&gt;.bam_CNVs</code></li>
+          <li><code class="language-plaintext highlighter-rouge">&lt;sample&gt;.bam_ratio.txt</code></li>
+          <li><code class="language-plaintext highlighter-rouge">&lt;sample&gt;.bam.anno_CNVs</code>（与 GFF 交集注释后的 CNV）</li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/call_cnv/&lt;sample&gt;_call_cnv.done</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>后续用 bedtools 与 GFF 注释（基因区域中 CNV）。</li>
+</ul>
+
+<h3 id="总结报告">总结报告</h3>
+
+<ul>
+  <li>
+    <p><strong>单样本：<code class="language-plaintext highlighter-rouge">summary_single</code></strong></p>
+  </li>
+  <li>调用 <code class="language-plaintext highlighter-rouge">summary_sig.pl</code> 生成 Summary 报告。
+    <ul>
+      <li>输出：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">./Summary/</code>（汇总目录，脚本参数 <code class="language-plaintext highlighter-rouge">-od Summary</code>）</li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/summary_single.done</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>群体：<code class="language-plaintext highlighter-rouge">summary_pop</code></strong></p>
+  </li>
+  <li>调用 <code class="language-plaintext highlighter-rouge">summary.pl</code> 汇总全项目的各类统计与结果。
+    <ul>
+      <li>输出：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">./Summary/</code></li>
+          <li><code class="language-plaintext highlighter-rouge">DONE/summary_pop.done</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="参数说明与选取建议">参数说明与选取建议</h2>
+
+<blockquote>
+  <p>下表按照模块分类，重点给出<strong>用途</strong>和<strong>实务建议</strong>。如无特别说明，默认值一般为经验值，可不改。</p>
+</blockquote>
+
+<h3 id="核心项目级参数">核心/项目级参数</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">partition</code></td>
+      <td>Slurm 队列名（分区）</td>
+      <td>保持集群管理员给定默认值（如 <code class="language-plaintext highlighter-rouge">P3</code>）；超大项目可换大内存/大 GPU 分区</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">only_QC</code></td>
+      <td>是否只做质控；<code class="language-plaintext highlighter-rouge">T</code> 时 QC 后退出，不做比对与变异</td>
+      <td>只想预览数据质量设 <code class="language-plaintext highlighter-rouge">T</code>；正式分析设 <code class="language-plaintext highlighter-rouge">F</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">population</code></td>
+      <td>是否群体重测序（多样本联合变异检测）</td>
+      <td>多样本联合分析设 <code class="language-plaintext highlighter-rouge">T</code>；单样本或只关心单样本可设 <code class="language-plaintext highlighter-rouge">F</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tool</code></td>
+      <td>变异检测方式：<code class="language-plaintext highlighter-rouge">U</code>=UnifiedGenotyper，<code class="language-plaintext highlighter-rouge">H</code>=HaplotypeCaller</td>
+      <td>混池样本<strong>必须 <code class="language-plaintext highlighter-rouge">U</code></strong>；常规个体/群体推荐 <code class="language-plaintext highlighter-rouge">H</code>（更常用/更准确）</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">chr_num</code></td>
+      <td>按参考序列<strong>长度</strong>排序后，保留<strong>最长的 N 条</strong>序列作为“主染色体”（用于参考精简、后续分析）；<strong>不是</strong> scaffold/contig 总数</td>
+      <td>猪：18 常染色体 + X + Y → <strong><code class="language-plaintext highlighter-rouge">chr_num=20</code></strong>；其他物种按“常染色体 + 性染色体”填写（如人 24、牛 31）</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="参考基因组与注释">参考基因组与注释</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ref_db</code></td>
+      <td>参考基因组 FASTA</td>
+      <td>与注释、SnpEff 版本一致；尽量用同一来源同一版本（Ensembl/NCBI）</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ref_anno</code></td>
+      <td>注释 GFF/GTF</td>
+      <td>必须与 <code class="language-plaintext highlighter-rouge">ref_db</code> 坐标体系一致；若为 GTF，需确认建库脚本支持</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ref_annotation</code></td>
+      <td>额外注释占位（脚本中未直接使用）</td>
+      <td>保持 <code class="language-plaintext highlighter-rouge">NA</code>，除非流程另有要求</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SnpEff_db</code></td>
+      <td>SnpEff 安装目录</td>
+      <td>通常不改，保持系统配置路径</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SnpEff_version</code></td>
+      <td>SnpEff 数据库 ID（如 <code class="language-plaintext highlighter-rouge">Sus_scrofa_Ensembl_V111</code>）</td>
+      <td>必须与 <code class="language-plaintext highlighter-rouge">ref_db/ref_anno</code> 版本匹配，否则注释可能错位</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="集群运行配置">集群运行配置</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">node</code></td>
+      <td>指定运行节点（可为 <code class="language-plaintext highlighter-rouge">NA</code>）</td>
+      <td>一般 <code class="language-plaintext highlighter-rouge">NA</code>；仅在集群要求固定节点时指定</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">interval</code></td>
+      <td>批量任务轮询/间隔（由配套 slurm 脚本使用）</td>
+      <td>默认 <code class="language-plaintext highlighter-rouge">30</code> 通常足够；任务极多/队列繁忙可适当调大</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">maxFailed</code></td>
+      <td>允许失败任务阈值</td>
+      <td><code class="language-plaintext highlighter-rouge">0</code> 表示出现失败就中止，便于及时定位问题；需要“容错继续”才放宽</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">maxProc</code></td>
+      <td>最大并行任务数上限</td>
+      <td>与集群资源匹配；默认 <code class="language-plaintext highlighter-rouge">10000</code> 通常可不改</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="目录结构">目录结构</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">INPUT</code></td>
+      <td>原始 FASTQ 目录名</td>
+      <td>在项目目录内运行时保持默认即可</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">CLEANDATA</code></td>
+      <td>质控后 FASTQ 输出目录</td>
+      <td>一般保持默认；磁盘规划特殊时可改为绝对路径</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PROCESSDATA</code></td>
+      <td>中间文件目录</td>
+      <td>同上</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">OUTPUT</code></td>
+      <td>输出目录</td>
+      <td>同上</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">DONE</code></td>
+      <td>步骤完成标记（<code class="language-plaintext highlighter-rouge">.done</code>）目录</td>
+      <td>同上</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="样本信息">样本信息</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SAMPLE_INFO</code></td>
+      <td>样本信息文件（默认 <code class="language-plaintext highlighter-rouge">Sample_Info.txt</code>），每行 <code class="language-plaintext highlighter-rouge">样本名\t文库名</code>，<code class="language-plaintext highlighter-rouge">#</code> 为注释</td>
+      <td>样本名需与 <code class="language-plaintext highlighter-rouge">INPUT</code> 中 FASTQ 命名/路径规则匹配；样本多时注意空格、隐藏字符</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="原始数据质控参数fastp">原始数据质控参数（fastp）</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">data_QC_threads</code></td>
+      <td>fastp 每样本线程数</td>
+      <td>PE150 常规 <code class="language-plaintext highlighter-rouge">2</code> 足够；资源充足可 4–8</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">n_base_limit</code></td>
+      <td>允许的 N 碱基数量上限</td>
+      <td>默认 <code class="language-plaintext highlighter-rouge">5</code> 常用；数据较差可适当放宽</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">overlap_len_require</code></td>
+      <td>PE reads 重叠长度要求（用于接头识别/纠错）</td>
+      <td>PE150 常用 <code class="language-plaintext highlighter-rouge">30</code>，一般不改</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">length_required</code></td>
+      <td>剪切后最短保留读长</td>
+      <td>默认 <code class="language-plaintext highlighter-rouge">15</code> 较宽松；更严格可设 30</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="比对与去重复">比对与去重复</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">map_soft</code></td>
+      <td>比对方式：<code class="language-plaintext highlighter-rouge">CPU</code>（bwa+samtools+picard）或 <code class="language-plaintext highlighter-rouge">GPU</code>（Parabricks）</td>
+      <td>有 Parabricks GPU 环境优先 <code class="language-plaintext highlighter-rouge">GPU</code>（显著提速）；否则 <code class="language-plaintext highlighter-rouge">CPU</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mapping_threads</code></td>
+      <td>CPU 比对线程数（bwa/samtools）</td>
+      <td>4–16 常见；按节点 CPU 调整</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">min_seed_len</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bwa mem -k</code> 最小 seed 长度</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">32</code>，一般不改</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sort_mem</code></td>
+      <td><code class="language-plaintext highlighter-rouge">samtools sort</code> 每线程内存（如 <code class="language-plaintext highlighter-rouge">768M</code>）</td>
+      <td>大基因组/大 BAM 可调到 <code class="language-plaintext highlighter-rouge">2G</code> 左右；注意 <code class="language-plaintext highlighter-rouge">sort_mem × mapping_threads</code> 不超节点内存</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">rmdup</code></td>
+      <td>后续分析是否使用去重 BAM（<code class="language-plaintext highlighter-rouge">rmdup.bam</code>）</td>
+      <td>全基因组重测序通常 <code class="language-plaintext highlighter-rouge">T</code>；特殊定量场景才考虑 <code class="language-plaintext highlighter-rouge">F</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">rmdup_mem</code></td>
+      <td>Picard <code class="language-plaintext highlighter-rouge">MarkDuplicates</code> 内存（脚本内部作为 <code class="language-plaintext highlighter-rouge">picard_mem</code>）</td>
+      <td>默认 <code class="language-plaintext highlighter-rouge">30G</code> 多数项目安全；样本/基因组更大时可加大</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="深度与覆盖绘图">深度与覆盖绘图</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">max_depth</code></td>
+      <td>深度分布图横坐标最大深度（仅影响绘图展示）</td>
+      <td>常规 10–40×：<code class="language-plaintext highlighter-rouge">150</code> 足够；极高深度可适当增大</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="变异检测相关gatk--gpu">变异检测相关（GATK &amp; GPU）</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">numGPUs</code></td>
+      <td>每个 GPU 任务使用的 GPU 数量</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">1</code>；超大样本/节点多卡才考虑增加</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">GPU</code></td>
+      <td>GPU 队列/分区名</td>
+      <td>与集群实际配置一致（如 <code class="language-plaintext highlighter-rouge">GPU2</code>）</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">GATK_threads</code></td>
+      <td>GATK 相关任务 CPU 线程数</td>
+      <td>默认 <code class="language-plaintext highlighter-rouge">10</code> 合理；按节点资源调整</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">GATK_mem</code></td>
+      <td>GATK/Java 最大内存（如 <code class="language-plaintext highlighter-rouge">20G</code>）</td>
+      <td>群体/大基因组可 30–60G；内存不足易 OOM</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ploidy</code></td>
+      <td>倍性（<code class="language-plaintext highlighter-rouge">--sample-ploidy</code>）</td>
+      <td>二倍体一般 <code class="language-plaintext highlighter-rouge">2</code>；多倍体按物种调整</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">cut_len</code></td>
+      <td>群体联合 Genotype 时按区间切割长度</td>
+      <td>默认 5 Mb（<code class="language-plaintext highlighter-rouge">5000000</code>）折中；任务过大可减小</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">cut_num</code></td>
+      <td>群体联合时每个拆分任务的样本数上限</td>
+      <td>默认 <code class="language-plaintext highlighter-rouge">800</code> 适合几百～上千样本；样本极多可减小以降低单任务压力</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="snp-过滤hard-filter-表达式">SNP 过滤（hard-filter 表达式）</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">QD</code></td>
+      <td>QD：质量/深度的比值（过滤低 QD）</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">QD &lt; 2.0</code>；一般沿用</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">QUAL</code></td>
+      <td>变异质量（过滤低 QUAL）</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">QUAL &lt; 30.0</code>；一般沿用</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SOR</code></td>
+      <td>Strand Odds Ratio（链偏好指标）</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">SOR &gt; 3.0</code>；一般沿用</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">FS</code></td>
+      <td>Fisher Strand（链偏好指标）</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">FS &gt; 60.0</code>；一般沿用</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">MQ</code></td>
+      <td>Mapping Quality（过滤低 MQ）</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">MQ &lt; 40.0</code>；一般沿用</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">MQRankSum</code></td>
+      <td>MQRankSum（比对质量偏倚）</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">MQRankSum &lt; -12.5</code>；一般沿用</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ReadPosRankSum</code></td>
+      <td>ReadPosRankSum（read 位置偏倚）</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">ReadPosRankSum &lt; -8.0</code>；一般沿用</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>以上阈值为 GATK 常见 hard-filter 经验值；如需调整建议基于项目深度/验证集评估后再改。</p>
+</blockquote>
+
+<h3 id="indel-过滤hard-filter-表达式">INDEL 过滤（hard-filter 表达式）</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">QD_indel</code></td>
+      <td>INDEL 的 QD 过滤</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">QD &lt; 2.0</code>；一般沿用</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">QUAL_indel</code></td>
+      <td>INDEL 的 QUAL 过滤</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">QUAL &lt; 30.0</code>；一般沿用</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">FS_indel</code></td>
+      <td>INDEL 的 FS 过滤</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">FS &gt; 200.0</code>；一般沿用</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ReadPosRankSum_indel</code></td>
+      <td>INDEL 的 ReadPosRankSum 过滤</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">ReadPosRankSum &lt; -20.0</code>；一般沿用</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="snpeff-注释参数">SnpEff 注释参数</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">anno_mem</code></td>
+      <td>SnpEff/Java 内存</td>
+      <td>群体/大基因组可较大（示例 <code class="language-plaintext highlighter-rouge">80G</code>）；小项目可下调节省资源</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ud</code></td>
+      <td>上下游注释范围（bp）</td>
+      <td>常用 <code class="language-plaintext highlighter-rouge">1000</code>；希望更宽“调控区”可设 2000–5000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="sv-检测控制">SV 检测控制</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SV</code></td>
+      <td>是否运行 SV 检测</td>
+      <td>需要结构变异分析设 <code class="language-plaintext highlighter-rouge">T</code>；只关心 SNP/INDEL 可设 <code class="language-plaintext highlighter-rouge">F</code> 缩短时间</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="cnv-检测控制">CNV 检测控制</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>用途/含义</th>
+      <th>选取建议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">CNV</code></td>
+      <td>是否运行 CNV 检测</td>
+      <td>需要 CNV 分析设 <code class="language-plaintext highlighter-rouge">T</code>；否则设 <code class="language-plaintext highlighter-rouge">F</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">minExpectedGC</code> / <code class="language-plaintext highlighter-rouge">maxExpectedGC</code></td>
+      <td>CNV 检测的 GC 含量范围过滤</td>
+      <td>哺乳动物常用 <code class="language-plaintext highlighter-rouge">0.35–0.55</code>；GC 分布差异大的物种可根据经验/文献调整</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="实务使用建议简要">实务使用建议（简要）</h2>
+
+<ul>
+  <li>
+    <p><strong>参数最小修改集合</strong>（常规哺乳动物重测序项目）：</p>
+  </li>
+  <li>
+    <p>根据项目类型设置：<code class="language-plaintext highlighter-rouge">population</code>、<code class="language-plaintext highlighter-rouge">tool</code>（混池用 <code class="language-plaintext highlighter-rouge">U</code>，其他推荐 <code class="language-plaintext highlighter-rouge">H</code>）。</p>
+  </li>
+  <li>
+    <p><strong>资源相关参数</strong>（根据集群环境微调）：</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">partition / GPU / numGPUs / GATK_threads / GATK_mem / mapping_threads / sort_mem / rmdup_mem / anno_mem</code>。</p>
+  </li>
+  <li>
+    <p><strong>高级优化</strong>：</p>
+  </li>
+  <li>
+    <p>样本数特别多或基因组超大时，可酌情调小 <code class="language-plaintext highlighter-rouge">cut_len</code>、<code class="language-plaintext highlighter-rouge">cut_num</code>，并加大 GATK 内存/线程，以避免单任务过大或 OOM。</p>
+  </li>
+</ul>
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/variant%20calling" rel="tag"># variant calling</a>
+          
+            
+            <a href="/tag/#/%E6%B5%81%E7%A8%8B" rel="tag"># 流程</a>
+          
+            
+            <a href="/tag/#/%E8%BD%AF%E4%BB%B6" rel="tag"># 软件</a>
+          
+            
+            <a href="/tag/#/%E5%8F%82%E6%95%B0" rel="tag"># 参数</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/wgs/2026/03/07/Variant-calling-%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/" rel="next" title="Variant calling 过程的文件格式">
+                <i class="fa fa-chevron-left"></i> Variant calling 过程的文件格式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/wgs/2026/03/07/VariantCalling-%E5%8E%9F%E7%90%86/" rel="prev" title="Variant calling 原理">
+                Variant calling 原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#重测序一键sop配置参数"> <span class="nav-number">1</span> <span class="nav-text">重测序一键SOP配置参数</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#脚本整体功能"> <span class="nav-number">2</span> <span class="nav-text">脚本整体功能</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#主流程步骤"> <span class="nav-number">3</span> <span class="nav-text">主流程步骤</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#参数读取与环境准备"> <span class="nav-number">3.1</span> <span class="nav-text">参数读取与环境准备</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#样本信息与数据列表构建"> <span class="nav-number">3.2</span> <span class="nav-text">样本信息与数据列表构建</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#原始数据质控fastp--fastqc"> <span class="nav-number">3.3</span> <span class="nav-text">原始数据质控（fastp + FastQC）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#参考基因组处理与索引构建"> <span class="nav-number">3.4</span> <span class="nav-text">参考基因组处理与索引构建</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#比对cpu-或-gpu"> <span class="nav-number">3.5</span> <span class="nav-text">比对（CPU 或 GPU）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#插入片段比对质量与深度统计"> <span class="nav-number">3.6</span> <span class="nav-text">插入片段、比对质量与深度统计</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#bam-索引与整体对齐统计汇总"> <span class="nav-number">3.7</span> <span class="nav-text">BAM 索引与整体对齐统计汇总</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#变异检测snp--indel"> <span class="nav-number">3.8</span> <span class="nav-text">变异检测：SNP &amp; InDel</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#unifiedgenotyper-模式toolu"> <span class="nav-number">3.8.1</span> <span class="nav-text">UnifiedGenotyper 模式（tool=U）</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#haplotypecaller-模式toolh"> <span class="nav-number">3.8.2</span> <span class="nav-text">HaplotypeCaller 模式（tool=H）</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#坐标还原link-scaffold-项目"> <span class="nav-number">3.9</span> <span class="nav-text">坐标还原（link scaffold 项目）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#snpeff-建库与功能注释"> <span class="nav-number">3.10</span> <span class="nav-text">SnpEff 建库与功能注释</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#变异统计与绘图"> <span class="nav-number">3.11</span> <span class="nav-text">变异统计与绘图</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#sv-与-cnv-检测"> <span class="nav-number">3.12</span> <span class="nav-text">SV 与 CNV 检测</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#svsvt"> <span class="nav-number">3.12.1</span> <span class="nav-text">SV（SV=T）</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#cnvcnvt"> <span class="nav-number">3.12.2</span> <span class="nav-text">CNV（CNV=T）</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#总结报告"> <span class="nav-number">3.13</span> <span class="nav-text">总结报告</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#参数说明与选取建议"> <span class="nav-number">4</span> <span class="nav-text">参数说明与选取建议</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#核心项目级参数"> <span class="nav-number">4.1</span> <span class="nav-text">核心/项目级参数</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#参考基因组与注释"> <span class="nav-number">4.2</span> <span class="nav-text">参考基因组与注释</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#集群运行配置"> <span class="nav-number">4.3</span> <span class="nav-text">集群运行配置</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#目录结构"> <span class="nav-number">4.4</span> <span class="nav-text">目录结构</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#样本信息"> <span class="nav-number">4.5</span> <span class="nav-text">样本信息</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#原始数据质控参数fastp"> <span class="nav-number">4.6</span> <span class="nav-text">原始数据质控参数（fastp）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#比对与去重复"> <span class="nav-number">4.7</span> <span class="nav-text">比对与去重复</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#深度与覆盖绘图"> <span class="nav-number">4.8</span> <span class="nav-text">深度与覆盖绘图</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#变异检测相关gatk--gpu"> <span class="nav-number">4.9</span> <span class="nav-text">变异检测相关（GATK &amp; GPU）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#snp-过滤hard-filter-表达式"> <span class="nav-number">4.10</span> <span class="nav-text">SNP 过滤（hard-filter 表达式）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#indel-过滤hard-filter-表达式"> <span class="nav-number">4.11</span> <span class="nav-text">INDEL 过滤（hard-filter 表达式）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#snpeff-注释参数"> <span class="nav-number">4.12</span> <span class="nav-text">SnpEff 注释参数</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#sv-检测控制"> <span class="nav-number">4.13</span> <span class="nav-text">SV 检测控制</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#cnv-检测控制"> <span class="nav-number">4.14</span> <span class="nav-text">CNV 检测控制</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#实务使用建议简要"> <span class="nav-number">5</span> <span class="nav-text">实务使用建议（简要）</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

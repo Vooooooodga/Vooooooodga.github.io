@@ -1,0 +1,1681 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="variant calling,原理," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这篇笔记整理了variant calling（SNP和InDel）的技术原理。">
+<meta name="keywords" content="variant calling, 原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Variant calling 原理">
+<meta property="og:url" content="https://vooooooodga.github.io/wgs/2026/03/07/VariantCalling-%E5%8E%9F%E7%90%86/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="这篇笔记整理了variant calling（SNP和InDel）的技术原理。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/variant-calling-duplicate-types.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Variant calling 原理">
+<meta name="twitter:description" content="这篇笔记整理了variant calling（SNP和InDel）的技术原理。">
+<meta name="twitter:image" content="/assets/images/variant-calling-duplicate-types.png">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>Variant calling 原理 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/wgs/2026/03/07/VariantCalling-%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            Variant calling 原理
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-03-07T00:00:00+08:00">
+                2026-03-07
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-03-12T16:07:37+08:00">
+                  2026-03-12
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/WGS" itemprop="url" rel="index">
+                    <span itemprop="name">WGS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <p>这篇笔记整理了variant calling（SNP和InDel）的技术原理。</p>
+
+<h1 id="相关信息">相关信息</h1>
+
+<p>参考资料：</p>
+<ol>
+  <li><a href="https://ming-lian.github.io/2019/02/08/call-snp/">https://ming-lian.github.io/2019/02/08/call-snp/</a></li>
+</ol>
+
+<h1 id="术语">术语</h1>
+<ul>
+  <li>Single Nucleotide Polymorphism (SNP)：群体中特定位点上两种或多种不同的核苷酸（通常是转换Transition「同类碱基置换，如嘌呤之间AtoG或嘧啶之间CtoT」或颠换Transversion）存在，且在该群体中的等位基因频率通常高于 1%。该术语倾向于描述群体遗传学、物种进化或亲缘关系分析中的多态性，属于胚系变异。</li>
+  <li>SNP calling：旨在通过高通量测序数据比对，识别个体基因组中与参考序列不同的单个碱基变异（SNP）。</li>
+  <li>QTL：QTL的划定是一个基于统计学推断的过程，它没有全球统一的、绝对的物理范围或SNP数量标准，但有一套被广泛接受的科学方法和经验性阈值。详见<a href="/_posts/2026-03-08-QTL的鉴定.md">QTL的鉴定</a></li>
+  <li>expression quantitative trait loci (eQTLs)：指基因组中能影响特定基因（mRNA或蛋白质）表达水平的遗传变异（通常为SNP）。它通过研究DNA变异与基因表达量的相关性，揭示遗传突变调控表达的机制，主要分为顺式（cis-eQTL，近距离，上下游1Mb）和反式（trans-eQTL，远距离不同染色体或相距&gt;5Mb）两类。</li>
+  <li>Genotype-Tissue Expression Project (GTEx数据库)：是目前最全的人类组织特异性eQTL数据库。</li>
+  <li>Genomics Reference Panel：一个包含了大量个体全基因组测序（WGS）数据的“高密度变异数据库”它记录了群体中极其丰富的自然遗传变异</li>
+</ul>
+
+<h1 id="分析原理">分析原理</h1>
+
+<p>本项目的重测序分析流程由 <code class="language-plaintext highlighter-rouge">ACGT101_ReSeq_4.6_gpu.pl</code> 驱动，目标是<strong>从原始测序 reads 出发，构建高质量比对结果，进行变异检测（SNP / InDel / SV / CNV）与功能注释，为后续关联分析与功能解释提供可靠的基因型信息</strong>。下面按照实际流程顺序，说明每一步“在做什么”以及“为什么要做”。</p>
+
+<h3 id="参数读取与环境准备">参数读取与环境准备</h3>
+
+<ul>
+  <li><strong>做什么：</strong><br />
+脚本首先通过 <code class="language-plaintext highlighter-rouge">-i parameter_ACGT101_ReSeq.txt</code>读取项目参数，加载：
+    <ul>
+      <li>集群运行配置（<code class="language-plaintext highlighter-rouge">partition / node / interval / maxProc / GPU / numGPUs / GATK_threads / GATK_mem / anno_mem</code> 等）</li>
+      <li>目录结构（<code class="language-plaintext highlighter-rouge">INPUT / CLEANDATA / PROCESSDATA / OUTPUT / DONE</code>）</li>
+      <li>样本信息文件 <code class="language-plaintext highlighter-rouge">SAMPLE_INFO</code>（样本名与文库名对应关系）</li>
+      <li>参考基因组与注释（<code class="language-plaintext highlighter-rouge">ref_db / ref_anno / SnpEff_version / chr_num</code> 等）</li>
+      <li>是否只做质控（<code class="language-plaintext highlighter-rouge">only_QC</code>）、是否群体联合分析（<code class="language-plaintext highlighter-rouge">population</code>）、变异检测模式（<code class="language-plaintext highlighter-rouge">tool=U/H</code>）、是否调用 SV / CNV（<code class="language-plaintext highlighter-rouge">SV / CNV</code>）等。</li>
+    </ul>
+  </li>
+  <li><strong>为什么：</strong><br />
+统一在一个参数文件中配置所有关键信息，可以保证<strong>流程的可复现性</strong>和<strong>不同项目间的可移植性</strong>。脚本后续所有子步骤都只依赖该参数文件，不需要手动改脚本，从而减少人为出错风险。</li>
+</ul>
+
+<h3 id="样本信息读取与数据列表构建">样本信息读取与数据列表构建</h3>
+
+<ul>
+  <li><strong>做什么：</strong>
+    <ul>
+      <li>从 <code class="language-plaintext highlighter-rouge">Sample_Info.txt</code> 中读取所有待分析样本及文库名，生成 <code class="language-plaintext highlighter-rouge">smp_list</code>。</li>
+      <li>在 <code class="language-plaintext highlighter-rouge">INPUT</code> 目录中搜索各样本的原始 <code class="language-plaintext highlighter-rouge">R1/R2</code> fastq.gz，生成 <code class="language-plaintext highlighter-rouge">input_list.txt</code>（样本名与双端文件路径列表）。</li>
+      <li>质控后再在 <code class="language-plaintext highlighter-rouge">CLEANDATA</code> 中生成 <code class="language-plaintext highlighter-rouge">cleandata_list.txt</code>，用于后续比对。</li>
+    </ul>
+  </li>
+  <li><strong>为什么：</strong><br />
+通过<strong>标准化的数据列表</strong>显式描述“每个样本对应哪些 FASTQ 文件”，可以：
+    <ul>
+      <li>让后续所有步骤都在同一份样本列表上工作，避免样本遗漏或顺序错乱；</li>
+      <li>支持批量、多样本自动化处理，而不需要为每个样本编写独立命令。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="原始数据质控fastp--fastqc">原始数据质控：fastp + FastQC</h3>
+
+<ul>
+  <li><strong>做什么：</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">fastp</code> 对 <code class="language-plaintext highlighter-rouge">input_list.txt</code> 中的每个样本进行质控：
+        <ul>
+          <li>去接头、去除含过多 N 的 reads（由 <code class="language-plaintext highlighter-rouge">n_base_limit</code> 控制）；</li>
+          <li>剪切两端低质量碱基，丢弃过短 reads（由 <code class="language-plaintext highlighter-rouge">length_required</code> 控制）；</li>
+          <li>输出 Clean reads 到 <code class="language-plaintext highlighter-rouge">CLEANDATA</code>，并生成每个样本的质控报告（json/html）。</li>
+        </ul>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">fastp_stat.py</code> 汇总所有样本的 fastp 结果，生成整体质控统计表 <code class="language-plaintext highlighter-rouge">OUTPUT/data_stat.txt</code>。</p>
+      </li>
+      <li>对 Clean data 再运行 FastQC，补充基础质控图表。</li>
+    </ul>
+  </li>
+  <li><strong>为什么：</strong>
+    <ul>
+      <li>去除低质量 reads 和接头污染可以<strong>降低假阳性变异的产生</strong>，为比对与变异检测提供干净输入；</li>
+      <li>统一的质控汇总报告方便评估不同样本之间的数据量、Q30 比例、接头污染等是否异常；</li>
+      <li>若 <code class="language-plaintext highlighter-rouge">only_QC=T</code>，流程在此停止，可以用于项目早期<strong>快速评估数据质量</strong>而不浪费后续计算资源。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="参考基因组处理与索引构建">参考基因组处理与索引构建</h3>
+
+<ul>
+  <li><strong>做什么：</strong>
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">ref_GC_len</code> 计算 <code class="language-plaintext highlighter-rouge">ref_db</code> 中每条序列的长度和 GC 含量，输出 <code class="language-plaintext highlighter-rouge">genome.fa.len</code>。</p>
+      </li>
+      <li>根据注释和 <code class="language-plaintext highlighter-rouge">chr_num</code> 判断是否进入 <code class="language-plaintext highlighter-rouge">link</code> 模式：
+        <ul>
+          <li>若染色体/序列条数 &gt; 设定阈值（如 65），说明有大量 scaffold，流程会选择长度前 <code class="language-plaintext highlighter-rouge">chr_num</code> 条作为“主染色体”，生成 <code class="language-plaintext highlighter-rouge">chr_id.txt</code>。</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">prepare_ref</code> 在 <code class="language-plaintext highlighter-rouge">Ref</code> 目录中对参考基因组进行精简与重命名（若需要 link）：
+        <ul>
+          <li>生成新的 <code class="language-plaintext highlighter-rouge">ref.genome.fa / ref.genome.gff</code>、对应长度文件以及 <code class="language-plaintext highlighter-rouge">id_table.txt</code>（记录原始坐标与新坐标的映射关系）。</li>
+        </ul>
+      </li>
+      <li>对最终使用的参考序列构建 BWA / samtools / Picard 索引。</li>
+    </ul>
+  </li>
+  <li><strong>为什么：</strong>
+    <ul>
+      <li>计算 GC 和长度是后续 CNV 分析与绘图的基础；</li>
+      <li>对 scaffold 极多的基因组进行“主染色体抽取 + 重命名”可以<strong>显著降低比对与下游分析复杂度</strong>，加快运行并避免在大量微小 scaffold 上产生噪声；</li>
+      <li>坐标映射表 <code class="language-plaintext highlighter-rouge">id_table.txt</code> 让后续可以在精简参考上完成计算，再把结果<strong>还原回原始参考坐标</strong>，兼顾效率与结果可解释性；</li>
+      <li>构建各种索引是 BWA / samtools / GATK 等工具运行的前提。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="比对cpu-模式与-gpuparabricks模式">比对：CPU 模式与 GPU（Parabricks）模式</h3>
+
+<ul>
+  <li><strong>做什么：</strong><br />
+根据 <code class="language-plaintext highlighter-rouge">map_soft</code> 选择比对方案：
+    <ul>
+      <li><strong>CPU 模式 (<code class="language-plaintext highlighter-rouge">map_soft=CPU</code>)</strong>：
+        <ul>
+          <li>使用 <code class="language-plaintext highlighter-rouge">bwa mem</code> 将 Clean reads 比对到参考基因组，生成 SAM；</li>
+          <li>用 <code class="language-plaintext highlighter-rouge">samtools view + sort</code> 转换并排序为 BAM；</li>
+          <li>再用 Picard <code class="language-plaintext highlighter-rouge">MarkDuplicates</code> 标记/去除 PCR duplicates，得到 <code class="language-plaintext highlighter-rouge">*.rmdup.bam</code>。</li>
+        </ul>
+      </li>
+      <li><strong>GPU 模式 (<code class="language-plaintext highlighter-rouge">map_soft=GPU</code>)</strong>：
+        <ul>
+          <li>调用 Parabricks <code class="language-plaintext highlighter-rouge">pbrun fq2bam</code>，在 GPU 上一次性完成比对 + 排序 + 去重复，直接产生 <code class="language-plaintext highlighter-rouge">*.rmdup.bam</code> 和重复率统计。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>为什么：</strong>
+    <ul>
+      <li>高质量的比对结果是 SNP / InDel / SV / CNV 检测的基础；</li>
+      <li>去除/标记 duplicates（见下文 duplicates 产生原因）可以减少 PCR 扩增和光学重复带来的<strong>假阳性信号</strong>；</li>
+      <li>GPU 加速能在保证结果与标准 GATK 流程一致的前提下，大幅缩短运行时间，特别适合全基因组重测序和群体项目。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="比对结果质量评估与深度覆盖统计">比对结果质量评估与深度/覆盖统计</h3>
+
+<ul>
+  <li><strong>做什么：</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">insertsize</code> 计算文库插入片段长度分布，输出插入片段图和统计表；</li>
+      <li><code class="language-plaintext highlighter-rouge">samtools flagstat</code> 生成每个样本的比对统计（比对率、成对比对率、重复率等）；</li>
+      <li><code class="language-plaintext highlighter-rouge">samtools depth</code> 计算碱基层面的测序深度，<code class="language-plaintext highlighter-rouge">depth_stat.pl</code> 汇总为：
+        <ul>
+          <li>各染色体平均深度、不同深度阈值下的覆盖比例；</li>
+          <li>再绘制平均深度柱状图、深度分布曲线、覆盖度图等。</li>
+        </ul>
+      </li>
+      <li>生成 BAM 索引（<code class="language-plaintext highlighter-rouge">.bai</code>），并汇总所有样本的比对与覆盖信息到 <code class="language-plaintext highlighter-rouge">mapped_cover_stat.txt</code>。</li>
+    </ul>
+  </li>
+  <li><strong>为什么：</strong>
+    <ul>
+      <li>插入片段异常（比如极短或极长）可能提示文库构建问题；</li>
+      <li>比对率和重复率是<strong>评估测序数据可用性</strong>的重要指标：比对率太低可能是污染或参考版本不匹配；</li>
+      <li>深度和覆盖度直接决定变异检测的<strong>灵敏度与可靠性</strong>，需要在变异调用前进行全局评估；</li>
+      <li>BAM 索引是 GATK、samtools 等对局部区域进行高效随机访问的前提。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="变异检测snp--indel">变异检测：SNP &amp; InDel</h3>
+
+<p>根据 <code class="language-plaintext highlighter-rouge">tool</code>（UnifiedGenotyper 或 HaplotypeCaller）以及 <code class="language-plaintext highlighter-rouge">population</code>（单样本或群体）选择不同分支，但核心思想相同：<strong>在高质量比对基础上，对每个位点的碱基观察数据构建统计模型，评估是否存在真实变异以及每个样本的基因型。</strong></p>
+
+<h4 id="unifiedgenotyper-流程toolu适合混池等场景">UnifiedGenotyper 流程（<code class="language-plaintext highlighter-rouge">tool=U</code>，适合混池等场景）</h4>
+
+<ul>
+  <li><strong>Realign（<code class="language-plaintext highlighter-rouge">realign</code>）</strong>
+    <ul>
+      <li>对 BAM 进行 GATK3 的局部重比对（IndelRealigner），修正 indel 区域附近的错配模式。</li>
+      <li><strong>目的：</strong>减小 indel 周围误配导致的假阳性 SNP，提高 UG 在复杂区域的召回与精度。</li>
+    </ul>
+  </li>
+  <li><strong>Call 变异（<code class="language-plaintext highlighter-rouge">gatk_pop</code> / <code class="language-plaintext highlighter-rouge">gatk_single</code>）</strong>
+    <ul>
+      <li>群体模式下，各样本联合进行 UG 调用，得到群体 VCF；</li>
+      <li>单样本模式下，逐样本调用。</li>
+      <li><strong>目的：</strong>利用群体信息提高变异检测的统计功效，特别是在中低深度时减少漏检。</li>
+    </ul>
+  </li>
+  <li><strong>SNP / InDel 拆分与过滤</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">SelectVariants</code> 将 VCF 按变异类型拆成 SNP 和 InDel；</li>
+      <li><code class="language-plaintext highlighter-rouge">VariantFiltration</code> 依据硬过滤表达式（<code class="language-plaintext highlighter-rouge">QD / QUAL / FS / SOR / MQ / MQRankSum / ReadPosRankSum</code> 等）给每条变异打标签，然后只保留 <code class="language-plaintext highlighter-rouge">PASS</code> 记录。</li>
+      <li><strong>目的：</strong>通过经验阈值过滤掉深度过低、质量过差、链偏好严重等可疑位点，得到一套<strong>高可信度候选变异集</strong>。</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="haplotypecaller-流程toolh本项目默认推荐">HaplotypeCaller 流程（<code class="language-plaintext highlighter-rouge">tool=H</code>，本项目默认推荐）</h4>
+
+<ul>
+  <li><strong>GVCF 生成（<code class="language-plaintext highlighter-rouge">gatk_gvcf_gpu</code> 或 CPU 版 HC）</strong>
+    <ul>
+      <li>对每个样本的 <code class="language-plaintext highlighter-rouge">rmdup.bam</code> 运行 HaplotypeCaller，输出 <code class="language-plaintext highlighter-rouge">sample.g.vcf.gz</code>。</li>
+      <li>与 UG 不同，HC 在局部区域进行重组装，构建 haplotype，从而更好地处理 indel 和复杂变异。</li>
+      <li><strong>目的：</strong>以 gVCF 形式完整记录每个样本在全基因组的“基因型证据”，为群体联合 Genotype 做准备。</li>
+    </ul>
+  </li>
+  <li><strong>Genotype 合并（<code class="language-plaintext highlighter-rouge">genotype_vcf_pop</code> / <code class="language-plaintext highlighter-rouge">genotype_vcf_single</code>）</strong>
+    <ul>
+      <li>群体模式下，利用 <code class="language-plaintext highlighter-rouge">easy_JVC.pl</code> 将所有样本 gVCF 按染色体和区间切分，分批 <code class="language-plaintext highlighter-rouge">CombineGVCFs + GenotypeGVCFs</code>，最终合并成群体级 VCF <code class="language-plaintext highlighter-rouge">pop.vcf</code>；</li>
+      <li>单样本模式下，对每个 gVCF 直接 Genotype。</li>
+      <li><strong>目的：</strong>在保持样本间信息共享的同时，控制每个任务的计算负载，使<strong>大样本群体分析也能稳定完成</strong>。</li>
+    </ul>
+  </li>
+  <li><strong>SNP / InDel 拆分与过滤（GATK4）</strong>
+    <ul>
+      <li>与 UG 分支类似，通过 <code class="language-plaintext highlighter-rouge">SelectVariants + VariantFiltration</code> + <code class="language-plaintext highlighter-rouge">awk</code> 保留 <code class="language-plaintext highlighter-rouge">PASS</code> 记录。</li>
+      <li><strong>目的：</strong>得到一套标准化、质量可控的 SNP / InDel 候选位点，用作后续功能注释与关联分析的输入。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="link-模式下的坐标还原">link 模式下的坐标还原</h3>
+
+<ul>
+  <li><strong>做什么：</strong>
+    <ul>
+      <li>若在前面参考精简步骤中进入 <code class="language-plaintext highlighter-rouge">link</code> 模式，所有变异检测和过滤都是在“重排后的参考”上完成的；</li>
+      <li><code class="language-plaintext highlighter-rouge">filter_pos_convert</code> 和 <code class="language-plaintext highlighter-rouge">result_pos_convert</code> 使用 <code class="language-plaintext highlighter-rouge">id_table.txt</code> 将过滤后的 SNP / InDel VCF 坐标转换回原始参考坐标。</li>
+    </ul>
+  </li>
+  <li><strong>为什么：</strong>
+    <ul>
+      <li>许多公共数据库（如 Ensembl/NCBI 注释、已有 QTL/eQTL 结果）都是基于原始参考构建的；</li>
+      <li>通过坐标还原，可以在保持计算高效的同时，保证最终结果<strong>与外部资源以及基因组浏览器完全对齐</strong>。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="snpeff-建库与变异功能注释">SnpEff 建库与变异功能注释</h3>
+
+<ul>
+  <li><strong>做什么：</strong>
+    <ul>
+      <li>先根据 <code class="language-plaintext highlighter-rouge">ref_db / ref_anno / SnpEff_version</code> 构建或更新 SnpEff 数据库，生成 <code class="language-plaintext highlighter-rouge">snpEffectPredictor.bin</code>；</li>
+      <li>对过滤后的 SNP / InDel VCF 运行 SnpEff <code class="language-plaintext highlighter-rouge">ann</code>，得到带有功能注释字段（ANN）的 VCF 以及对应的统计报表（csv/html）；</li>
+      <li>通过 <code class="language-plaintext highlighter-rouge">extract_ANN.pl</code> 从 ANN 字段中提取易读的注释表（<code class="language-plaintext highlighter-rouge">*.anno.txt</code>），包括变异是否位于 exon/intron/UTR、是否导致同义/非同义、剪接位点破坏等。</li>
+    </ul>
+  </li>
+  <li><strong>为什么：</strong>
+    <ul>
+      <li>仅知道“这个位点发生了 A→G”还不够，<strong>需要知道它可能如何影响基因功能</strong>：
+        <ul>
+          <li>是否改变氨基酸？</li>
+          <li>是否位于启动子或剪接位点？</li>
+          <li>是否落在已知基因或转录本上？</li>
+        </ul>
+      </li>
+      <li>这些功能注释是后续 pQTL / eQTL / GWAS 信号解释的关键证据之一。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="变异统计与可视化">变异统计与可视化</h3>
+
+<ul>
+  <li><strong>做什么：</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">snp_mut_stat</code> 计算 Ti/Tv 比值、杂合/纯合比例等整体质量指标；</li>
+      <li><code class="language-plaintext highlighter-rouge">snp_stat / indel_stat</code> 基于 <code class="language-plaintext highlighter-rouge">*.anno.csv</code> 统计变异在不同基因区域和功能类别中的分布；</li>
+      <li><code class="language-plaintext highlighter-rouge">snp_plot / indel_plot</code> 调用 R 脚本绘制功能分布饼图等可视化图。</li>
+    </ul>
+  </li>
+  <li><strong>为什么：</strong>
+    <ul>
+      <li>Ti/Tv 比值和 Het/Hom 比例是<strong>评估变异结果整体可信度</strong>的常用指标（例如 Ti/Tv 过低往往提示大量假阳性）；</li>
+      <li>功能类别统计有助于从宏观上理解本项目的变异谱特征，例如是否富集于非同义、剪接区、启动子等。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="sv-与-cnv-检测">SV 与 CNV 检测</h3>
+
+<ul>
+  <li><strong>SV（结构变异）</strong>
+    <ul>
+      <li>使用 <code class="language-plaintext highlighter-rouge">lumpy</code> 等工具，基于异常配对 reads 和拆分 reads 检测大片段缺失、插入、倒位等结构变异，并做类型/大小统计。</li>
+      <li><strong>目的：</strong>捕获<strong>大于单碱基或小 indel 的结构变化</strong>，这些变异往往对基因剂量或染色体结构有较大影响。</li>
+    </ul>
+  </li>
+  <li><strong>CNV（拷贝数变异）</strong>
+    <ul>
+      <li>将参考基因组拆分为按染色体的窗口，结合 GC 含量和测序深度，利用 <code class="language-plaintext highlighter-rouge">call_CNV.pl</code> 估计每个样本的相对 copy number，输出 CNV 片段以及与基因注释交集的结果。</li>
+      <li><strong>目的：</strong>发现基因或大片段的拷贝数增减，这类变异在适应性进化、疾病易感性和产量性状中往往扮演重要角色。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="总结报告与交付物">总结报告与交付物</h3>
+
+<ul>
+  <li><strong>做什么：</strong>
+    <ul>
+      <li>对单样本调用 <code class="language-plaintext highlighter-rouge">summary_sig.pl</code>，对群体项目调用 <code class="language-plaintext highlighter-rouge">summary.pl</code>，收集质控、比对、深度覆盖、变异统计、功能注释等多项结果，整理到 <code class="language-plaintext highlighter-rouge">Summary</code> 目录下的标准交付结构中。</li>
+    </ul>
+  </li>
+  <li><strong>为什么：</strong>
+    <ul>
+      <li>将复杂的多步流程抽象成<strong>易于阅读和交付的报告与表格</strong>，方便下游的统计分析、可视化和客户/合作方解读；</li>
+      <li>同时也为之后的 QTL / GWAS / pQTL / eQTL 分析提供了系统化的起点——即一套质量可控、注释完备的基因型矩阵与辅助统计信息。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="后续关联分析-association">后续关联分析 (Association)</h3>
+
+<ul>
+  <li>
+    <p><strong>基因型 (Genotype)：</strong> 通过 SNP Calling 获得每个样本在特定位点的等位基因状态（如 0, 1, 2，代表突变个数）。</p>
+  </li>
+  <li>
+    <p><strong>表型 (Phenotype)：</strong> 这里的性状是分子的“量”，例如蛋白质丰度。</p>
+  </li>
+</ul>
+
+<p>统计模型会对全基因组的 SNP 逐一进行检验。</p>
+
+<ul>
+  <li>
+    <p><strong>原假设 (H0​)：</strong> 该 SNP 与蛋白质丰度无关（相关系数 β=0）。</p>
+  </li>
+  <li>
+    <p><strong>备择假说 (H1​)：</strong> 该 SNP 的基因型剂量变化会导致蛋白质丰度发生显著变化。</p>
+  </li>
+</ul>
+
+<p>详情见<a href="/_posts/2026-03-09-GWAS关联分析.md">GWAS关联分析</a></p>
+
+<h3 id="后续功能分类与证据评估">后续功能分类与证据评估</h3>
+
+<ul>
+  <li>
+    <p><strong>Cis-pQTL：</strong> 显著 SNP 物理位置靠近编码基因。这提供了较强的先验概率，暗示其可能直接影响转录或翻译。</p>
+  </li>
+  <li>
+    <p><strong>Trans-pQTL：</strong> 显著 SNP 远离编码基因。</p>
+  </li>
+  <li>
+    <p><strong>诊断性评估：</strong> 此时需要评估是否存在<strong>连锁不平衡 (LD)</strong>。即：该 SNP 是真正的功能位点，还是仅仅与功能位点距离太近而被“带”出来的信号？</p>
+  </li>
+</ul>
+
+<h2 id="duplicates的产生原因">duplicates的产生原因</h2>
+
+<p><img src="/assets/images/variant-calling-duplicate-types.png" alt="" /></p>
+<h3 id="pcr-duplicatespcr重复"><strong>PCR duplicates（PCR重复）</strong></h3>
+<p>PCR扩增时，同一个DNA片段会产生多个相同的拷贝，第4步测序的时候，这些来源于同一个拷贝的DNA片段会结合到Fellowcell的不同位置上，生成完全相同的测序cluster，然后被测序出来，这些相同的序列就是duplicate</p>
+<h3 id="cluster-duplicates"><strong>Cluster duplicates</strong></h3>
+
+<p>生成测序cluster的时候，某一个cluster中的DNA序列可能搭到旁边的另一个cluster的生成位点上，又再重新长成一个相同的cluster，这也是序列duplicate的另一个来源，这个现象在Illumina HiSeq4000之后的Flowcell中会有这类Cluster duplicates</p>
+
+<h3 id="optical-duplicates光学重复"><strong>Optical duplicates（光学重复）</strong></h3>
+
+<p>某些cluster在测序的时候，捕获的荧光亮点由于光波的衍射，导致形状出现重影（如同近视散光一样），导致它可能会被当成两个荧光点来处理。这也会被读出为两条完全相同的reads</p>
+
+<h3 id="sister-duplicates"><strong>Sister duplicates</strong></h3>
+
+<p>它是文库分子的两条互补链同时都与Flowcell上的引物结合分别形成了各自的cluster被测序，最后产生的这对reads是完全反向互补的。比对到参考基因组时，也分别在正负链的相同位置上，在有些分析中也会被认为是一种duplicates。</p>
+
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/variant%20calling" rel="tag"># variant calling</a>
+          
+            
+            <a href="/tag/#/%E5%8E%9F%E7%90%86" rel="tag"># 原理</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/wgs/2026/03/07/Variant-calling-%E8%BF%90%E8%A1%8C%E6%B5%81%E7%A8%8B/" rel="next" title="Variant calling 流程">
+                <i class="fa fa-chevron-left"></i> Variant calling 流程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/%E7%A7%91%E7%A0%94%E7%BB%98%E5%9B%BE/2026/03/06/%E6%8A%80%E6%9C%AF%E8%B7%AF%E7%BA%BF%E7%9A%84%E7%BB%98%E5%88%B6/" rel="prev" title="技术路线的绘制">
+                技术路线的绘制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#相关信息"> <span class="nav-number">1</span> <span class="nav-text">相关信息</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#术语"> <span class="nav-number">2</span> <span class="nav-text">术语</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#分析原理"> <span class="nav-number">3</span> <span class="nav-text">分析原理</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#duplicates的产生原因"> <span class="nav-number">3.1</span> <span class="nav-text">duplicates的产生原因</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#pcr-duplicatespcr重复"> <span class="nav-number">3.1.1</span> <span class="nav-text">PCR duplicates（PCR重复）</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#cluster-duplicates"> <span class="nav-number">3.1.2</span> <span class="nav-text">Cluster duplicates</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#optical-duplicates光学重复"> <span class="nav-number">3.1.3</span> <span class="nav-text">Optical duplicates（光学重复）</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#sister-duplicates"> <span class="nav-number">3.1.4</span> <span class="nav-text">Sister duplicates</strong</span> </a> </li> </ol> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

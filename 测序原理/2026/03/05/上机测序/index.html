@@ -1,0 +1,1511 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="原理,流程," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="记录了二代测序的原理。">
+<meta name="keywords" content="原理, 流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="上机测序">
+<meta property="og:url" content="https://vooooooodga.github.io/%E6%B5%8B%E5%BA%8F%E5%8E%9F%E7%90%86/2026/03/05/%E4%B8%8A%E6%9C%BA%E6%B5%8B%E5%BA%8F/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="记录了二代测序的原理。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/Pasted%20image%2020260303172538.png">
+<meta property="og:image" content="/assets/images/Pasted%20image%2020260303172637.png">
+<meta property="og:image" content="/assets/images/Pasted%20image%2020260303172850.png">
+<meta property="og:image" content="/assets/images/Pasted%20image%2020260303173038.png">
+<meta property="og:image" content="/assets/images/Pasted%20image%2020260303173208.png">
+<meta property="og:image" content="/assets/images/ScreenShot_2026-03-13_133759_100.png">
+<meta property="og:image" content="/assets/images/Pasted%20image%2020260304173217.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="上机测序">
+<meta name="twitter:description" content="记录了二代测序的原理。">
+<meta name="twitter:image" content="/assets/images/Pasted%20image%2020260303172538.png">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>上机测序 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/%E6%B5%8B%E5%BA%8F%E5%8E%9F%E7%90%86/2026/03/05/%E4%B8%8A%E6%9C%BA%E6%B5%8B%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            上机测序
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-03-05T21:33:17+08:00">
+                2026-03-05
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-03-13T13:40:24+08:00">
+                  2026-03-13
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/%E6%B5%8B%E5%BA%8F%E5%8E%9F%E7%90%86" itemprop="url" rel="index">
+                    <span itemprop="name">测序原理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <p>记录了二代测序的原理。</p>
+
+<h4 id="常见测序方法">常见测序方法</h4>
+<ul>
+  <li>Illumina SBS：边合成边测序技术，桥式PCR扩增文库，读长通常在100-300bp之间。
+    <ul>
+      <li>
+        <ul>
+          <li><strong>优势：</strong> 成本低、通量高、准确率高（&gt;99.9%）。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>应用：</strong> 适用于检测SNP（单核苷酸多态性）、小片段Indel（插入/缺失）、CNV（拷贝数变异）等。
+    <ul>
+      <li><strong>代表仪器：</strong> Illumina NovaSeq, HiSeq, NextSeq系列。</li>
+    </ul>
+  </li>
+  <li>第三代长度长测序
+    <ul>
+      <li>PacBio SMRT：单分子实时测序，</li>
+      <li>Oxford Nanopore Technologies (ONT)：纳米孔测序，直接读取单分子DNA，通过纳米孔检测电流变化。</li>
+      <li>优势： 读长长（可达kb至Mb级别），适合解决复杂区域（如高重复序列、SV结构性变异、单倍型分析）。</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/images/Pasted%20image%2020260303172538.png" alt="" /></p>
+<h4 id="桥式扩增">桥式扩增</h4>
+
+<ul>
+  <li>待测DNA片段固定在流动槽的探针上。
+<img src="/assets/images/Pasted%20image%2020260303172637.png" alt="" /></li>
+  <li>开启桥式扩增第一个循环</li>
+</ul>
+
+<p><img src="/assets/images/Pasted%20image%2020260303172850.png" alt="" /></p>
+<ul>
+  <li>扩增至N个循环
+<img src="/assets/images/Pasted%20image%2020260303173038.png" alt="" /></li>
+  <li>仅保留forward/reverse链。
+<img src="/assets/images/Pasted%20image%2020260303173208.png" alt="" /></li>
+  <li>边合成边测序：使用的是<strong>带有可逆阻断基团的 dNTP</strong>（不同于 ddNTP）。其 3’ 端被一个可以化学切除的基团保护。 这种阻断是<strong>暂时且可逆的</strong>。每轮循环加入一个碱基并拍照后，通过化学试剂切除阻断基团，使 3’ 端恢复羟基，从而继续下一轮合成。
+<img src="/assets/images/ScreenShot_2026-03-13_133759_100.png" alt="" /></li>
+</ul>
+
+<h4 id="乳液pcr">乳液PCR</h4>
+<p>Roche454，SOLiD，Ion Torrent都是这类。
+DNA片段与dNTP、引物和聚合酶包在一个油滴中，独立进行PCR扩增。
+优势：</p>
+<ul>
+  <li>每个测序反应都在PTP板上独立的小孔中进行，能大大降低相互间的干扰和测序偏差</li>
+  <li>测序读长，平均读长可达400bp，最长可达800bp
+劣势：</li>
+  <li>无法准确测量同聚物长度，如当序列中存在类似于PolyA的情况时，测序反应会一次加入多个T，而所加入的T的个数只能通过荧光强度推测获得，可能导致结果不准</li>
+  <li>测序成本相对较高
+    <h4 id="abi-solid-边连接边测序">ABI Solid 边连接边测序</h4>
+    <p>连接酶测序</p>
+    <ol>
+      <li>8碱基单链荧光探针混合物与单链DNA模板链配对完成，发出代表第1,2位碱基的荧光信号，然后在5和第6位碱基之间进行切割，移除荧光信号，即第一轮测序获得第1、2位，第二次是第6、7位……在测到末尾，将新合成的链变性洗脱掉</li>
+      <li>接着用引物n-1进行第二轮测序，发出代表第0,1位碱基的荧光信号，然后在5和第6位碱基之间进行切割，移除荧光信号，即第二轮测序获得第0、1位，第二次是第5、6位……在测到末尾，将新合成的链变性洗脱掉</li>
+      <li>依此类推，用n-2,n-3,n-4继续测序（接入长度为5bp的特殊探针bridge probe），五轮测序后即完成所有位置的碱基测序，且每个位置的碱基均被检测了两次
+优势：</li>
+    </ol>
+  </li>
+  <li>每个碱基为双次检测，原始测序准确性高达99.94%，而15x覆盖率的准确性更是达到了99.999%
+劣势：</li>
+  <li>读长短（2×50bp），后续序列拼接比较复杂</li>
+  <li>鉴于其是双碱基确定一个荧光信号，荧光解码阶段，一旦发生错误就容易产生连锁的解码错误</li>
+</ul>
+
+<h4 id="半导体测序">半导体测序</h4>
+<p>ION芯片测序</p>
+<ol>
+  <li>将处理好的磁珠固定在高密度半导体芯片的小孔中，与Roche454技术类似，一个小孔即为一个反应池</li>
+  <li>依次加入4种dNTP，配对成功后会释放出一个氢离子，反应池中PH发生改变</li>
+  <li>微电极检测PH变化，检测到的H+离子信号转化为数字信号，从而读出DNA序列</li>
+  <li>洗脱后进入下一轮碱基测序
+优势：
+    <ul>
+      <li>将化学信号转换为数字信号，不需要昂贵的物理成像等设备，成本低、操作简单、速度快</li>
+      <li>同聚物准确测量得到改善，DNA链上有若干相同碱基时，会检测到电压加倍，通过优化酶聚合酶，如新推出的Hi-Q酶聚合反应非常快，产生的PH值变化的峰更高、更尖、更利于判读，提高判读Homoploymer区域的准确性
+劣势：</li>
+      <li>通量较低，仅适合用于小基因组和外显子验证等测序。</li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="华大dnb">华大DNB</h4>
+<p><img src="/assets/images/Pasted%20image%2020260304173217.png" alt="" />
+DNA片段扩增（纳米球DNB技术）
+	1. DNA片段两段加接头
+	2. 变性处理后分离得到单链DNA
+	3. 加入与接头序列互补的连接引物，使单链DNA成环，连接酶连接两个接头
+	4. 在聚合酶的作用下沿着引物进行连续不断的滚环扩增
+	5. 上百份拷贝都在一股新DNA上，形成一团DNA纳米球（DNB, DNA Nano Ball）
+DNA纳米球附着芯片
+	DNB纳米球经过装载技术固定在阵列化（Patterned Array）的硅芯片上，芯片每个位点的蛋白质自动附着上去一个DNB纳米球
+测序
+	1. DNA分子锚和荧光探针在DNB上进行聚合
+	2. 高分辨率成像系统对光信号进行采集
+	3. 光信号经过数字化处理后即可获得待测序列
+优势：</p>
+<ul>
+  <li>DNB通过增加待测DNA的拷贝数而增强了信号强度，从而提高测序准确度</li>
+  <li>不同于PCR的指数扩增，滚环扩增技术的扩增错误不会累积</li>
+  <li>DNB与芯片上活化位点的大小相同，每个位点只固定一个DNB，保证信号点之间不产生相互干扰</li>
+  <li>阵列化测序芯片和DNB测序技术的结合，使得成像系统像素和测序芯片的面积得到最大化利用</li>
+  <li>核心技术：DNB技术、Patterned array技术、cPAS技术</li>
+</ul>
+
+<h4 id="二代测序出现错误的原因">二代测序出现错误的原因</h4>
+<h5 id="1-信号积累与信噪比退化生化层面">1. 信号积累与信噪比退化（生化层面）</h5>
+
+<p>Phasing 和 Pre-phasing 属于这一类。其本质是<strong>分子群落（Cluster）的非同步化</strong>。</p>
+
+<ul>
+  <li>
+    <p><strong>Phasing (滞后)</strong>：化学反应不完全（末端修饰未脱落或未延伸），导致部分分子留在 n−1 步。</p>
+  </li>
+  <li>
+    <p><strong>Pre-phasing (超前)</strong>：末端阻断失效，导致部分分子直接跳到 n+1 步。</p>
+  </li>
+  <li>
+    <p><strong>后果</strong>：随着循环数（Cycle）增加，噪声呈指数级积累。这就是为什么 Illumina 读长通常限制在 150-300bp 的物理瓶颈——到后面，“杂音”盖过了“主音”，Q30 质量值断崖式下跌。</p>
+  </li>
+</ul>
+
+<p>个人理解：如果一个集群（Cluster）中有 10% 的分子发生了 <strong>Phasing（滞后）</strong>，那么在第 10 轮成像时，这 10% 的分子发出的其实是第 9 轮的信号（$I_{n−1}​$）。测序软件（Basecaller）每一轮都会强行识别一个碱基。如果$I_{n−1}​$的背景噪声太强，导致识别错误，结果就是在该位点记下一个错误的碱基（替换错误），但不会改变总读长。</p>
+<h5 id="2-空间重叠与集群密度光学层面">2. 空间重叠与集群密度（光学层面）</h5>
+
+<p>除了信号的时间同步问题，还有空间上的分辨问题。</p>
+
+<ul>
+  <li>
+    <p><strong>Over-clustering（过饱和）</strong>：如果上机浓度（Loading concentration）过高，Flow Cell 上的集群会靠得太近。</p>
+  </li>
+  <li>
+    <p><strong>后果</strong>：光学镜头无法分辨两个相邻集群的荧光信号，导致坐标定位（Template Generation）失败或颜色串扰。这种错误通常发生在测序的最初几个循环。</p>
+  </li>
+  <li>
+    <p><strong>Under-clustering（密度过低）</strong>：虽然错误率低，但数据产量极低，导致有效信息不足。</p>
+  </li>
+</ul>
+
+<p>个人理解：</p>
+<ol>
+  <li>非模式芯片（non-patterned flow cell）中，DNA 片段随机结合在探针表面，如果浓度太高，扩增后的两个cluster可能在空间上发生物理重叠导致相机无法区分，信号被丢弃或识别错误。</li>
+  <li>而模式芯片（patterned flow cell），如NovaSeq，通过Exclusion Amplification（ExAmp）“排除扩增”确保一个孔只有一个cluster（一个孔只会被一个DNA片段填满），但浓度过高会导致不同DNA片段同时进入一个孔并开始扩增（co-occupancy），导致信号无法正确识别。
+    <h5 id="3-序列偏好性与系统性偏差序列层面">3. 序列偏好性与系统性偏差（序列层面）</h5>
+  </li>
+</ol>
+
+<p>某些特定的 DNA 序列天生难以被准确测序，这与 Phasing 无关，而与生化动力学有关。</p>
+
+<ul>
+  <li><strong>GC 含量偏好（GC Bias）</strong>：
+    <ul>
+      <li><strong>低 GC 或高 GC 区域</strong>：在集群扩增（Bridge PCR）过程中，这些区域的扩增效率极低，导致信号强度弱。</li>
+    </ul>
+  </li>
+  <li><strong>同聚物（Homopolymers）</strong>：
+    <ul>
+      <li>虽然 Illumina 对 AAAAA 这种序列比 454 或 Ion Torrent 系统更稳定，但在极长同聚物中，依然会因为聚合酶滑移（Polymerase Slippage）导致插入或缺失错误（Indel）。</li>
+    </ul>
+  </li>
+  <li><strong>G-quadruplex（G-四联体）</strong>：复杂的二级结构会物理性阻碍聚合酶的延伸。</li>
+</ul>
+
+<h5 id="4-实验室引入的人造错误样本准备层面">4. 实验室引入的“人造”错误（样本准备层面）</h5>
+
+<p>这些错误在测序前就已经存在于文库中。</p>
+
+<ul>
+  <li>
+    <p><strong>PCR 嵌合体（Chimeras）与错配</strong>：文库构建时的扩增步骤会引入碱基错配。平均而言，高保真酶的错误率约为 10−6，虽然低，但在深度测序中会被放大。</p>
+  </li>
+  <li>
+    <p><strong>Index Hopping（标签漂移）</strong>：在 Patterned Flow Cell 上，游离的接头可能导致 A 样本的 Read 被错误地标记为 B 样本。
+个人理解：文库构建过程中，接头（Adapter）是过量加入的。即使经过两轮磁珠纯化仍然会有极微量的游离接头或引物残留。上机后，flow cell存在已结合的单链，游离接头，游离样本，以及高活性的DNA聚合酶。游离的接头B以文库A为模板通过其互补的P5/P7延伸，最终导致本属于样本A的片段接上了B的barcode。</p>
+  </li>
+</ul>
+
+<h4 id="光信号转换为数字信号">光信号转换为数字信号</h4>
+<p>测序仪记录的是图像光信号（tiff）
+需要转换为cif location，再转为BCL（进行stats control filter），最后得到fastq</p>
+
+<p>BCL：BaseCalL，二进制文件，包含了每个circles和tite的碱基信息和质量分数，是真正意义上的RawData，由仪器的实时分析软件（RTA）生成</p>
+
+<p>目前主流的数据拆分软件是bcl2fastq和bcl-convert</p>
+
+<p>Bcl2fastq为旧版本的数据拆分软件，拆分速度较慢，目前已不再更新</p>
+
+<p>Bcl-convert具有算法上的优化，拆分速度快，资源消耗小</p>
+
+<p>不同软件拆分出的fastq ID不同</p>
+
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/%E5%8E%9F%E7%90%86" rel="tag"># 原理</a>
+          
+            
+            <a href="/tag/#/%E6%B5%81%E7%A8%8B" rel="tag"># 流程</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/%E6%B5%8B%E5%BA%8F%E5%8E%9F%E7%90%86/2026/03/05/%E5%8F%8C%E7%AB%AF%E6%B5%8B%E5%BA%8F%E6%8E%A5%E5%A4%B4%E8%AF%86%E5%88%AB%E4%B8%8E%E5%8E%BB%E9%99%A4/" rel="next" title="双端测序接头识别与去除">
+                <i class="fa fa-chevron-left"></i> 双端测序接头识别与去除
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/%E6%B5%8B%E5%BA%8F%E5%8E%9F%E7%90%86/2026/03/05/%E6%B5%8B%E5%BA%8F%E6%A0%B7%E5%93%81%E5%BB%BA%E5%BA%93/" rel="prev" title="测序样品建库">
+                测序样品建库 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-4"> <a class="nav-link" href="#常见测序方法"> <span class="nav-number">1</span> <span class="nav-text">常见测序方法</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#桥式扩增"> <span class="nav-number">2</span> <span class="nav-text">桥式扩增</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#乳液pcr"> <span class="nav-number">3</span> <span class="nav-text">乳液PCR</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#abi-solid-边连接边测序"> <span class="nav-number">4</span> <span class="nav-text">ABI Solid 边连接边测序</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#半导体测序"> <span class="nav-number">5</span> <span class="nav-text">半导体测序</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#华大dnb"> <span class="nav-number">6</span> <span class="nav-text">华大DNB</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#二代测序出现错误的原因"> <span class="nav-number">7</span> <span class="nav-text">二代测序出现错误的原因</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-5"> <a class="nav-link" href="#1-信号积累与信噪比退化生化层面"> <span class="nav-number">7.1</span> <span class="nav-text">1. 信号积累与信噪比退化（生化层面）</span> </a> </li> <li class="nav-item nav-level-5"> <a class="nav-link" href="#2-空间重叠与集群密度光学层面"> <span class="nav-number">7.2</span> <span class="nav-text">2. 空间重叠与集群密度（光学层面）</span> </a> </li> <li class="nav-item nav-level-5"> <a class="nav-link" href="#3-序列偏好性与系统性偏差序列层面"> <span class="nav-number">7.3</span> <span class="nav-text">3. 序列偏好性与系统性偏差（序列层面）</span> </a> </li> <li class="nav-item nav-level-5"> <a class="nav-link" href="#4-实验室引入的人造错误样本准备层面"> <span class="nav-number">7.4</span> <span class="nav-text">4. 实验室引入的“人造”错误（样本准备层面）</span> </a> </li> </ol> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#光信号转换为数字信号"> <span class="nav-number">8</span> <span class="nav-text">光信号转换为数字信号</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

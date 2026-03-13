@@ -1,0 +1,2351 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="variant calling,参考基因组注释,文件格式,可视化," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这篇笔记整理了在做基因组注释与变异检测时，相关文件格式的含义。 主要覆盖参考基因组构建（BWA 索引、功能注释）、Fastq 原始测序数据、以及 VCF 变异结果文件中的关键字段。">
+<meta name="keywords" content="variant calling, 参考基因组注释, 文件格式, 可视化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Variant calling 过程的文件格式">
+<meta property="og:url" content="https://vooooooodga.github.io/wgs/2026/03/07/Variant-calling-%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="这篇笔记整理了在做基因组注释与变异检测时，相关文件格式的含义。 主要覆盖参考基因组构建（BWA 索引、功能注释）、Fastq 原始测序数据、以及 VCF 变异结果文件中的关键字段。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/genome/fastq.format.png">
+<meta property="og:image" content="/assets/images/genome/fa.fai.format.png">
+<meta property="og:image" content="/assets/images/picard.dict.png">
+<meta property="og:image" content="/assets/images/sam.png">
+<meta property="og:image" content="/assets/images/insert.size.plot.png">
+<meta property="og:image" content="/assets/images/genome/vcf.format.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Variant calling 过程的文件格式">
+<meta name="twitter:description" content="这篇笔记整理了在做基因组注释与变异检测时，相关文件格式的含义。 主要覆盖参考基因组构建（BWA 索引、功能注释）、Fastq 原始测序数据、以及 VCF 变异结果文件中的关键字段。">
+<meta name="twitter:image" content="/assets/images/genome/fastq.format.png">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>Variant calling 过程的文件格式 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/wgs/2026/03/07/Variant-calling-%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            Variant calling 过程的文件格式
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-03-07T02:00:00+08:00">
+                2026-03-07
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-03-12T16:07:37+08:00">
+                  2026-03-12
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/WGS" itemprop="url" rel="index">
+                    <span itemprop="name">WGS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <p>这篇笔记整理了在做基因组注释与变异检测时，相关文件格式的含义。<br />
+主要覆盖参考基因组构建（BWA 索引、功能注释）、Fastq 原始测序数据、以及 VCF 变异结果文件中的关键字段。</p>
+
+<h3 id="参考基因组">参考基因组</h3>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47<br/>48<br/>49<br/>50<br/>51<br/>52<br/>53<br/>54<br/>55<br/>56<br/>57<br/>58<br/>59<br/>60<br/>61<br/>62<br/>63<br/>64<br/>65<br/>66<br/>67<br/>68<br/>69<br/>70<br/>71<br/>72<br/>73<br/>74<br/>75<br/>76<br/>77<br/>78<br/>79<br/>80<br/>81<br/>82<br/>83<br/>84<br/>85<br/>86<br/>87<br/>88<br/>89<br/>90<br/>91<br/>92<br/>93<br/>94<br/>95<br/>96<br/>97<br/>98<br/>99<br/>100<br/>101<br/>102<br/>103<br/>104<br/>105<br/>106<br/>107<br/>108<br/>109<br/>110<br/>111<br/>112<br/>113<br/>114<br/>115<br/>116<br/>117<br/>118<br/>119<br/>120<br/>121<br/>122<br/>123<br/>124<br/>125<br/>126<br/>127<br/>128<br/>129<br/>130<br/>131<br/>132<br/>133<br/>134<br/>135<br/>136<br/>137<br/>138<br/>139<br/>140<br/>141<br/>142<br/>143<br/>144<br/>145<br/>146<br/>147<br/>148<br/>149<br/>150<br/>151</pre></td><td class="code"><pre class="highlight"><code>tree ../Sus_scrofa/Ensembl_V111/
+../Sus_scrofa/Ensembl_V111/
+├── 01_Build_Genome_DB.sh
+├── 02_raw
+│   ├── Sus_scrofa.Sscrofa11.1.111.gff3
+│   └── Sus_scrofa.Sscrofa11.1.dna_sm.toplevel.fa
+├── 03_genome
+│   ├── cds.fa.gz
+│   ├── gene.fa.gz
+│   ├── genome.dict
+│   ├── genome.fa
+│   ├── genome.fa.amb
+│   ├── genome.fa.ann
+│   ├── genome.fa.bwt
+│   ├── genome.fa.fai
+│   ├── genome.fa.index
+│   ├── genome.fa.pac
+│   ├── genome.fa.sa
+│   ├── genome.gff
+│   ├── mrna.fa.gz
+│   ├── pep.fa.gz
+│   ├── promoter_3kb.fa.gz
+│   ├── Ref
+│   │   ├── genome.fa
+│   │   ├── id_table.txt
+│   │   ├── ref.genome.dict
+│   │   ├── ref.genome.fa
+│   │   ├── ref.genome.fa.amb
+│   │   ├── ref.genome.fa.ann
+│   │   ├── ref.genome.fa.bwt
+│   │   ├── ref.genome.fa.fai
+│   │   ├── ref.genome.fa.len
+│   │   ├── ref.genome.fa.pac
+│   │   ├── ref.genome.fa.sa
+│   │   └── ref.genome.gff
+│   └── <span class="nb">stat</span>
+│       ├── biological_region
+│       │   └── table_per_feature_type.txt
+│       ├── gene@c_gene_segment
+│       │   ├── name
+│       │   │   └── name_exon.txt
+│       │   └── table_per_feature_type.txt
+│       ├── gene@j_gene_segment
+│       │   ├── name
+│       │   │   └── name_exon.txt
+│       │   └── table_per_feature_type.txt
+│       ├── gene@mrna
+│       │   ├── description
+│       │   │   └── description_gene.txt
+│       │   ├── name
+│       │   │   ├── name_exon.txt
+│       │   │   ├── name_gene.txt
+│       │   │   └── name_mrna.txt
+│       │   └── table_per_feature_type.txt
+│       ├── gene@rna
+│       │   ├── name
+│       │   │   ├── name_exon.txt
+│       │   │   ├── name_gene.txt
+│       │   │   └── name_rna.txt
+│       │   └── table_per_feature_type.txt
+│       ├── gene@v_gene_segment
+│       │   ├── description
+│       │   │   └── description_gene.txt
+│       │   ├── name
+│       │   │   ├── name_exon.txt
+│       │   │   ├── name_gene.txt
+│       │   │   └── name_v_gene_segment.txt
+│       │   └── table_per_feature_type.txt
+│       ├── ncrna_gene@lnc_rna
+│       │   ├── description
+│       │   │   └── description_ncrna_gene.txt
+│       │   ├── name
+│       │   │   ├── name_exon.txt
+│       │   │   ├── name_lnc_rna.txt
+│       │   │   └── name_ncrna_gene.txt
+│       │   └── table_per_feature_type.txt
+│       ├── ncrna_gene@mirna
+│       │   ├── description
+│       │   │   └── description_ncrna_gene.txt
+│       │   ├── name
+│       │   │   ├── name_exon.txt
+│       │   │   ├── name_mirna.txt
+│       │   │   └── name_ncrna_gene.txt
+│       │   └── table_per_feature_type.txt
+│       ├── ncrna_gene@rrna
+│       │   ├── description
+│       │   │   └── description_ncrna_gene.txt
+│       │   ├── name
+│       │   │   ├── name_exon.txt
+│       │   │   ├── name_ncrna_gene.txt
+│       │   │   └── name_rrna.txt
+│       │   └── table_per_feature_type.txt
+│       ├── ncrna_gene@scrna
+│       │   ├── description
+│       │   │   └── description_ncrna_gene.txt
+│       │   ├── name
+│       │   │   ├── name_exon.txt
+│       │   │   ├── name_ncrna_gene.txt
+│       │   │   └── name_scrna.txt
+│       │   └── table_per_feature_type.txt
+│       ├── ncrna_gene@snorna
+│       │   ├── description
+│       │   │   └── description_ncrna_gene.txt
+│       │   ├── name
+│       │   │   ├── name_exon.txt
+│       │   │   ├── name_ncrna_gene.txt
+│       │   │   └── name_snorna.txt
+│       │   └── table_per_feature_type.txt
+│       ├── ncrna_gene@snrna
+│       │   ├── description
+│       │   │   └── description_ncrna_gene.txt
+│       │   ├── name
+│       │   │   ├── name_exon.txt
+│       │   │   ├── name_ncrna_gene.txt
+│       │   │   └── name_snrna.txt
+│       │   └── table_per_feature_type.txt
+│       ├── ncrna_gene@transcript
+│       │   ├── description
+│       │   │   └── description_ncrna_gene.txt
+│       │   ├── name
+│       │   │   ├── name_exon.txt
+│       │   │   ├── name_ncrna_gene.txt
+│       │   │   └── name_transcript.txt
+│       │   └── table_per_feature_type.txt
+│       ├── ncrna_gene@trna
+│       │   ├── name
+│       │   │   └── name_exon.txt
+│       │   └── table_per_feature_type.txt
+│       ├── pseudogene@pseudogenic_transcript
+│       │   ├── description
+│       │   │   └── description_pseudogene.txt
+│       │   ├── name
+│       │   │   ├── name_exon.txt
+│       │   │   ├── name_pseudogene.txt
+│       │   │   └── name_pseudogenic_transcript.txt
+│       │   └── table_per_feature_type.txt
+│       ├── region
+│       │   └── table_per_feature_type.txt
+│       └── stat_features.txt
+├── 04_diamond
+│   ├── cds.diamond_blastx.go.txt
+│   ├── cds.diamond_blastx.kegg.txt
+│   ├── cds.diamond_blastx.nr.txt
+│   ├── mRNA2gene.txt
+│   └── tmp
+├── 05_annotation
+│   ├── GO.annotation.txt
+│   ├── KEGG.annotation.txt
+│   └── NR.annotation.txt
+└── nohup.out
+
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">01_Build_Genome_DB.sh</code>: 核心构建脚本。包含从原始数据下载、过滤、索引构建到功能提取的全流程命令。</li>
+  <li><code class="language-plaintext highlighter-rouge">nohup.out</code>: 记录脚本运行过程中的标准输出与错误日志，用于追溯构建过程中的异常。</li>
+  <li><code class="language-plaintext highlighter-rouge">02_raw</code>: 存储从公共数据库（如 Ensembl）下载的原始未处理文件。
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">.gff3</code>: 原始基因组注释。</li>
+      <li><code class="language-plaintext highlighter-rouge">.dna_sm.toplevel.fa</code>: 软掩盖（Soft-masked）的基因组序列，重复序列被标记为小写字母。</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">03_genome</code>：存储处理后的序列及各类访问索引。
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">*.fa.gz</code> (cds, gene, mrna, pep, promoter): 提取出的各类功能元件序列包。</li>
+      <li><code class="language-plaintext highlighter-rouge">genome.fa</code> / <code class="language-plaintext highlighter-rouge">genome.gff</code>: 经过标准化处理（如重命名染色体）的主参考文件。</li>
+      <li>BWA 索引 (.amb, .ann, .bwt, .pac, .sa): 用于二代测序数据比对。</li>
+      <li>访问索引 (.fai, .dict): 用于随机定位与校验。</li>
+      <li><code class="language-plaintext highlighter-rouge">Ref/</code>：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">ref.genome.*</code>: 该子目录下文件通常为 downstream 流程（如 GATK）专用。</li>
+          <li><code class="language-plaintext highlighter-rouge">id_table.txt</code>: 关键对照表，记录原始染色体 ID 到标准化 ID 的映射。</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">stat/</code>：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">gene@mrna/</code> / <code class="language-plaintext highlighter-rouge">ncrna_gene@lnc_rna/</code> 等: 按“父特征@子特征”命名的分类统计。
+            <ul>
+              <li><code class="language-plaintext highlighter-rouge">name/</code>: 包含 ID 与基因/转录本名称的映射（<code class="language-plaintext highlighter-rouge">name_gene.txt</code> 等）。</li>
+              <li><code class="language-plaintext highlighter-rouge">description/</code>: 存储基因的功能描述信息，用于注释补全。</li>
+              <li><code class="language-plaintext highlighter-rouge">table_per_feature_type.txt</code>: 该类特征的数量、平均长度等统计报表。</li>
+            </ul>
+          </li>
+          <li><code class="language-plaintext highlighter-rouge">stat_features.txt</code>: 整个基因组所有特征类型的总览统计。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">04_diamond</code>：使用 DIAMOND 工具将提取的 CDS/mRNA 序列与蛋白库进行比对。
+    <ul>
+      <li>
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">*.go.txt</code> / <code class="language-plaintext highlighter-rouge">*.kegg.txt</code> / <code class="language-plaintext highlighter-rouge">*.nr.txt</code>: 初始比对结果，记录了查询序列与数据库序列的相似性得分（E-value, Identity）。</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">mRNA2gene.txt</code>: 关系映射表，用于将比对到的转录本功能归类到所属基因上。</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">05_annotation</code>：将比对结果经过滤、去重、权重筛选后生成的最终注释表。
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">GO.annotation.txt</code>: 基因与 Gene Ontology 词条的对应关系。</li>
+      <li><code class="language-plaintext highlighter-rouge">KEGG.annotation.txt</code>: 基因与代谢通路（Pathways）的对应关系。</li>
+      <li><code class="language-plaintext highlighter-rouge">NR.annotation.txt</code>: 基因与已知蛋白功能的详细文本描述对照表。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="测序原始文件">测序原始文件</h3>
+<p><img src="/assets/images/genome/fastq.format.png" alt="Fastq 结构示意" /></p>
+<h3 id="原始数据质控">原始数据质控</h3>
+<h4 id="fastp质控输出">fastp质控输出</h4>
+<p><code class="language-plaintext highlighter-rouge">*_CleanData_R1.fastq.gz</code> &amp;  <code class="language-plaintext highlighter-rouge">*_CleanData_R2.fastq.gz</code><br />
+fastp统计 <code class="language-plaintext highlighter-rouge">json/html</code><br />
+整合所有样本的报告 <code class="language-plaintext highlighter-rouge">data_stat.txt</code></p>
+
+<h4 id="fastqc质控报告">fastQC质控报告</h4>
+<p>对 <code class="language-plaintext highlighter-rouge">CleanData</code> 进行，输出zip/html报告。</p>
+
+<h3 id="序列访问索引">序列访问索引</h3>
+
+<p>这类索引用于实现对大型 FASTA 文件的随机访问（Random Access），使软件能够快速定位并提取特定染色体或位置的碱基。</p>
+<h4 id="samtools索引">samtools索引</h4>
+<p><code class="language-plaintext highlighter-rouge">samtools faidx ref.genome.fa</code><br />
+该指令会生成<code class="language-plaintext highlighter-rouge">genome.fa.fai</code>。</p>
+
+<p><img src="/assets/images/genome/fa.fai.format.png" alt="genome.fa.fai 示例" />
+注：某些性染色体（如 Y 染色体）或部分高度重复区域的组装结果可能比某些长 Scaffold 还要短。仅凭长度排序<code class="language-plaintext highlighter-rouge">sort -k2nr</code>是一种启发式搜索，不能作为最终证据。建议结合第一列的 <strong>NAME</strong> 命名规范进行二次判定。</p>
+
+<h4 id="基于bwa的比对索引">基于BWA的比对索引</h4>
+<p><code class="language-plaintext highlighter-rouge">bwa index -a bwtsw ref.genome.fa</code><br />
+通常不需要关注这些文件结构。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>扩展名</th>
+      <th>格式/内容解释</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>.bwt</strong></td>
+      <td><strong>Burrows-Wheeler Transform</strong>：核心索引，将序列转换为数学表示。</td>
+    </tr>
+    <tr>
+      <td><strong>.ann</strong></td>
+      <td><strong>Annotation</strong>：记录染色体 ID、长度及在 <code class="language-plaintext highlighter-rouge">.pac</code> 中的连接顺序。</td>
+    </tr>
+    <tr>
+      <td><strong>.amb</strong></td>
+      <td><strong>Ambiguous</strong>：记录非 ATGC 碱基（如 N）的位置。</td>
+    </tr>
+    <tr>
+      <td><strong>.pac</strong></td>
+      <td><strong>Packed</strong>：二进制。将原始碱基以 2-bit 形式压缩存储。</td>
+    </tr>
+    <tr>
+      <td><strong>.sa</strong></td>
+      <td><strong>Suffix Array</strong>：后缀数组采样点，用于坐标还原。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">.amb</code>:</p>
+
+<pre><code class="language-txt"># 头部行（第一行）：参考基因组的总长度，参考序列的数量（染色体或 Contig 的总数），内部校验值或特定格式标记
+# N区域起始位置，N区域长度，N区域所在的序列名或索引（通常与.ann文件对应）
+2501912388 613 544
+90927422 100 n
+91945429 100 n
+92881119 100 n
+214753360 100 n
+......
+</code></pre>
+
+<p><code class="language-plaintext highlighter-rouge">.ann</code>:</p>
+
+<pre><code class="language-txt"># 头部行（第一行）：参考基因组的总长度，参考序列的数量（染色体或 Contig 的总数），内部校验值或特定格式标记
+# 序列注释块两行为一组：第一行分别为，该序列在整个连接参考序列中的起始偏移量（Offset），序列名称，该序列的描述信息。
+# 第二行分别为， 内部标记（通常标明该序列在链接过程中的某些状态），该序列的精确长度，该序列包含的非变体或特定字符（如N）的数量类别标识。
+2501912388 613 11
+0 1 (null)
+0 274330532 4
+0 2 (null)
+274330532 151935994 6
+0 3 (null)
+426266526 132848913 10
+0 4 (null)
+559115439 130910915 5
+0 5 (null)
+......
+</code></pre>
+<h4 id="picard索引">picard索引</h4>
+<p><code class="language-plaintext highlighter-rouge">$java -Xmx$picard_mem -jar $picard CreateSequenceDictionary R=$ref_db O=$dict &amp;&amp; touch $DONE/picard_index.done</code><br />
+生成<code class="language-plaintext highlighter-rouge">ref.genome.dict</code>:</p>
+
+<p><img src="/assets/images/picard.dict.png" alt="" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">.dict</code> 文件由两部分组成：</p>
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">@HD</code> (Header Line)</strong>：定义文件版本和排序方式。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">@SQ</code> (Sequence Dictionary Line)</strong>：定义参考基因组中每一条染色体或 Contig 的具体信息。</li>
+</ul>
+
+<p>每列意义：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>标签 (Tag)</strong></th>
+      <th><strong>名称</strong></th>
+      <th><strong>意义</strong></th>
+      <th><strong>示例/备注</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong><code class="language-plaintext highlighter-rouge">@HD</code></strong></td>
+      <td>Header</td>
+      <td>文件的头部起始标志</td>
+      <td>表明这是一个头部行</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">VN</code></td>
+      <td>Version</td>
+      <td>格式版本号</td>
+      <td><code class="language-plaintext highlighter-rouge">1.5</code></td>
+    </tr>
+    <tr>
+      <td><strong><code class="language-plaintext highlighter-rouge">@SQ</code></strong></td>
+      <td>Sequence</td>
+      <td>序列记录起始标志</td>
+      <td>每一行代表一条染色体或 Contig</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SN</code></td>
+      <td>Sequence Name</td>
+      <td>序列名称</td>
+      <td>如 <code class="language-plaintext highlighter-rouge">1</code>, <code class="language-plaintext highlighter-rouge">2</code>, <code class="language-plaintext highlighter-rouge">X</code> 或 Contig ID <code class="language-plaintext highlighter-rouge">FPKY02000001.1</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">LN</code></td>
+      <td>Length</td>
+      <td>序列长度</td>
+      <td>单位为碱基对 (bp)。例如染色体 1 长度为 <code class="language-plaintext highlighter-rouge">274330532</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">M5</code></td>
+      <td>MD5 Checksum</td>
+      <td>序列内容的 MD5 校验码</td>
+      <td>用于唯一标识序列内容，防止因文件名相同但内容不同导致的错误</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">UR</code></td>
+      <td>URI</td>
+      <td>参考基因组源文件的路径</td>
+      <td>指向原始 <code class="language-plaintext highlighter-rouge">.fa</code> 文件的位置，通常为绝对或相对路径</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="比对过程文件">比对过程文件</h3>
+
+<h4 id="bam"><code class="language-plaintext highlighter-rouge">*.bam</code></h4>
+
+<p>sam文件的压缩二进制表示：</p>
+
+<p><img src="/assets/images/sam.png" alt="" />
+ Header 头部信息：以 <code class="language-plaintext highlighter-rouge">SAM</code> 文本格式存储的元数据，包含版本、序列字典（@SQ）、读段分组（@RG）和比对工具（@PG）。在 BAM 中，这部分被转换为二进制存储。</p>
+
+<p>Alignments比对部分：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>列号</th>
+      <th>字段名称</th>
+      <th>含义说明</th>
+      <th>示例/取值范围</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><strong>QNAME</strong></td>
+      <td>序列 ID (Query Name)</td>
+      <td>来自测序仪的原始 ID</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>FLAG</strong></td>
+      <td>数字标识 (Bitwise Flag)</td>
+      <td>代表比对状态的位运算总和</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>RNAME</strong></td>
+      <td>参考序列名称 (Reference Name)</td>
+      <td>染色体编号，若未比对上则为 <code class="language-plaintext highlighter-rouge">*</code></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>POS</strong></td>
+      <td>比对起始位置 (Position)</td>
+      <td>基于 1 的最左端位置</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>MAPQ</strong></td>
+      <td>比对质量值 (Mapping Quality)</td>
+      <td>比对结果错误的概率（−10log10​P）</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><strong>CIGAR</strong></td>
+      <td>简并比对表示法</td>
+      <td>描述 Match、Mismatch 及 Indel</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><strong>RNEXT</strong></td>
+      <td>配对端比对到的染色体</td>
+      <td>=  表示与本 Read 相同，* 表示无配对</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><strong>PNEXT</strong></td>
+      <td>配对端比对到的位置</td>
+      <td>配对 Read 的起始位置</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><strong>TLEN</strong></td>
+      <td>观察到的片段长度 (Template Length)</td>
+      <td>插入片段大小，通常左端为正，右端为负</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><strong>SEQ</strong></td>
+      <td>Read 的碱基序列</td>
+      <td><code class="language-plaintext highlighter-rouge">A, T, C, G, N</code></td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td><strong>QUAL</strong></td>
+      <td>碱基质量得分 (Phred Quality)</td>
+      <td>ASCII 编码的碱基准确性信息</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="flag">FLAG</h5>
+<p>FLAG 列通过一个十进制数字存储了多个布尔状态（True/False）。它是通过将以下<strong>二进制位</strong>累加得到的。</p>
+
+<p><strong>常用标志位（部分）：</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">1 (0x1)</code>: 该 Read 是双端测序（Paired-end）。</li>
+  <li><code class="language-plaintext highlighter-rouge">2 (0x2)</code>: 该 Read 每一端都正确比对上（Properly aligned）。</li>
+  <li><code class="language-plaintext highlighter-rouge">4 (0x4)</code>: 该 Read 未比对上（Unmapped）。</li>
+  <li><code class="language-plaintext highlighter-rouge">16 (0x10)</code>: 该 Read 比对到了负链（Reverse strand）。</li>
+  <li><code class="language-plaintext highlighter-rouge">256 (0x100)</code>: 二次比对（Secondary alignment）。</li>
+  <li><code class="language-plaintext highlighter-rouge">1024 (0x400)</code>: 重复记录（PCR or Optical Duplicate）。</li>
+</ul>
+
+<p>例：FLAG 为 <strong>99</strong>，其二进制分解为 64+32+2+1：</p>
+<ul>
+  <li>1: 双端测序</li>
+  <li>2: 正确匹配</li>
+  <li>32: 配对端在负链</li>
+  <li>64: 这是双端中的第一条 Read (R1)</li>
+  <li>(蕴含信息：本条 Read 在正链)</li>
+</ul>
+
+<h5 id="mapq比对质量">MAPQ：比对质量</h5>
+<p>MAPQ 是评估比对结果“唯一性”的关键指标，计算公式为：</p>
+
+<p>MAPQ=$−10log_{10}​P(mapping\ is\ wrong)$</p>
+
+<ul>
+  <li><strong>40 - 60</strong>: 高置信度，Read 极大概率只属于当前位置。</li>
+  <li><strong>0</strong>: 极低置信度。通常表示 Read 序列过于简单（如全 A）或在基因组中存在多个几乎相同的拷贝，软件无法确定其真实位置。</li>
+</ul>
+
+<h5 id="cigar比对状态描述">CIGAR：比对状态描述</h5>
+<p>CIGAR 字符串告诉我们 Read 是如何“贴”在参考序列上的：</p>
+
+<ul>
+  <li><strong>M</strong>: Alignment Match (可以是 Mismatch，仅表示比对位置对齐)。</li>
+  <li><strong>I</strong>: Insertion (相对于参考基因组，Read 多出了碱基)。</li>
+  <li><strong>D</strong>: Deletion (相对于参考基因组，Read 缺失了碱基)。</li>
+  <li><strong>S</strong>: Soft Clipping (末端未比对上的部分，但在记录中保留了碱基序列)。</li>
+  <li><strong>H</strong>: Hard Clipping (末端未比对上的部分，且在记录中删除了该段序列)。</li>
+</ul>
+
+<h5 id="可选标签-optional-tags">可选标签 (Optional Tags)</h5>
+
+<p>在 11 列之后，通常会有形如 <code class="language-plaintext highlighter-rouge">NM:i:1</code> 或 <code class="language-plaintext highlighter-rouge">MD:Z:100</code> 的标记。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12</pre></td><td class="code"><pre class="highlight"><code>AS:i  匹配的得分  
+XS:i  第二好的匹配的得分  
+YS:i  mate 序列匹配的得分  
+XN:i  在参考序列上模糊碱基的个数  
+XM:i  错配的个数  
+XO:i  gap open的个数  
+XG:i  gap 延伸的个数  
+NM:i  经过编辑的序列  
+YF:i  说明为什么这个序列被过滤的字符串  
+YT:Z 值为UU表示不是pair中一部分<span class="o">(</span>单末端？<span class="o">)</span>、CP<span class="o">(</span>是pair且可以完美匹配<span class="o">)</span>  
+DP<span class="o">(</span>是pair但不能很好的匹配<span class="o">)</span>、UP<span class="o">(</span>是pair但是无法比对到参考序列上<span class="o">)</span>  
+MD:Z  代表序列和参考序列错配的字符串
+</code></pre></td></tr></tbody></table></div></div>
+
+<h5 id="异常检测建议">异常检测建议</h5>
+<p>观察到某行的数据不符合上述逻辑，可以采用以下排查思路：</p>
+
+<ol>
+  <li><strong>若 FLAG 包含 4（未比对）</strong>：则 POS 必须为 0，CIGAR 必须为 <code class="language-plaintext highlighter-rouge">*</code>。若不符，说明文件在生成过程中可能存在逻辑错误或软件 Bug。</li>
+  <li><strong>若 TLEN 远大于文库长度</strong>：可能存在染色体结构变异（SV），或者该 Read 的两端被错误地比对到了相隔极远的位置。</li>
+  <li><strong>线性对齐</strong>：一条read比对到参考序列上，可以存在插入(insert)、缺失(delete)、跳跃(skip)、剪切(clip)，但是方向不变（不能是一部分和正链匹配，另一部分又和负链匹配），sam文件中只占用一行记录。</li>
+  <li><strong>嵌合比对</strong>：由于一条测序read比对到基因组上时分别比对到两个不同的区域，而这两个区域基本没有接触和重叠。因此它在sam文件中需要占用多行记录显示。只有第一个记录称作”representative”,其他的都是”supplementary”。RNA-seq中的chimeric read或许可以说明有融合基因存在，但在基因组中一般作为结构变异的证据。</li>
+</ol>
+
+<h4 id="sortbam"><code class="language-plaintext highlighter-rouge">*.sort.bam</code></h4>
+<p>比对并按坐标排序后的二进制文件。</p>
+
+<h3 id="picard-markduplicates">Picard MarkDuplicates</h3>
+<h4 id="rmdupbam"><code class="language-plaintext highlighter-rouge">*.rmdup.bam</code></h4>
+<p>经过 Picard (CPU) 或 Parabricks (GPU) 处理，标记了 PCR/Optical 重复后的文件。</p>
+<h5 id="flag-标签">FLAG 标签</h5>
+
+<p>普通 BAM 文件中的 Read 通常没有关于重复的信息。而在 <code class="language-plaintext highlighter-rouge">rmdup.bam</code> 中，被识别为重复的 Read，其 <strong>FLAG</strong> 列数值会增加 <strong>1024 (0x400)</strong>。</p>
+
+<ul>
+  <li>
+    <p><strong>普通比对 Read (R1, 正向比对)</strong>: FLAG = 99</p>
+  </li>
+  <li>
+    <p><strong>标记为重复后的相同 Read</strong>: FLAG = 1123 (99+1024)</p>
+  </li>
+</ul>
+
+<h5 id="标记与删除的策略差异">“标记”与“删除”的策略差异</h5>
+
+<p>根据运行参数 <code class="language-plaintext highlighter-rouge">REMOVE_DUPLICATES</code> 的不同，结果有两种表现：</p>
+
+<ul>
+  <li>
+    <p><strong>默认 (False)</strong>：保留所有 Read，仅通过 FLAG 位进行标记。下游工具（如 GATK <code class="language-plaintext highlighter-rouge">HaplotypeCaller</code>）会识别此 FLAG 并主动忽略这些数据。</p>
+  </li>
+  <li>
+    <p><strong>删除 (True)</strong>：物理删除被识别为重复的 Read。此时文件体积会显著减小，但该操作不可逆，通常不建议在临床或高标准研究中使用。</p>
+  </li>
+</ul>
+
+<h5 id="坐标排序要求">坐标排序要求</h5>
+
+<p><code class="language-plaintext highlighter-rouge">MarkDuplicates</code> 运行前要求 BAM 文件必须按坐标（Coordinate）或查询名（Queryname）排序，因此 <code class="language-plaintext highlighter-rouge">rmdup.bam</code>通常继承了严格的排序属性。</p>
+
+<h4 id="metrics"><code class="language-plaintext highlighter-rouge">*.metrics</code></h4>
+
+<p><code class="language-plaintext highlighter-rouge">.metrics</code> 文件是一个以制表符分隔（Tab-delimited）的文本文件，记录了文库的复杂度和重复率统计信息。它通常分为三个主要部分：</p>
+
+<h5 id="命令行信息-header">命令行信息 (Header)</h5>
+
+<p>包含运行 Picard 的版本、具体参数设置以及处理时间。</p>
+
+<h5 id="核心指标表-metrics-class">核心指标表 (METRICS CLASS)</h5>
+
+<p>这是分析的核心，定义了文库的质量特征。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>字段名称</th>
+      <th>含义</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>LIBRARY</strong></td>
+      <td>文库名称（来源于 BAM 头的 <code class="language-plaintext highlighter-rouge">@RG</code> 标签）。</td>
+    </tr>
+    <tr>
+      <td><strong>UNPAIRED_READS_EXAMINED</strong></td>
+      <td>检查的单端 Read 总数。</td>
+    </tr>
+    <tr>
+      <td><strong>READ_PAIRS_EXAMINED</strong></td>
+      <td>检查的双端 Read 对总数。</td>
+    </tr>
+    <tr>
+      <td><strong>SECONDARY_OR_SUPPLEMENTARY_RDS</strong></td>
+      <td>次要或补充比对的 Read 数量。</td>
+    </tr>
+    <tr>
+      <td><strong>UNMAPPED_READS</strong></td>
+      <td>未比对上的 Read 数量。</td>
+    </tr>
+    <tr>
+      <td><strong>UNPAIRED_READ_DUPLICATES</strong></td>
+      <td>标记为重复的单端 Read 数量。</td>
+    </tr>
+    <tr>
+      <td><strong>READ_PAIR_DUPLICATES</strong></td>
+      <td>标记为重复的双端 Read 对数量。</td>
+    </tr>
+    <tr>
+      <td><strong>PERCENT_DUPLICATION</strong></td>
+      <td><strong>重复率</strong>。计算公式为：Duplicates/Examined Reads。</td>
+    </tr>
+    <tr>
+      <td><strong>ESTIMATED_LIBRARY_SIZE</strong></td>
+      <td><strong>预估文库规模</strong>。基于现有数据推测出的文库中唯一分子的近似总数。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="直方图数据">直方图数据</h5>
+
+<p>如果设置了相关参数，文件末尾会包含一组数据，用于描述随着测序深度的增加，发现新（唯一）分子的效率。常用于判断继续增加测序量是否还有意义。</p>
+
+<h5 id="如何解读高重复率">如何解读高重复率？</h5>
+<p>当<code class="language-plaintext highlighter-rouge"> .metrics</code> 显示 <code class="language-plaintext highlighter-rouge">PERCENT_DUPLICATION</code> 过高（例如 &gt; 20%）时，应考虑以下替代假说并寻找诊断性证据：</p>
+
+<p>假说 A：测序量过度（Over-sequencing）</p>
+
+<p>解释：文库本身的分子种类有限，但测序深度过高，导致同一个分子被反复测序。</p>
+
+<p>诊断性证据：ESTIMATED_LIBRARY_SIZE 远小于总测序量。增加测序量后，重复率线性上升。</p>
+
+<p>假说 B：起始 DNA 量不足或文库复杂度低</p>
+
+<p>解释：实验起始的 DNA 模板太少，PCR 扩增次数过多以补偿浓度。</p>
+
+<p>诊断性证据：即使总 Read 数不多，重复率依然很高；且 ESTIMATED_LIBRARY_SIZE 的绝对数值较低。</p>
+
+<p>假说 C：光学重复（Optical Duplicates）</p>
+
+<p>解释：测序仪拍照或信号聚类过程中的技术偏差。</p>
+
+<p>诊断性证据：查看 READ_PAIR_OPTICAL_DUPLICATES 字段。若该值比例异常高，通常与测序芯片（Flowcell）载量或聚类算法有关。</p>
+
+<h3 id="比对后统计文件">比对后统计文件</h3>
+<h4 id="picard-collectinsertsizemetrics">Picard <code class="language-plaintext highlighter-rouge">CollectInsertSizeMetrics</code></h4>
+<h5 id="insertsizemetricstxt"><code class="language-plaintext highlighter-rouge">*.InsertSizeMetrics.txt</code></h5>
+<p>记录插入片段均值与标准差。</p>
+
+<pre><code class="language-txt">## htsjdk.samtools.metrics.StringHeader
+# CollectInsertSizeMetrics HISTOGRAM_FILE=../Output/InsertSize_result/Sample_1/Sample_1.InsertSizePlot.pdf INPUT=../Output/Sample_1/Sample_1.rmdup.bam OUTPUT=../Output/InsertSize_result/Sample_1/Sample_1.InsertSizeMetrics.txt VALIDATION_STRINGENCY=LENIENT    DEVIATIONS=10.0 MINIMUM_PCT=0.05 METRIC_ACCUMULATION_LEVEL=[ALL_READS] INCLUDE_DUPLICATES=false ASSUME_SORTED=true STOP_AFTER=0 VERBOSITY=INFO QUIET=false COMPRESSION_LEVEL=5 MAX_RECORDS_IN_RAM=500000 CREATE_INDEX=false CREATE_MD5_FILE=false GA4GH_CLIENT_SECRETS=client_secrets.json USE_JDK_DEFLATER=false USE_JDK_INFLATER=false
+## htsjdk.samtools.metrics.StringHeader
+# Started on: Thu Jan 22 12:37:09 UTC 2026
+
+## METRICS CLASS        picard.analysis.InsertSizeMetrics
+MEDIAN_INSERT_SIZE      MODE_INSERT_SIZE        MEDIAN_ABSOLUTE_DEVIATION       MIN_INSERT_SIZE MAX_INSERT_SIZE MEAN_INSERT_SIZE        STANDARD_DEVIATION      R
+EAD_PAIRS      PAIR_ORIENTATION        WIDTH_OF_10_PERCENT     WIDTH_OF_20_PERCENT     WIDTH_OF_30_PERCENT     WIDTH_OF_40_PERCENT     WIDTH_OF_50_PERCENT     WI
+DTH_OF_60_PERCENT     WIDTH_OF_70_PERCENT     WIDTH_OF_80_PERCENT     WIDTH_OF_90_PERCENT     WIDTH_OF_95_PERCENT     WIDTH_OF_99_PERCENT     SAMPLE  LIBRARY REA
+D_GROUP
+293     289     42      2       267253735       296.417202      73.607692       79130765        FR      17      33      49      67      85      109     135     1
+73     235     303     583
+
+## HISTOGRAM    java.lang.Integer
+insert_size     All_Reads.fr_count
+2       226
+3       224
+4       287
+5       268
+......
+</code></pre>
+
+<h5 id="insertsizeplotpdf"><code class="language-plaintext highlighter-rouge">*.InsertSizePlot.pdf</code></h5>
+<ul>
+  <li><strong>诊断假说</strong>: 若分布非单峰正态，可能是 DNA 片段化不均或磁珠筛选失效。
+<img src="/assets/images/insert.size.plot.png" alt="" />
+    <h4 id="samtools-flagstat"><code class="language-plaintext highlighter-rouge">samtools flagstat</code></h4>
+    <p>输出每个样本的比对统计。</p>
+    <h5 id="_aln_stattxt"><code class="language-plaintext highlighter-rouge">*_aln_stat.txt</code></h5>
+    <pre><code class="language-txt">186234779 + 0 in total (QC-passed reads + QC-failed reads)
+0 + 0 secondary
+1688865 + 0 supplementary
+21718577 + 0 duplicates
+185728377 + 0 mapped (99.73% : N/A)
+184545914 + 0 paired in sequencing
+92272957 + 0 read1
+92272957 + 0 read2
+177551800 + 0 properly paired (96.21% : N/A)
+183900400 + 0 with itself and mate mapped
+139112 + 0 singletons (0.08% : N/A)
+3380244 + 0 with mate mapped to a different chr
+2409003 + 0 with mate mapped to a different chr (mapQ&gt;=5)
+</code></pre>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">*.flagstat</code></strong>: 比对率统计（Mapped, Properly paired, Singleton）。</p>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">*.depth</code></strong>: 碱基水平的深度文件。由 <code class="language-plaintext highlighter-rouge">samtools depth</code> 生成，是 <code class="language-plaintext highlighter-rouge">depth_stat.pl</code> 计算覆盖度的基础。</li>
+</ul>
+
+<h3 id="bam-索引与整体对齐统计汇总">BAM 索引与整体对齐统计汇总</h3>
+<h4 id="bai"><code class="language-plaintext highlighter-rouge">*.bai</code></h4>
+<p>BAM 索引文件，允许 IGV 等软件快速查看特定位点。</p>
+
+<h3 id="变异检测过程文件">变异检测过程文件</h3>
+
+<h4 id="realignbam"><code class="language-plaintext highlighter-rouge">*.realign.bam</code></h4>
+<p>UnifiedGenotyper 模式下经过 InDel 局部重比对，消除 InDel 末端比对错位造成伪 SNP 的干扰。</p>
+
+<h3 id="variant-calling结果文件">Variant calling结果文件</h3>
+
+<p>VCF:
+<img src="/assets/images/genome/vcf.format.png" alt="VCF 字段示意" /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>字段名</th>
+      <th>格式/内容解释</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CHROM</strong></td>
+      <td>变异所在的染色体 ID（如“1”、“chrX”）</td>
+    </tr>
+    <tr>
+      <td><strong>POS</strong></td>
+      <td>变异在染色体上的物理位置（从 1 开始，单位为 bp）</td>
+    </tr>
+    <tr>
+      <td><strong>ID</strong></td>
+      <td>变异的唯一标识符（如 dbSNP 编号“rsID”；若无则为“.”）</td>
+    </tr>
+    <tr>
+      <td><strong>REF</strong></td>
+      <td>参考基因组的碱基（或序列），即未发生变异时的等位基因</td>
+    </tr>
+    <tr>
+      <td><strong>ALT</strong></td>
+      <td>变异等位基因（Alternative），与 REF 不同的碱基（或序列）；多等位用逗号分隔</td>
+    </tr>
+    <tr>
+      <td><strong>QUAL</strong></td>
+      <td>变异位点的质量分数（Phred Scale），表示对该变异存在的置信度，值越高越可靠</td>
+    </tr>
+    <tr>
+      <td><strong>FILTER</strong></td>
+      <td>过滤结果，“PASS” 表示通过所有标准，其他为未通过的过滤标签或原因</td>
+    </tr>
+    <tr>
+      <td><strong>INFO</strong></td>
+      <td>逗号分隔的附加注释信息，如变异类型（SNP/INDEL）、功能注释、等位基因频率、深度等参数；具体内容取决于分析流程</td>
+    </tr>
+    <tr>
+      <td><strong>FORMAT</strong></td>
+      <td>后续样本信息格式。描述每个样本的字段顺序与类型（如 GT:DP 表示基型和测序深度）</td>
+    </tr>
+    <tr>
+      <td><strong>SAMPLE1</strong></td>
+      <td>按 FORMAT 顺序展示该样本的各项指标（如“0/1:26”，分别表示基因型0/1和深度26）</td>
+    </tr>
+    <tr>
+      <td><strong>SAMPLE2</strong></td>
+      <td>同上，代表下一个样本的数据</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h4 id="info列详细解读">INFO列详细解读</h4>
+
+<p>从“变异检测（Calling）”到“质量过滤（Filtering）”再到“功能注释（Annotation）”，每个阶段产生的 VCF，其 INFO 列的侧重点存在显著的诊断性差异。</p>
+
+<p><strong>原始检测阶段 (Raw Variant Calling)</strong></p>
+
+<p>目标：评估变异信号是否真实存在，排查测序噪声（Artifacts）。</p>
+
+<p>产生的 VCF：单样本 VCF 或 gVCF（Genomic VCF）。</p>
+
+<p>INFO 核心关注点：测序深度分布、碱基质量偏差、链偏好性。</p>
+
+<p><strong>联合分型与群体评估阶段 (Joint Calling &amp; Population Stats)</strong></p>
+
+<p>目标：在群体层面评估等位基因频率，通过群体特征修正个体位点的置信度。</p>
+
+<p>产生的 VCF：多样本（Multisample）VCF。</p>
+
+<p>INFO 核心关注点：等位基因计数（AC）、频率（AF）、群体层面的质量指标。</p>
+
+<p><strong>功能过滤与临床/育种注释阶段 (Filtering &amp; Annotation)</strong></p>
+
+<p>目标：判定变异的生物学效应及其与表型的关联。</p>
+
+<p>产生的 VCF：过滤后的 VCF、注释后的 VCF（Annotated VCF）。</p>
+
+<p>INFO 核心关注点：基因组位置（内含子/外显子）、氨基酸改变、有害性预测分值。</p>
+
+<ul>
+  <li>
+    <p><strong>INFO 字段分类解析</strong></p>
+  </li>
+  <li>
+    <p>测序与比对质量指标（用于 Hard Filtering）</p>
+  </li>
+</ul>
+
+<p>这些指标是区分真实变异与测序/比对误差的关键诊断依据。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>字段</th>
+      <th>全称</th>
+      <th>诊断意义（贝叶斯视角下的排他性证据）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>QD</td>
+      <td>QualByDepth</td>
+      <td>变异置信度与深度的比值。若 QD 过低，说明高质量碱基支撑不足，可能是由重复序列区域的比对错误引起的。</td>
+    </tr>
+    <tr>
+      <td>FS</td>
+      <td>FisherStrand</td>
+      <td>Fisher 链偏好性评分。若值过高（&gt;60），说明变异仅出现在正向链或反向链中，高度疑似测序偏好造成的假阳性。</td>
+    </tr>
+    <tr>
+      <td>SOR</td>
+      <td>StrandOddsRatio</td>
+      <td>另一种衡量链偏好性的指标，尤其在深度较高时比 FS 更稳健。</td>
+    </tr>
+    <tr>
+      <td>MQ</td>
+      <td>RMSMappingQuality</td>
+      <td>比对质量均方根。若 MQ &lt; 40，说明支持该变异的 Read 大多来自比对不明确的区域（如转座子、重复序列）。</td>
+    </tr>
+    <tr>
+      <td>MQRankSum</td>
+      <td>MQ Rank Sum</td>
+      <td>比较参考基因组 Read 与变异 Read 的比对质量差异。若差异显著，说明变异 Read 可能源自错配。</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>群体遗传学指标（用于群体研究/GWAS）</li>
+</ul>
+
+<p>当样本量增加时，这些指标可作为评估位点多态性的证据。</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>字段</td>
+      <td>全称</td>
+      <td>说明</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>AC</td>
+      <td>Allele Count</td>
+      <td>该位点 ALT（变异）等位基因在当前群体中出现的总次数。</td>
+    </tr>
+    <tr>
+      <td>AN</td>
+      <td>Allele Number</td>
+      <td>该位点所有有效样本（非缺失）中等位基因的总数（二倍体通常为 2× 样本数）。</td>
+    </tr>
+    <tr>
+      <td>AF</td>
+      <td>Allele Frequency</td>
+      <td>等位基因频率 (AF=AC/AN)。在罕见疾病分析中，AF &gt; 1% 通常被视为中性变异的排除证据。</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>功能注释指标（由 SnpEff/VEP 等工具添加）</li>
+</ul>
+
+<p>这是将技术数据转化为业务结论的关键字段。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>字段</th>
+      <th>说明</th>
+      <th>示例内容</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ANN / CSQ</td>
+      <td>功能预测 (Consequence)</td>
+      <td>记录变异对蛋白质的影响：missense_variant (错义), synonymous_variant (同义), stop_gained (提前终止)。</td>
+    </tr>
+    <tr>
+      <td>LOF</td>
+      <td>功能缺失 (Loss of Function)</td>
+      <td>标识变异是否导致基因功能丧失。在育种中，这是筛选关键控制基因的核心证据。</td>
+    </tr>
+    <tr>
+      <td>NMD</td>
+      <td>无义介导降解</td>
+      <td>预测转录本是否会因为提前终止密码子而被细胞机制降解。</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>特殊格式：gVCF 里的 INFO 差异</li>
+</ul>
+
+<p>如果运行的是 <code class="language-plaintext highlighter-rouge">HaplotypeCaller</code> 的 <code class="language-plaintext highlighter-rouge">-ERC GVCF</code> 模式,</p>
+
+<ul>
+  <li>
+    <p>END 字段：由于 gVCF 会记录“非变异区域（Non-variant blocks）”，END 表示该块状区域（Block）的结束位置。</p>
+  </li>
+  <li>
+    <p>逻辑变化：在 gVCF 阶段，INFO 并不提供复杂的变异指标，而是记录该区域作为“纯合参考”的置信度。这是为了在后续多样本 GenotypeGVCFs 阶段提供先验概率。</p>
+  </li>
+</ul>
+
+<hr />
+
+<h4 id="其它字段的理解">其它字段的理解</h4>
+
+<ul>
+  <li>
+    <p><strong>QUAL 为 <code class="language-plaintext highlighter-rouge">.</code> 是什么意思？</strong></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">QUAL</code> 是位点层面的质量值（Phred），但在不少场景会缺失并写成 <code class="language-plaintext highlighter-rouge">.</code>，常见原因包括：</p>
+  </li>
+  <li>
+    <p>该 VCF 来自联合分型/二次处理流程，作者选择<strong>不输出</strong>或<strong>无法定义</strong>统一的 site-level QUAL；</p>
+  </li>
+  <li>
+    <p>该记录不是标准“变异位点”的评分（例如某些 gVCF 的非变异记录/中间格式转换）。</p>
+  </li>
+  <li>
+    <p>实战中更常用的是 <code class="language-plaintext highlighter-rouge">FILTER</code>、<code class="language-plaintext highlighter-rouge">INFO</code>（如 <code class="language-plaintext highlighter-rouge">QD/FS/MQ</code>）和样本级 <code class="language-plaintext highlighter-rouge">FORMAT</code>（如 <code class="language-plaintext highlighter-rouge">GQ/DP/AD/PL</code>）综合判断。</p>
+  </li>
+  <li>
+    <p><strong>FORMAT 常见会有哪些字段？怎么和每个 SAMPLE 对上？</strong></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">FORMAT</code> 用冒号把“样本列里每一段的含义”写清楚，样本列按同样的冒号顺序给出值。</p>
+  </li>
+  <li>
+    <p>常见 <code class="language-plaintext highlighter-rouge">FORMAT</code> 子字段（不同 caller/流程会略有差异）：</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">GT</code>：基因型（genotype），最关键。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">DP</code>：该样本在该位点的测序深度（depth）。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">AD</code>：allelic depth，常见为 <code class="language-plaintext highlighter-rouge">REF,ALT1,ALT2...</code> 的计数，例如 <code class="language-plaintext highlighter-rouge">AD=10,3</code> 表示 REF 支持 10、ALT1 支持 3。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">GQ</code>：genotype quality（Phred），表示该样本基因型判定的置信度。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">PL</code>：phred-scaled likelihoods，基因型似然（通常是一串逗号分隔的整数，用于下游再推断）。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">PS</code>：phase set（相位集合 ID），配合 <code class="language-plaintext highlighter-rouge">GT</code> 中的 <code class="language-plaintext highlighter-rouge">|</code> 使用（不是所有 VCF 都有）。</p>
+  </li>
+  <li>
+    <p>例子：若 <code class="language-plaintext highlighter-rouge">FORMAT=GT:AD:DP:GQ</code>，则样本列形如 <code class="language-plaintext highlighter-rouge">0/1:10,3:13:45</code>，逐段对应 <code class="language-plaintext highlighter-rouge">GT=0/1</code>、<code class="language-plaintext highlighter-rouge">AD=10,3</code>、<code class="language-plaintext highlighter-rouge">DP=13</code>、<code class="language-plaintext highlighter-rouge">GQ=45</code>。</p>
+  </li>
+  <li>
+    <p><strong>GT 里的 <code class="language-plaintext highlighter-rouge">1/2</code>、<code class="language-plaintext highlighter-rouge">0|1</code>、<code class="language-plaintext highlighter-rouge">1|0</code>、<code class="language-plaintext highlighter-rouge">1|1</code> 怎么读？</strong></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">GT</code> 的数字是对 <code class="language-plaintext highlighter-rouge">REF/ALT</code> 的<strong>索引编号</strong>：</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">0</code> 表示 <code class="language-plaintext highlighter-rouge">REF</code></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">1</code> 表示 <code class="language-plaintext highlighter-rouge">ALT</code> 列里第 1 个等位基因</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">2</code> 表示 <code class="language-plaintext highlighter-rouge">ALT</code> 列里第 2 个等位基因（如果 <code class="language-plaintext highlighter-rouge">ALT</code> 是多等位，比如 <code class="language-plaintext highlighter-rouge">ALT=AT,CT</code>）</p>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>` / ` vs `</td>
+          <td>`：</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">0/1</code>：<strong>未定相（unphased）</strong>的杂合，表示两个染色体拷贝分别为 REF 和 ALT1，但<strong>不知道</strong>哪条单倍型上是哪一个。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">0|1</code>：<strong>已定相（phased）</strong>，表示这两份等位基因的相位已知（哪条单倍型是 0，哪条是 1）。</p>
+  </li>
+  <li>
+    <p>常见组合的直觉：</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">0/0</code>：纯合参考（无变异）。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">0/1</code>：杂合（一个 REF、一个 ALT1）。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">1/1</code>：纯合 ALT1（两个拷贝都是第 1 个 ALT）。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">1/2</code>：<strong>多等位杂合</strong>（一个拷贝是 ALT1、另一个拷贝是 ALT2；要求 <code class="language-plaintext highlighter-rouge">ALT</code> 至少有两个备选等位基因）。</p>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">0|1</code> vs <code class="language-plaintext highlighter-rouge">1|0</code>：两者都表示杂合且已定相，但<strong>哪条单倍型携带 ALT 不同</strong>；如果下游做连锁/单倍型分析，这个方向信息会影响结果。</li>
+</ul>
+
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/variant%20calling" rel="tag"># variant calling</a>
+          
+            
+            <a href="/tag/#/%E5%8F%82%E8%80%83%E5%9F%BA%E5%9B%A0%E7%BB%84%E6%B3%A8%E9%87%8A" rel="tag"># 参考基因组注释</a>
+          
+            
+            <a href="/tag/#/%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F" rel="tag"># 文件格式</a>
+          
+            
+            <a href="/tag/#/%E5%8F%AF%E8%A7%86%E5%8C%96" rel="tag"># 可视化</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/wgs/2026/03/08/%E7%AD%89%E4%BD%8D%E5%9F%BA%E5%9B%A0%E7%89%B9%E5%BC%82%E6%80%A7%E8%A1%A8%E8%BE%BE/" rel="next" title="等位基因特异性表达">
+                <i class="fa fa-chevron-left"></i> 等位基因特异性表达
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/wgs/2026/03/07/Variant-calling-%E8%BF%90%E8%A1%8C%E6%B5%81%E7%A8%8B/" rel="prev" title="Variant calling 流程">
+                Variant calling 流程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-3"> <a class="nav-link" href="#参考基因组"> <span class="nav-number">1</span> <span class="nav-text">参考基因组</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#测序原始文件"> <span class="nav-number">2</span> <span class="nav-text">测序原始文件</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#原始数据质控"> <span class="nav-number">3</span> <span class="nav-text">原始数据质控</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#fastp质控输出"> <span class="nav-number">3.1</span> <span class="nav-text">fastp质控输出</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#fastqc质控报告"> <span class="nav-number">3.2</span> <span class="nav-text">fastQC质控报告</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#序列访问索引"> <span class="nav-number">4</span> <span class="nav-text">序列访问索引</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#samtools索引"> <span class="nav-number">4.1</span> <span class="nav-text">samtools索引</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#基于bwa的比对索引"> <span class="nav-number">4.2</span> <span class="nav-text">基于BWA的比对索引</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#picard索引"> <span class="nav-number">4.3</span> <span class="nav-text">picard索引</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#比对过程文件"> <span class="nav-number">5</span> <span class="nav-text">比对过程文件</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#bam"> <span class="nav-number">5.1</span> <span class="nav-text">*.bam</code</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-5"> <a class="nav-link" href="#flag"> <span class="nav-number">5.1.1</span> <span class="nav-text">FLAG</span> </a> </li> <li class="nav-item nav-level-5"> <a class="nav-link" href="#mapq比对质量"> <span class="nav-number">5.1.2</span> <span class="nav-text">MAPQ：比对质量</span> </a> </li> <li class="nav-item nav-level-5"> <a class="nav-link" href="#cigar比对状态描述"> <span class="nav-number">5.1.3</span> <span class="nav-text">CIGAR：比对状态描述</span> </a> </li> <li class="nav-item nav-level-5"> <a class="nav-link" href="#可选标签-optional-tags"> <span class="nav-number">5.1.4</span> <span class="nav-text">可选标签 (Optional Tags)</span> </a> </li> <li class="nav-item nav-level-5"> <a class="nav-link" href="#异常检测建议"> <span class="nav-number">5.1.5</span> <span class="nav-text">异常检测建议</span> </a> </li> </ol> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#sortbam"> <span class="nav-number">5.2</span> <span class="nav-text">*.sort.bam</code</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#picard-markduplicates"> <span class="nav-number">6</span> <span class="nav-text">Picard MarkDuplicates</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#rmdupbam"> <span class="nav-number">6.1</span> <span class="nav-text">*.rmdup.bam</code</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-5"> <a class="nav-link" href="#flag-标签"> <span class="nav-number">6.1.1</span> <span class="nav-text">FLAG 标签</span> </a> </li> <li class="nav-item nav-level-5"> <a class="nav-link" href="#标记与删除的策略差异"> <span class="nav-number">6.1.2</span> <span class="nav-text">“标记”与“删除”的策略差异</span> </a> </li> <li class="nav-item nav-level-5"> <a class="nav-link" href="#坐标排序要求"> <span class="nav-number">6.1.3</span> <span class="nav-text">坐标排序要求</span> </a> </li> </ol> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#metrics"> <span class="nav-number">6.2</span> <span class="nav-text">*.metrics</code</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-5"> <a class="nav-link" href="#命令行信息-header"> <span class="nav-number">6.2.1</span> <span class="nav-text">命令行信息 (Header)</span> </a> </li> <li class="nav-item nav-level-5"> <a class="nav-link" href="#核心指标表-metrics-class"> <span class="nav-number">6.2.2</span> <span class="nav-text">核心指标表 (METRICS CLASS)</span> </a> </li> <li class="nav-item nav-level-5"> <a class="nav-link" href="#直方图数据"> <span class="nav-number">6.2.3</span> <span class="nav-text">直方图数据</span> </a> </li> <li class="nav-item nav-level-5"> <a class="nav-link" href="#如何解读高重复率"> <span class="nav-number">6.2.4</span> <span class="nav-text">如何解读高重复率？</span> </a> </li> </ol> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#比对后统计文件"> <span class="nav-number">7</span> <span class="nav-text">比对后统计文件</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#picard-collectinsertsizemetrics"> <span class="nav-number">7.1</span> <span class="nav-text">Picard CollectInsertSizeMetrics</code</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-5"> <a class="nav-link" href="#insertsizemetricstxt"> <span class="nav-number">7.1.1</span> <span class="nav-text">*.InsertSizeMetrics.txt</code</span> </a> </li> <li class="nav-item nav-level-5"> <a class="nav-link" href="#insertsizeplotpdf"> <span class="nav-number">7.1.2</span> <span class="nav-text">*.InsertSizePlot.pdf</code</span> </a> </li> </ol> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#samtools-flagstat"> <span class="nav-number">7.2</span> <span class="nav-text">samtools flagstat</code</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-5"> <a class="nav-link" href="#_aln_stattxt"> <span class="nav-number">7.2.1</span> <span class="nav-text">*_aln_stat.txt</code</span> </a> </li> </ol> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#bam-索引与整体对齐统计汇总"> <span class="nav-number">8</span> <span class="nav-text">BAM 索引与整体对齐统计汇总</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#bai"> <span class="nav-number">8.1</span> <span class="nav-text">*.bai</code</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#变异检测过程文件"> <span class="nav-number">9</span> <span class="nav-text">变异检测过程文件</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#realignbam"> <span class="nav-number">9.1</span> <span class="nav-text">*.realign.bam</code</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#variant-calling结果文件"> <span class="nav-number">10</span> <span class="nav-text">Variant calling结果文件</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#info列详细解读"> <span class="nav-number">10.1</span> <span class="nav-text">INFO列详细解读</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#其它字段的理解"> <span class="nav-number">10.2</span> <span class="nav-text">其它字段的理解</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+
