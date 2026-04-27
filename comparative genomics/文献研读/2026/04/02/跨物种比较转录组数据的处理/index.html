@@ -1,0 +1,1493 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="流程,比较基因组学,方法学," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="该流程参考自Perry 等人（2012）。跨物种的全长转录本存在非同源插入/缺失（Indels）和不保守剪接，直接比对会引入物种特异性的长度偏差，掩盖真实的表达量演化信号。必须通过多序列比对强制裁剪掉所有存在序列变异或缺失的区域，仅保留跨物种100%保守的“最大直系同源区域”。">
+<meta name="keywords" content="流程, 比较基因组学, 方法学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="跨物种比较转录组数据的处理">
+<meta property="og:url" content="https://vooooooodga.github.io/comparative%20genomics/%E6%96%87%E7%8C%AE%E7%A0%94%E8%AF%BB/2026/04/02/%E8%B7%A8%E7%89%A9%E7%A7%8D%E6%AF%94%E8%BE%83%E8%BD%AC%E5%BD%95%E7%BB%84%E6%95%B0%E6%8D%AE%E7%9A%84%E5%A4%84%E7%90%86/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="该流程参考自Perry 等人（2012）。跨物种的全长转录本存在非同源插入/缺失（Indels）和不保守剪接，直接比对会引入物种特异性的长度偏差，掩盖真实的表达量演化信号。必须通过多序列比对强制裁剪掉所有存在序列变异或缺失的区域，仅保留跨物种100%保守的“最大直系同源区域”。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="跨物种比较转录组数据的处理">
+<meta name="twitter:description" content="该流程参考自Perry 等人（2012）。跨物种的全长转录本存在非同源插入/缺失（Indels）和不保守剪接，直接比对会引入物种特异性的长度偏差，掩盖真实的表达量演化信号。必须通过多序列比对强制裁剪掉所有存在序列变异或缺失的区域，仅保留跨物种100%保守的“最大直系同源区域”。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>跨物种比较转录组数据的处理 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/comparative%20genomics/%E6%96%87%E7%8C%AE%E7%A0%94%E8%AF%BB/2026/04/02/%E8%B7%A8%E7%89%A9%E7%A7%8D%E6%AF%94%E8%BE%83%E8%BD%AC%E5%BD%95%E7%BB%84%E6%95%B0%E6%8D%AE%E7%9A%84%E5%A4%84%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            跨物种比较转录组数据的处理
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-04-02T22:50:37+08:00">
+                2026-04-02
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-04-11T12:12:51+08:00">
+                  2026-04-11
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Comparative%20genomics" itemprop="url" rel="index">
+                    <span itemprop="name">Comparative genomics</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/%E6%96%87%E7%8C%AE%E7%A0%94%E8%AF%BB" itemprop="url" rel="index">
+                    <span itemprop="name">文献研读</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <blockquote>
+  <p>该流程参考自<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3317143/">Perry 等人（2012）</a>。跨物种的全长转录本存在非同源插入/缺失（Indels）和不保守剪接，直接比对会引入物种特异性的长度偏差，掩盖真实的表达量演化信号。必须通过多序列比对强制裁剪掉所有存在序列变异或缺失的区域，仅保留跨物种100%保守的“最大直系同源区域”。</p>
+</blockquote>
+
+<h2 id="先看看作者是如何处理数据的">先看看作者是如何处理数据的</h2>
+<p>基于 Perry 等人（2012）和他们补充材料（Supplemental Methods）中提供的详尽细节，处理流程为：</p>
+<h3 id="定制化-de-novo-组装与直系同源基因识别逐物种进行">定制化 de novo 组装与直系同源基因识别（逐物种进行）</h3>
+
+<p>将同一物种所有个体的 reads 合并，进行基于人类参考基因组引导的定制化组装：</p>
+
+<ul>
+  <li>
+    <p><strong>构建 de Bruijn 图：</strong> 使用 $k=39$ 构建图。使用 Bloom Filter 过滤掉仅出现一次的 k-mers（覆盖度为1），并去除代表测序错误的短末端 (tips)。</p>
+  </li>
+  <li>
+    <p><strong>基于种子的同源性搜索：</strong> 将人类 RefSeq 基因的所有亚型合并为单一共有序列。在图中搜索与人类基因匹配的短种子序列。种子长度和允许的错配数量根据物种与人类的系统发育距离严格设定（例如：黑猩猩种子长度27，允许2个错配；小鼠种子长度15，允许4个错配）。</p>
+  </li>
+  <li>
+    <p><strong>局部图过滤：</strong> 提取上一步识别出的同源 k-mers 的覆盖度，取其第 90 百分位数作为预期覆盖度。从图中删除覆盖度低于该预期值 10%（且绝对覆盖度不小于3）的节点，以此去除内含子序列和测序错误。</p>
+  </li>
+  <li>
+    <p><strong>路径分析与共有序列提取：</strong> 提取图中的连通分量，并去除长度差异不超过 10 bp 的短泡 (bubbles)。将保留的长度至少达到人类参考序列编码区 50% 的路径，使用 Fast Statistical Alignment (FSA) 算法与人类参考序列比对，选择匹配碱基最多的路径作为该基因的共有序列。</p>
+  </li>
+  <li>
+    <p><strong>旁系同源基因过滤：</strong> 将组装出的共有序列使用 BLAST 反向比对回人类 RefSeq 基因库，如果最佳匹配不是原始的目标基因，则将其作为旁系同源基因剔除。</p>
+  </li>
+</ul>
+
+<h3 id="reads-映射与表达量初始计数逐样本单独进行">Reads 映射与表达量初始计数（逐样本单独进行）</h3>
+
+<ul>
+  <li>
+    <p><strong>严格唯一比对：</strong> 使用 BWA（默认参数）将每个样本的 reads 比对到其所属物种组装好的基因序列库上。双端 reads 被拆开<strong>独立比对</strong>，并且<strong>仅保留唯一比对 (uniquely mapped) 的 reads</strong>。</p>
+  </li>
+  <li>
+    <p><strong>跨剪接位点比对：</strong> 对于第一步未比对上的 reads，取其首尾 20 bp 独立进行 BWA 比对。如果两端比对到同一转录本且能向内部完美延伸，则计为有效的外显子连接 (exon-junction) read。</p>
+  </li>
+</ul>
+
+<h3 id="跨物种定量的核心最大直系同源区域限制">跨物种定量的核心：最大直系同源区域限制</h3>
+
+<p>为了防止测序偏差或部分物种特有的可变剪接外显子影响表达量估计，作者在计算最终表达量时实施了极其严格的区域截断：</p>
+
+<ul>
+  <li>
+    <p>使用 FSA 对所有物种组装出的同源基因序列执行多序列比对。</p>
+  </li>
+  <li>
+    <p>识别在所有物种中完全对齐的<strong>最大直系同源区域 (maximum orthologous region)</strong>，并从中强制排除任何非编码区 (UTRs)。</p>
+  </li>
+  <li>
+    <p><strong>仅仅统计物理位置落入这个保守同源区域内的 reads（包括上述的剪接 reads），作为该转录本的表达量衡量指标</strong>。</p>
+  </li>
+</ul>
+
+<h3 id="多维数据标准化">多维数据标准化</h3>
+
+<p>针对上述落在直系同源区域内的 reads 计数，必须进行连续的两步数学调整：</p>
+
+<ul>
+  <li>
+    <p><strong>种内调整（长度与 GC 含量）：</strong></p>
+
+    <ul>
+      <li>
+        <p>首先除以转录本的长度。</p>
+      </li>
+      <li>
+        <p>为了校正 PCR 扩增偏好，计算该转录本 reads 在个体中的比例 $y_{ij}$，并针对转录本的 GC 含量 $g_{j}$ 进行 loess 回归。利用拟合值 $f_{ij}$ 对表达量进行调整：$x_{ij} = (mean_{j}(f_{ij}) / f_{ij}) \times Z_{ij}$。</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>跨物种调整（测序深度校正）：</strong></p>
+
+    <ul>
+      <li>
+        <p>计算每个基因跨所有物种的平均表达值，将这些值排序形成一个合成分布，并计算其中位数 (<code class="language-plaintext highlighter-rouge">medSyn</code>)。</p>
+      </li>
+      <li>
+        <p>对于每个样本，计算归一化因子：<code class="language-plaintext highlighter-rouge">NormSamp = medSyn / (样本中位数)</code>。</p>
+      </li>
+      <li>
+        <p>使用该因子乘以该样本所有组装转录本的表达量，迫使每个样本的表达量中位数都对齐到 <code class="language-plaintext highlighter-rouge">medSyn</code>。</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<h2 id="该标准化思路可否应用于可变剪接">该标准化思路可否应用于可变剪接？</h2>
+
+<p>1。鉴定直系同源外显子后，对每个外显子量化跳过率； </p>
+
+<p>2。鉴定直系同源外显子后，构建他们之间的三联体，量化剪接事件的psi； </p>
+
+<p>3。仿照perry，严格提取直系同源无gap连续区域，在这个区域map并量化基因的剪接发生率； </p>
+
+<p>4。尝试组装转录本（但需要严格控制假阳性），再鉴定直系同源转录本，量化标准化表达量。</p>
+
+<h3 id="四条思路的分子生物学与进化意义阐明">四条思路的分子生物学与进化意义阐明</h3>
+
+<h4 id="思路-1量化直系同源单外显子的跳过率-single-exon-skip-rate">思路 1：量化直系同源单外显子的跳过率 (Single Exon Skip Rate)</h4>
+
+<p>这正是 Perry 等人实际执行的分析逻辑。</p>
+
+<ul>
+  <li>
+    <p><strong>分子生物学意义：</strong> 孤立地评估一段特定编码序列（CDS）在转录本中被保留的绝对频率。它不关心这段序列的上游和下游连接了什么，只测量该外显子本身的“剪接亲和力”。</p>
+  </li>
+  <li>
+    <p><strong>进化意义（功能域的得失）：</strong> 它用于检验特定的蛋白质功能结构域是否受到了选择。例如，如果发现某个特定的外显子在食树胶的懒猴（Slow loris）中跳过率极低（几乎全部纳入），而在其他灵长类中跳过率极高，这提示该外显子编码的结构域可能在解毒或代谢树胶产物（如视黄醇代谢基因 SDR16C5）中发挥了适应性作用。</p>
+  </li>
+  <li>
+    <p><strong>局限性：</strong> 缺乏结构上下文，若物种间侧翼序列发生重组，相同的跳过率可能产生截然不同的蛋白质产物。</p>
+  </li>
+</ul>
+
+<h4 id="思路-2构建直系同源三联体量化-psi-exon-triplet-psi">思路 2：构建直系同源三联体量化 PSI (Exon Triplet PSI)</h4>
+
+<ul>
+  <li>
+    <p><strong>分子生物学意义：</strong> 将分析对象从“物理序列”升级为“剪接事件”。三联体严格控制了剪接体面临的竞争性环境（固定的上下游外显子）。PSI 测定的是剪接体在 E1​−E2​−E3​ 这一固定微环境中，做出特定连接选择的精确概率。</p>
+  </li>
+  <li>
+    <p><strong>进化意义（顺式调控元件的微调）：</strong> 它专门用于检测剪接调控网络的进化。PSI 的改变通常不源于蛋白质功能域的直接选择，而是源于cis-regulatory elements如剪接位点（SS）强度或剪接增强子/沉默子（ESE/ESS）的碱基突变。通过 EVE 模型检验三联体 PSI，可以回答：物种间顺式调控元件的突变是中性漂变，还是受到了定向选择的驱动。</p>
+  </li>
+</ul>
+
+<h4 id="思路-3提取直系同源无-gap-连续区域量化基因级剪接率-gene-level-as-in-gapless-regions">思路 3：提取直系同源无 Gap 连续区域量化基因级剪接率 (Gene-level AS in Gapless Regions)</h4>
+
+<p>这是将 Perry 定量总表达量的逻辑 创新性地平移到 AS 领域。</p>
+
+<ul>
+  <li>
+    <p><strong>分子生物学意义：</strong> 忽略具体的异构体形式，直接把基因的保守核心区看作一个整体，测定该区域内产生的所有非标准剪接（包括跳跃、替代位点）的<strong>总体频率</strong>。它反映的是该基因转录过程中的“总剪接变异度”。</p>
+  </li>
+  <li>
+    <p><strong>进化意义（剪接保真度与遗传漂变）：</strong> 这种基因级别的总体变异度，通常用于评估“剪接噪声（Splicing Noise）”。Perry 等人发现克氏原狐猴（Coquerel’s sifaka）具有极高的遗传多样性，而指猴（Aye-aye）的遗传多样性极低，这与有效种群大小有关。思路3可以用来检验假说：在有效种群较小、纯化选择效率较低的物种中，基因级别的总剪接噪声是否由于遗传漂变（剪接保真度下降）而显著升高。</p>
+  </li>
+</ul>
+
+<h4 id="思路-4组装并鉴定直系同源转录本量化表达量-orthologous-isoform-expression">思路 4：组装并鉴定直系同源转录本量化表达量 (Orthologous Isoform Expression)</h4>
+
+<ul>
+  <li>
+    <p><strong>分子生物学意义：</strong> 直接量化细胞内最终产生的功能产物（特定亚型的蛋白质产物前体）。这是分辨率最高的测量，直接关联到最终的表型输出。</p>
+  </li>
+  <li>
+    <p><strong>进化意义（完整功能模块的演化）：</strong> 它试图评估物种是否进化出了完全不同的整体调控策略。然而，正如 Perry 等人在对比16个物种后得出的结论：整个外显子结构的固定种间差异极其罕见，绝大多数变异是种内的多态性。</p>
+  </li>
+  <li>
+    <p><strong>局限性（假阳性极高）：</strong> 跨越远缘物种时，组装算法在遇到重复序列和测序深度不足时极易产生嵌合转录本。要求转录本全长保持直系同源且结构完全对应，在客观数据层面上几乎无法实现，强行比对会引入巨大的系统性技术偏差。</p>
+  </li>
+</ul>
+
+<h3 id="总结">总结</h3>
+
+<p>如果研究目标是使用 EVE 模型来检验系统发育树上的适应性演化：</p>
+
+<ul>
+  <li>
+    <p><strong>思路 2（三联体 PSI）</strong> 提供的数据最符合系统发育方差分析的数学假设，且生物学意义（调控机制演化）最为精准排他。</p>
+  </li>
+  <li>
+    <p><strong>思路 3（核心区总剪接率）</strong> 适合用于探讨大尺度进化中的“剪接噪声”与选择压力强度的关系。</p>
+  </li>
+  <li>
+    <p><strong>思路 4（全转录本）</strong> 难以控制组装的假阳性，且演化尺度过大不一定能找到所谓的同源转录本。</p>
+  </li>
+</ul>
+
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/%E6%B5%81%E7%A8%8B" rel="tag"># 流程</a>
+          
+            
+            <a href="/tag/#/%E6%AF%94%E8%BE%83%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6" rel="tag"># 比较基因组学</a>
+          
+            
+            <a href="/tag/#/%E6%96%B9%E6%B3%95%E5%AD%A6" rel="tag"># 方法学</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/%E7%A7%91%E6%99%AE/2026/04/07/How-optical-genome-mapping-works/" rel="next" title="How optical genome mapping works">
+                <i class="fa fa-chevron-left"></i> How optical genome mapping works
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/comparative%20genomics/2026/04/01/Methods-in-Comparative-genomics/" rel="prev" title="Methods in Comparative genomics">
+                Methods in Comparative genomics <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#先看看作者是如何处理数据的"> <span class="nav-number">1</span> <span class="nav-text">先看看作者是如何处理数据的</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#定制化-de-novo-组装与直系同源基因识别逐物种进行"> <span class="nav-number">1.1</span> <span class="nav-text">定制化 de novo 组装与直系同源基因识别（逐物种进行）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#reads-映射与表达量初始计数逐样本单独进行"> <span class="nav-number">1.2</span> <span class="nav-text">Reads 映射与表达量初始计数（逐样本单独进行）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#跨物种定量的核心最大直系同源区域限制"> <span class="nav-number">1.3</span> <span class="nav-text">跨物种定量的核心：最大直系同源区域限制</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#多维数据标准化"> <span class="nav-number">1.4</span> <span class="nav-text">多维数据标准化</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#该标准化思路可否应用于可变剪接"> <span class="nav-number">2</span> <span class="nav-text">该标准化思路可否应用于可变剪接？</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#四条思路的分子生物学与进化意义阐明"> <span class="nav-number">2.1</span> <span class="nav-text">四条思路的分子生物学与进化意义阐明</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#思路-1量化直系同源单外显子的跳过率-single-exon-skip-rate"> <span class="nav-number">2.1.1</span> <span class="nav-text">思路 1：量化直系同源单外显子的跳过率 (Single Exon Skip Rate)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#思路-2构建直系同源三联体量化-psi-exon-triplet-psi"> <span class="nav-number">2.1.2</span> <span class="nav-text">思路 2：构建直系同源三联体量化 PSI (Exon Triplet PSI)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#思路-3提取直系同源无-gap-连续区域量化基因级剪接率-gene-level-as-in-gapless-regions"> <span class="nav-number">2.1.3</span> <span class="nav-text">思路 3：提取直系同源无 Gap 连续区域量化基因级剪接率 (Gene-level AS in Gapless Regions)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#思路-4组装并鉴定直系同源转录本量化表达量-orthologous-isoform-expression"> <span class="nav-number">2.1.4</span> <span class="nav-text">思路 4：组装并鉴定直系同源转录本量化表达量 (Orthologous Isoform Expression)</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#总结"> <span class="nav-number">2.2</span> <span class="nav-text">总结</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

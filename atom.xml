@@ -1,0 +1,1249 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://vooooooodga.github.io/atom.xml" rel="self" type="application/atom+xml" /><link href="https://vooooooodga.github.io/" rel="alternate" type="text/html" /><updated>2026-04-27T15:45:58+08:00</updated><id>https://vooooooodga.github.io/atom.xml</id><title type="html">Jia | Research &amp;amp; Insights</title><subtitle>Nothing in life is to be feared, it is only to be understood. — Marie Curie</subtitle><author><name>Jia</name></author><entry><title type="html">BUSTED-PH</title><link href="https://vooooooodga.github.io/comparative%20genomics/2026/04/17/BUSTED-PH/" rel="alternate" type="text/html" title="BUSTED-PH" /><published>2026-04-17T18:32:56+08:00</published><updated>2026-04-17T11:45:38+08:00</updated><id>https://vooooooodga.github.io/comparative%20genomics/2026/04/17/BUSTED-PH</id><content type="html" xml:base="https://vooooooodga.github.io/comparative%20genomics/2026/04/17/BUSTED-PH/"><![CDATA[<blockquote>
+  <p>根据Selberg等(2026)发表的预印本论文，<strong>BUSTED-PH</strong> 是在经典 <strong>BUSTED</strong> 模型基础上的重要扩展，其核心区别在于<strong>BUSTED-PH专门设计用于检测与特定表型性状相关联的间歇性正选择</strong>，而经典BUSTED仅用于检测基因层面是否存在正选择，不与具体表型挂钩。</p>
+</blockquote>
+
+<p>两者的主要区别对比如下：</p>
+<h3 id="1-核心目标与设计哲学">1. <strong>核心目标与设计哲学</strong></h3>
+<ul>
+  <li><strong>BUSTED</strong>: 是一个<strong>基因层面</strong>的检验，旨在回答“<strong>这个基因在整个进化历史中是否经历过间歇性的正选择？</strong>”它检测的是基因内部是否存在位点在某些分支上经历正选择（dN/dS &gt; 1），但不区分这些分支是否具有特定的表型。</li>
+  <li><strong>BUSTED-PH</strong>: 是一个<strong>基因-表型关联</strong>层面的检验，旨在回答“<strong>这个基因的正选择信号是否与我所关注的表型性状的进化特异相关？</strong>”它明确地将系统发育树上的分支划分为<strong>前景分支（拥有目标表型）</strong> 和<strong>背景分支（不拥有该表型）</strong>，并对比两者之间的选择机制。
+    <h3 id="2-方法模型与检验框架">2. <strong>方法模型与检验框架</strong></h3>
+    <p>这是最根本的区别。BUSTED-PH在BUSTED模型的基础上，引入了<strong>表型分区</strong>和<strong>三重检验</strong>的框架：</p>
+  </li>
+  <li><strong>分支划分</strong>: BUSTED-PH要求用户输入一个二元的表型状态（如有/无回声定位），并将树上的所有分支相应标记为“前景”或“背景”。对于内部节点，提供了多种祖先状态重建策略（如“共联”策略，仅当某节点的所有后代都具有该表型时才将其标记为前景）。</li>
+  <li><strong>三重似然比检验</strong>:
+    <ol>
+      <li><strong>前景选择检验</strong>: 检测前景分支上是否存在间歇性正选择（类似经典BUSTED，但仅针对前景分支）。</li>
+      <li><strong>背景选择检验</strong>: 检测背景分支上是否存在间歇性正选择。这是一个关键创新，用于识别在整个谱系中普遍存在的适应性进化，这种进化可能与目标表型无关。</li>
+      <li><strong>机制差异检验</strong>: 检验前景分支和背景分支的<strong>选择压力分布</strong>是否显著不同。这是BUSTED-PH的核心，确保检测到的信号是前景分支特有的，而非全树共有的模式。
+        <h3 id="3-输出与解读">3. <strong>输出与解读</strong></h3>
+      </li>
+    </ol>
+  </li>
+  <li><strong>BUSTED</strong>: 输出一个p值，表明该基因是否在整个树上经历了正选择。但无法区分这种选择是普遍存在的，还是与某个特定性状相关。</li>
+  <li><strong>BUSTED-PH</strong>: 输出一个<strong>综合的、保守的p值</strong>，该值要求<strong>同时拒绝</strong>“前景分支无选择”和“前景与背景选择机制无差异”这两个零假设。此外，它还提供一个启发式过滤器，用于优先考虑那些背景分支没有强烈选择信号的基因，从而最大限度地确保找到的表型关联是特异的。
+    <h3 id="4-解决的问题与优势">4. <strong>解决的问题与优势</strong></h3>
+  </li>
+  <li><strong>BUSTED</strong> 的优势在于广泛筛查经历过适应性进化的基因。</li>
+  <li><strong>BUSTED-PH</strong> 的优势在于<strong>精准隔离与表型相关的适应性进化信号</strong>，有效过滤两类主要噪声：
+    <ul>
+      <li><strong>普遍性适应</strong>: 在全系统发育背景下都受到正选择的基因（如一些免疫基因）。</li>
+      <li><strong>模型误设导致的假阳性</strong>: 通过直接对比前景与背景，减少了因进化模型不匹配而产生的错误关联。
+文中应用显示，在哺乳动物回声定位的全基因组筛选中，虽然单独的前景选择检验识别出761个基因，但经过BUSTED-PH的三重检验和过滤后，最终仅确认<strong>72个基因</strong>与回声定位显著相关，筛选掉了90%以上的候选者，体现了其严格性[1]。
+        <h3 id="总结">总结</h3>
+        <p>简而言之，<strong>BUSTED是检测“有没有选择”的工具，而BUSTED-PH是检测“选择是否与特定表型相关”的工具</strong>。BUSTED-PH通过将进化分支按表型分类并严格比较其间的选择机制，解决了传统方法难以区分性状特异性适应和背景进化噪声的难题，为研究趋同进化等表型背后的分子机制提供了更鲁棒的统计框架。</p>
+      </li>
+    </ul>
+  </li>
+</ul>]]></content><author><name>Jia</name></author><category term="Comparative genomics" /><category term="方法学" /><summary type="html"><![CDATA[根据Selberg等(2026)发表的预印本论文，BUSTED-PH 是在经典 BUSTED 模型基础上的重要扩展，其核心区别在于BUSTED-PH专门设计用于检测与特定表型性状相关联的间歇性正选择，而经典BUSTED仅用于检测基因层面是否存在正选择，不与具体表型挂钩。]]></summary></entry><entry><title type="html">演化基因组学中的算法确信与统计盲区-审视Heliconiinae蝶类群居行为的趋同推断</title><link href="https://vooooooodga.github.io/comparative%20genomics/2026/04/17/Francesco-2026-MBE-%E7%BE%A4%E5%B1%85%E8%A1%8C%E4%B8%BA%E7%9A%84%E5%88%86%E5%AD%90%E8%B6%8B%E5%90%8C-%E6%BC%94%E5%8C%96%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6%E4%B8%AD%E7%9A%84%E7%AE%97%E6%B3%95%E7%A1%AE%E4%BF%A1%E4%B8%8E%E7%BB%9F%E8%AE%A1%E7%9B%B2%E5%8C%BA/" rel="alternate" type="text/html" title="演化基因组学中的算法确信与统计盲区-审视Heliconiinae蝶类群居行为的趋同推断" /><published>2026-04-17T17:49:58+08:00</published><updated>2026-04-27T15:35:54+08:00</updated><id>https://vooooooodga.github.io/comparative%20genomics/2026/04/17/Francesco-2026-MBE-%E7%BE%A4%E5%B1%85%E8%A1%8C%E4%B8%BA%E7%9A%84%E5%88%86%E5%AD%90%E8%B6%8B%E5%90%8C-%E6%BC%94%E5%8C%96%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6%E4%B8%AD%E7%9A%84%E7%AE%97%E6%B3%95%E7%A1%AE%E4%BF%A1%E4%B8%8E%E7%BB%9F%E8%AE%A1%E7%9B%B2%E5%8C%BA</id><content type="html" xml:base="https://vooooooodga.github.io/comparative%20genomics/2026/04/17/Francesco-2026-MBE-%E7%BE%A4%E5%B1%85%E8%A1%8C%E4%B8%BA%E7%9A%84%E5%88%86%E5%AD%90%E8%B6%8B%E5%90%8C-%E6%BC%94%E5%8C%96%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6%E4%B8%AD%E7%9A%84%E7%AE%97%E6%B3%95%E7%A1%AE%E4%BF%A1%E4%B8%8E%E7%BB%9F%E8%AE%A1%E7%9B%B2%E5%8C%BA/"><![CDATA[<blockquote>
+  <p>在这项研究中，作者们借助多维度的基因组学扫描，为我们细致地梳理出了一系列可能与蝶类群居行为演化相关的候选分子印记。</p>
+</blockquote>
+
+<h4 id="研究核心与推断逻辑概述">研究核心与推断逻辑概述</h4>
+
+<p>该研究旨在评估 Heliconiinae 蝶类的蛋白质编码基因（PCGs）演化模式，以期发现分子层面的变化与群居表型之间的统计关联。为了区分由于共同环境压力导致的真实适应演化与纯粹的系统发育噪音，作者对 3,393 个单拷贝直系同源基因群采用了多层次的计算分析。</p>
+
+<p>整体逻辑框架结合了极大似然估计与贝叶斯推断，其核心工作流如下：首先利用 BUSTED-PH 和 RELAX 算法，基于同义突变与非同义突变的绝对比值（$\omega$），检验群居与独居谱系之间是否存在选择体制的定向转移（阵发正选择）或选择强度的标量偏离（放松或强化）。为了进一步确认这种宏观选择压力的改变是否落实为确切的分子状态趋同，研究引入了 CSUBST 算法，评估观测到的非同义趋同比率与同义趋同比率的相对值（$\omega_C = dN_C / dS_C$）。
+在针对非编码区保守元件（CNEEs）的分析中，研究者则转向 PhyloAcc-GT 贝叶斯模型，通过计算双重贝叶斯因子（Bayes Factor），评估目标谱系演化加速的排他条件。</p>
+
+<p>该套研究方案有效地纠正了序列级别的突变噪音。然而，在判定特定基因的趋同演化是否确由“群居表型”驱动时，当前的逻辑链条仍缺少一层关键的统计控制。CSUBST 建立的同义突变基准仅能排除分子事件背景层面的假阳性信号，但在表型关联层面，研究缺少置换检验（Permutation test）来评估随机指定前景支时的预期检出数量。</p>
+
+<hr />
+
+<h4 id="研究方法与计算策略细节解析">研究方法与计算策略细节解析</h4>
+
+<p>作者的核心假定是： 如果一个基因在 BUSTED-PH/RELAX 中表现出与群居谱系对齐的选择体制差异，并且在 CSUBST 中表现出 ωC&gt;1，那么该基因的演化就是由群居表型驱动的趋同演化。</p>
+
+<p><strong>1. 宏观选择压力转移检验（BUSTED-PH 与 RELAX）</strong></p>
+
+<p>这两种基于密码子替换模型的方法，依赖频率学派的似然比检验（LRT）来进行推断。</p>
+
+<ul>
+  <li>
+    <p><strong>BUSTED-PH：</strong> 评估指定的测试分支（群居谱系）是否发生阵发正选择。。 假设基因序列上的位点属于不同的 ω 类别（通常分为 ω1≤ω2≤1 且 ω3&gt;1）。它通过极大似然法拟合模型，计算在测试分支上被分配到 ω 3&gt;1 类别的位点比例（Proportion）是否显著大于零。如果似然比检验（LRT）显著，结论是：“该基因在测试分支上的某个或某些未知位点经历了阵发性正选择”。它只报告基因级别的 P-value，不识别也不输出具体是哪一个氨基酸位点发生了突变。作者在处理中运用了严格的布尔逻辑进行过滤：如果某个基因在独居谱系（背景分支）中也表现出受选择信号，则将其剔除。这种处理旨在寻找群居表型与正选择之间的充要条件关联。</p>
+  </li>
+  <li>
+    <p><strong>RELAX：</strong> 进一步评估测试分支相对参考分支其整体选择压力是经历了松弛（Relaxation）还是强化（Intensification）。它评估是纯化选择变弱了（放松选择，k&lt;1），还是正选择/纯化选择变强了（强化选择，k&gt;1）。如果 LRT 显著，结论是：“该基因在测试分支上整体的选择约束力发生了改变”。它评估的是整条序列的统计分布形状变化，与具体位点无关。</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>这两种方法建立的是基因选择约束强度与宏观物种分类的初步关联，并不涉及具体发生突变的氨基酸位点定位。</p>
+</blockquote>
+
+<p><strong>2. 基于内部同义突变基线的确切状态趋同检验（CSUBST）</strong></p>
+
+<p>为了探清氨基酸级别的分子状态趋同，或者说，作者为了控制假阳性，引入了一种内置基线对照（Internal baseline control）。
+研究采用了 CSUBST 算法。该方法不仅要求选择压力改变，还要求不同物种在特定基因位点发生相同氨基酸替换。
+其计算指标为非同义趋同与期望值的比率（$dN_C$）以及同义趋同比率（$dS_C$）。
+算法将同义突变（假定为中立演化）作为分子事件的基准指标：$\omega_C = dN_C / dS_C$。
+CSUBST 的核心逻辑是使用同义突变作为内部参照系： 
+它计算观测到的非同义趋同与<strong>期望非同义趋同</strong>的比值（$dN_C$），同时计算观测到的同义趋同与<strong>期望同义趋同</strong>的比值（$dS_C$）。
+这种设计的防线在于： 
+如果一个基因在前景支上表现出氨基酸突变，纯粹是因为这些分支刚好经历了群体瓶颈效应（导致整体突变率上升）或者存在系统发育的拓扑学噪音，那么中性的同义突变（$dS_C$）理应以同等比例上升。此时，ωC的值将维持在 1 左右。 
+只有当非同义趋同的增长显著剥离了同义趋同的增长背景时（ωC&gt;1），CSUBST 才将其判定为自适应的分子趋同。</p>
+
+<p><strong>3. 应对短序列推断的贝叶斯控制框架（PhyloAcc-GT）</strong></p>
+
+<p>由于非编码保守元件（CNEEs）序列极短且缺乏同义突变作为内生基准，传统的极大似然点估计容易产生严重过拟合。作者采用 PhyloAcc-GT 建立隐马尔可夫模型，利用贝叶斯推断对各分支状态（保守、中性、加速）进行马尔可夫链蒙特卡洛（MCMC）采样。</p>
+
+<p>其推断逻辑通过比对三个模型完成：</p>
+
+<ul>
+  <li>
+    <p><strong>M0（零模型）：</strong> 全树绝对保守。</p>
+  </li>
+  <li>
+    <p><strong>M1（测试模型）：</strong> 仅在具有群居表型的分支发生加速。</p>
+  </li>
+  <li>
+    <p><strong>M2（全模型）：</strong> 允许树上任意分支加速。</p>
+  </li>
+</ul>
+
+<p>在此框架下，Bayes Factor 1 ($M1$ vs $M0$) 确认目标谱系确实存在演化加速；而 Bayes Factor 2 ($M1$ vs $M2$) 则执行核心的诊断检验。如果 $BF2 &gt; 1$，说明限定只在群居分支加速的解释效力优于无限制的全局随机加速，从而逼近目标特征与演化加速的排他关联。作者同时要求加速事件至少分布于三个独立单系群（Arity $\ge 3$），以物理方式阻断历史偶然事件造成的系统发育偏差。</p>
+
+<hr />
+
+<h4 id="统计推断批判基线控制层级的错位">统计推断批判：基线控制层级的错位</h4>
+
+<p>该研究的逻辑假设是：若某基因在 BUSTED-PH/RELAX 分析中显现与群居谱系对齐的选择差异，并在 CSUBST 中达到 $\omega_C &gt; 1$，即可判定该基因由群居表型驱动发生趋同演化。这一推断未能客观区分两类截然不同的零假设（Null Hypotheses）。</p>
+
+<p><strong>1. CSUBST 控制的范畴：分子事件层面的测序噪音</strong></p>
+
+<p>CSUBST 的内置基线对照是为了判断观测到的氨基酸替换是自然选择所致，还是随机巧合。当多个独立谱系由于突变偏倚（如 GC 含量改变）、极快演化速率导致的随机碰撞，或祖先多态保留而表现出相同突变时，作为中立基准的 $dS_C$ 会与 $dN_C$ 维持同等比例的升高，使 $\omega_C$ 维持在 1 左右。因此，$\omega_C &gt; 1$ 客观上抵消了底层突变率波动带来的平行改变，证明非同义突变的富集突破了中性突变基准。</p>
+
+<p><strong>2. 方法局限与推断缺失：表型关联层面的背景期望</strong></p>
+
+<p>即便 CSUBST 能够准确剥离分子级别的系统噪音并筛选出真实发生适应趋同的基因，它也无法确证这些演化事件完全是由“群居行为”带来的选择压力所致。</p>
+
+<p>如果在进化树上随机抽取 3 个或更多独居物种建立“伪前景支”进行运算，由于基因多效作用（Pleiotropy）、未观测的共享环境协变量（如相似的气候条件、海拔高度、病原微生物负荷），或是纯粹的统计极值分布特征，这组随机物种群中依然会检出一定规模表现为 $\omega_C &gt; 1$ 的基因。</p>
+
+<p>由于 CSUBST 计算的基线（$dS_C$）仅作用于单一基因在给定树拓扑上的演化状态验证，它与整个基因组规模下随机关联产生的阳性信号期望值无关。缺少基于随机重抽样的置换检验，研究者便无法知晓由“群居表型”筛选出的趋同基因数量，是否显著高于随机指定谱系组合所带来的背景数量。</p>
+
+<hr />
+
+<h4 id="总结">总结</h4>
+
+<p>该文献在探究群居行为相关的分子演化机制时，组合运用了频率学派模型与贝叶斯双重因子比较，并在位点状态分析中引入了 CSUBST 算法以同义突变剥离系统发育的底层随机噪音。这套分析流程在判定序列级别的定向与加速演化方面具备严谨的数理逻辑。然而，在将找到的分子特征直接归因于特定表型时，研究采用了简单的“逻辑与”操作（满足特定算法阈值的交集）。由于未利用置换检验建立表型关联在随机状态下的零分布基准，当前结论中依然混杂着由基因多效作用和未知环境协变量带来的假阳性风险。建立针对目标宏观特征的随机抽样比较控制，是验证该假说不可或缺的统计环节。</p>
+
+<h4 id="reference">Reference</h4>
+<p><a href="https://doi.org/10.1093/molbev/msaf179">Convergent Molecular Evolution Associated With Repeated Transitions to Gregarious Larval Behavior in Heliconiini</a></p>
+
+<p><a href="https://www.biorxiv.org/content/10.64898/2026.01.29.702612v1">BUSTED-PH: Isolating the genomic signatures of convergent phenotypes</a></p>
+
+<p><a href="https://doi.org/10.1093/molbev/msu400">RELAX: Detecting Relaxed Selection in a Phylogenetic Framework</a></p>
+
+<p><a href="https://doi.org/10.1093/molbev/msad195">PhyloAcc-GT: A Bayesian Method for Inferring Patterns of Substitution Rate Shifts on Targeted Lineages Accounting for Gene Tree Discordance</a></p>]]></content><author><name>Jia</name></author><category term="Comparative genomics" /><category term="逻辑" /><summary type="html"><![CDATA[在这项研究中，作者们借助多维度的基因组学扫描，为我们细致地梳理出了一系列可能与蝶类群居行为演化相关的候选分子印记。]]></summary></entry><entry><title type="html">命题与条件</title><link href="https://vooooooodga.github.io/comparative%20genomics/2026/04/16/%E5%91%BD%E9%A2%98%E4%B8%8E%E6%9D%A1%E4%BB%B6/" rel="alternate" type="text/html" title="命题与条件" /><published>2026-04-16T16:58:18+08:00</published><updated>2026-04-17T13:37:30+08:00</updated><id>https://vooooooodga.github.io/comparative%20genomics/2026/04/16/%E5%91%BD%E9%A2%98%E4%B8%8E%E6%9D%A1%E4%BB%B6</id><content type="html" xml:base="https://vooooooodga.github.io/comparative%20genomics/2026/04/16/%E5%91%BD%E9%A2%98%E4%B8%8E%E6%9D%A1%E4%BB%B6/"><![CDATA[<blockquote>
+  <p>这是设计实验和解读结果时经常混淆的逻辑。</p>
+</blockquote>
+
+<h3 id="一-分析条件a预适应与必要条件">一、 分析条件A：预适应与必要条件</h3>
+
+<p>在命题逻辑中，条件A被定义为目标性状（T）产生的必要条件，即 $T \Rightarrow A$。</p>
+
+<p><strong>贝叶斯视角的评估：</strong></p>
+
+<p>我们关注的不仅仅是 $T$ 发生时 $A$ 是否发生，而是观测到 $A$ 对于推断 $T$ 的<strong>诊断性价值（Diagnostic Value）</strong>。这取决于似然比（Likelihood Ratio）或贝叶斯因子：</p>
+
+\[\text{似然比} = \frac{P(A \mid T)}{P(A \mid \neg T)}\]
+
+<p>根据预适应的定义，已知 $P(A \mid T) = 1$。但核心问题在于 $P(A  \mid  \neg T)$（在不具备目标性状的物种中观测到A的概率）可能非常高。</p>
+
+<ul>
+  <li>
+    <p>在进化生物学中，物种之间共享大量的基础基因组结构、代谢通路和系统发育历史。</p>
+  </li>
+  <li>
+    <p>如果 $A$ 是一种高度保守的生理条件或广泛存在的祖先性状，那么 $P(A \mid \neg T)$ 将接近于 1。</p>
+  </li>
+  <li>
+    <p>当似然比接近 1 时，观测到 $A$ 无法提供任何排他性证据来支持 $T$ 的演化。这种推理确实只能“顺着推”证实必要性，而无法“倒着推”提供解释力。</p>
+  </li>
+</ul>
+
+<h3 id="二-分析条件b排他性条件与替代假说">二、 分析条件B：排他性条件与替代假说</h3>
+
+<p>条件B被定义为：仅在具有目标性状的物种中具备B，没有此性状的物种绝不具有B。</p>
+
+<p>逻辑上，这是充要条件：$T \Leftrightarrow B$。</p>
+
+<p>贝叶斯视角下，$P(B \mid T) = 1$ 且 $P(B \mid \neg T) = 0$。观测到 $B$ 具有无限大的诊断性价值。</p>
+
+<p>除了“T导致了B（产物）”之外，完全相关的两个变量还存在以下解释：</p>
+
+<ol>
+  <li>
+    <p><strong>因果关系倒置（B是T的直接原因）：</strong> B可能是某一种特定的基因组调控事件或环境阈值，它是诱发复杂性状T产生的直接驱动力，且一旦B出现，T必然出现。</p>
+  </li>
+  <li>
+    <p><strong>多效性（Pleiotropy）或紧密连锁：</strong> 存在一个未被观测到的底层变量 $X$（例如某个上游转录因子的突变），它同时且必然地导致了 $T$ 和 $B$ 的平行发生。$T$ 和 $B$ 互为伴生关系，而非直接因果关系。</p>
+  </li>
+  <li>
+    <p><strong>系统发育的系统性偏差（Phylogenetic Confounding）：</strong> 如果性状 $T$ 在进化树上仅发生了一次单系起源，那么该分支上任何固定的衍征（Synapomorphy）都会与 $T$ 呈现完美的共现关系（即表现为条件B），即使它们在生物学功能上毫无关联。</p>
+  </li>
+</ol>
+
+<h3 id="三-分析条件c未知反事实下的推断">三、 分析条件C：未知反事实下的推断</h3>
+
+<p>假设已知具备目标性状（T）的物种都具有条件（c），即 $P(c \mid T) = 1$。</p>
+
+<p>在未知 $P(c \mid \neg T)$ 的情况下，问题是：<strong>能否断言目标性状T是产生c的唯一解释？</strong></p>
+
+<p>断言“T是产生c的唯一解释”意味着：只要观测到c，就必然是因为T的存在，逻辑上等同于 $c \Rightarrow T$。</p>
+
+<p><strong>命题逻辑视角：</strong></p>
+
+<p>已知 $T \Rightarrow c$，推导 $c \Rightarrow T$ 属于典型的<strong>肯定后件谬误（Affirming the consequent）</strong>。两者并不等价。</p>
+
+<p><strong>贝叶斯视角：</strong></p>
+
+<p>我们需要计算在观测到 $c$ 的条件下，$T$ 存在的后验概率 $P(T \mid c)$。根据贝叶斯定理：</p>
+
+\[P(T \mid c) = \frac{P(c \mid T) P(T)}{P(c \mid T) P(T) + P(c \mid \neg T) P(\neg T)}\]
+
+<p>代入已知条件 $P(c \mid T) = 1$：</p>
+
+\[P(T \mid c) = \frac{P(T)}{P(T) + P(c \mid \neg T) P(\neg T)}\]
+
+<p>要使断言成立（即 $P(T \mid c) = 1$），必须满足分母中的 $P(c \mid \neg T) P(\neg T) = 0$。由于 $P(\neg T)$不为 0（宇宙中存在不具备目标性状的物种），因此<strong>必须证明 $P(c \mid \neg T) = 0$</strong>。</p>
+
+<p>在尚未知不具有目标性状的物种是否具有c（即 $P(c \mid \neg T)$ 未知）的情况下，我们缺少计算分母中“证据的边际概率”的核心数据。如果 $c$ 是一种常见的非特异性条件，$P(c \mid \neg T)$ 可能会很大，从而导致 $P(T \mid c)$非常低。因此，<strong>在缺乏对对照组（不具备目标性状物种）的排他性观察时，绝对不能断言目标性状是产生该条件的唯一解释。</strong></p>
+
+<h3 id="四-分析条件d充分非必要条件与衍生推断">四、 分析条件D：充分非必要条件与衍生推断</h3>
+
+<p>定义条件d：</p>
+<ol>
+  <li>带有目标性状A的物种并不一定都有d：$P(d \mid A) &lt; 1$</li>
+  <li>不具有A的物种一定没有d：$P(d \mid \neg A) = 0$</li>
+</ol>
+
+<p><strong>命题逻辑视角：</strong></p>
+
+<p>由“不具有A一定没有d”可得 $\neg A \Rightarrow \neg d$。其逆否命题为 $d \Rightarrow A$。
+结合第一点 $A \nRightarrow d$，可以得出结论：<strong>条件d是产生目标性状A的充分不必要条件</strong>（或者说，目标性状A是拥有条件d的必要不充分条件）。</p>
+
+<p><strong>贝叶斯视角的评估：</strong></p>
+
+<p>在这个场景下，观测到条件d具有极高的<strong>正向诊断价值（Positive Diagnostic Value）</strong>，但缺乏反向排除能力。</p>
+
+<p>通过贝叶斯定理计算观测到 $d$ 时目标性状 $A$ 存在的后验概率：</p>
+
+\[P(A \mid d) = \frac{P(d \mid A) P(A)}{P(d \mid A) P(A) + P(d \mid \neg A) P(\neg A)}\]
+
+<p>由于已知 $P(d \mid \neg A) = 0$，分母中的第二项消除，得到：</p>
+
+\[P(A \mid d) = \frac{P(d \mid A) P(A)}{P(d \mid A) P(A) + 0} = 1\]
+
+<p>这意味着，只要在物种中观测到条件d，就可以100%确定该物种具有性状A。似然比 $\frac{P(d \mid A)}{P(d \mid \neg A)}$ 趋近于无穷大，提供了极强的排他性证据。</p>
+
+<p>然而，如果<strong>未观测到d（即 $\neg d$）</strong>，我们不能据此排除A的存在：</p>
+
+\[P(A \mid \neg d) = \frac{P(\neg d \mid A) P(A)}{P(\neg d \mid A) P(A) + P(\neg d \mid \neg A) P(\neg A)}\]
+
+<p>因为 $P(d \mid \neg A) = 0$，所以 $P(\neg d \mid \neg A) = 1$。公式转化为：</p>
+
+\[P(A \mid \neg d) = \frac{P(\neg d \mid A) P(A)}{P(\neg d \mid A) P(A) + P(\neg A)}\]
+
+<p>因为带有性状A的物种不一定有d，即 $P(\neg d \mid A) &gt; 0$，所以 $P(A \mid \neg d)$ 是一个大于0的值。缺失d无法作为否认A存在的证据。</p>
+
+<p><strong>进化生物学解释：</strong></p>
+
+<p>在比较基因组学中，观测到这种模式通常有以下几种可能：</p>
+
+<ol>
+  <li>
+    <p><strong>系统发育的序列演化（衍生性状假说）：</strong> 性状A是一个更为古老的基础演化事件（祖先节点的共有衍征），而条件d是发生在A演化支内部的一个后续创新事件。演化次序决定了d只能在已经具备A的遗传背景或生理基础的物种中发生。因此，所有具备d的物种都属于A的分支，但A分支下只有部分子类群演化出了d。</p>
+  </li>
+  <li>
+    <p><strong>多变量协同网络（A作为必要底物或前置条件）：</strong> 条件d的产生受到多个变量的共同调控。性状A是产生d所必需的结构基础、代谢底物或遗传网络核心节点，但仅有A是不够的。还需要未知的环境变量 $E$ 或其他基因组事件 $X$ 共同作用（即 $A \land X \Rightarrow d$）。这就解释了为什么没有A一定没有d，但有了A也不一定产生d。</p>
+  </li>
+  <li>
+    <p><strong>性状A的趋同演化与多路径实现：</strong> 如果我们将 $d \Rightarrow A$ 视作因果关系，那么d可能是诱发A的具体途径之一。自然界中可能存在多种不同的进化路径（如路径d、路径e、路径f）最终都导致了性状A的产生。因此，具备d的物种必定产生了A，但具备A的物种可能是通过路径e演化而来的，并不包含d。</p>
+  </li>
+  <li>
+    <p><strong>抽样偏差的诊断性质疑：</strong> 在实证研究中，必须对 $P(d \mid \neg A) = 0$ 这一绝对声明保持警惕。这种完美的排他性可能是由于对对照组（不具备A的物种）的测序深度不够或取样偏差造成的。寻找排他性证据时，需要主动扩大进化树上远缘物种的数据集进行搜索，以测试是否真的不存在“既没有A又拥有d”的反例。</p>
+  </li>
+</ol>]]></content><author><name>Jia</name></author><category term="Comparative genomics" /><category term="比较基因组学" /><category term="方法学" /><summary type="html"><![CDATA[这是设计实验和解读结果时经常混淆的逻辑。]]></summary></entry><entry><title type="html">似然比检验的局限与贝叶斯因子</title><link href="https://vooooooodga.github.io/comparative%20genomics/2026/04/16/%E4%BC%BC%E7%84%B6%E6%AF%94%E6%A3%80%E9%AA%8C%E7%9A%84%E5%B1%80%E9%99%90%E4%B8%8E%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%9B%A0%E5%AD%90/" rel="alternate" type="text/html" title="似然比检验的局限与贝叶斯因子" /><published>2026-04-16T16:56:20+08:00</published><updated>2026-04-17T13:37:30+08:00</updated><id>https://vooooooodga.github.io/comparative%20genomics/2026/04/16/%E4%BC%BC%E7%84%B6%E6%AF%94%E6%A3%80%E9%AA%8C%E7%9A%84%E5%B1%80%E9%99%90%E4%B8%8E%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%9B%A0%E5%AD%90</id><content type="html" xml:base="https://vooooooodga.github.io/comparative%20genomics/2026/04/16/%E4%BC%BC%E7%84%B6%E6%AF%94%E6%A3%80%E9%AA%8C%E7%9A%84%E5%B1%80%E9%99%90%E4%B8%8E%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%9B%A0%E5%AD%90/"><![CDATA[<blockquote>
+  <p>为了客观说明贝叶斯因子（Bayes Factor, BF），我们用一个宏观演化生态学的具体观察作为案例。</p>
+</blockquote>
+
+<h3 id="二者的数学差异">二者的数学差异</h3>
+
+<p>似然比（Likelihood Ratio, LR）和贝叶斯因子（Bayes Factor, BF）在统计推断中承担相似的比较功能，但它们评估的对象和数学基础存在核心差异。</p>
+
+<p><strong>似然比评估的是“特定参数点”：</strong></p>
+
+<p>似然比比较的是在两个<strong>特定的参数值</strong>（或极大似然估计值）下，观测到当前数据的概率之比。它不考虑参数空间的其他可能性。</p>
+
+<p><strong>贝叶斯因子评估的是“整个模型”：</strong></p>
+
+<p>贝叶斯因子比较的是两个<strong>模型</strong>产生当前观测数据的边缘似然（Marginal Likelihood）之比。它需要将模型在整个参数空间上的可能性，根据先验分布进行加权积分。</p>
+
+<p>用数学语言表述，假设我们要比较模型 $M_1$ 和 $M_0$，其各自的参数空间为 $\theta_1$ 和 $\theta_0$：</p>
+
+\[BF_{10} = \frac{P(D \mid M_1)}{P(D \mid M_0)} = \frac{\int P(D \mid \theta_1, M_1)P(\theta_1 \mid M_1)d\theta_1}{\int P(D \mid \theta_0, M_0)P(\theta_0 \mid M_0)d\theta_0}\]
+
+<p><strong>核心差异的实际意义：</strong></p>
+
+<p>计算贝叶斯因子时，积分操作会对模型的参数空间进行遍历。如果一个模型非常复杂（包含大量自由参数），其参数空间会变得极其广阔，导致先验概率密度 $P(\theta \mid M)$ 在整个空间上被摊薄。因此，贝叶斯因子在数学层面上自带对过度复杂模型的惩罚机制。相比之下，似然比检验（LRT）通常需要额外引入自由度差异来人为调整（如卡方分布近似），否则总是倾向于支持参数更多的复杂模型。</p>
+
+<p>核心概念是：<strong>似然比（Likelihood Ratio）只评估模型在“最佳参数”下的拟合能力，而贝叶斯因子评估模型在“所有可能参数”下的平均预测能力。</strong></p>
+
+<h3 id="一个例子岛屿物种的体型演化">一个例子：岛屿物种的体型演化</h3>
+
+<p><strong>观测数据（D）：</strong> 已知某大陆物种的平均体长为 10 cm。现观测到一个被隔离在海岛上的该物种亚群，其平均体长演化为了 15 cm。</p>
+
+<p>我们提出两个系统发育或生态学模型来解释这一现象：</p>
+
+<ul>
+  <li>
+    <p><strong>模型 0（M0，简单模型）：中性随机漂变。</strong></p>
+
+    <p>该模型假设体型变化仅由随机的遗传漂变引起。该模型只有一个参数：世代间的漂变方差（$\sigma^2$）。</p>
+  </li>
+  <li>
+    <p><strong>模型 1（M1，复杂模型）：定向自然选择。</strong></p>
+
+    <p>该模型假设岛屿环境（如特定食物的物理性质）存在一个最佳适应体长（Optimum，记为 $\theta$）。体型受到趋向该最佳值的选择压力。该模型有两个参数：漂变方差（$\sigma^2$）和适应性最优值（$\theta$）。</p>
+  </li>
+</ul>
+
+<h3 id="似然比likelihood-ratio的局限极值点比较">似然比（Likelihood Ratio）的局限：极值点比较</h3>
+
+<p>如果我们使用似然比来比较 M1 和 M0：</p>
+
+<p>似然比会寻找每个模型下<strong>最能吻合数据</strong>的那个单一参数点（极大似然估计）。</p>
+
+<ul>
+  <li>
+    <p>对于 M1（选择模型），算法会自动将未知参数 $\theta$ 设定为 15 cm（精确对准观测数据）。在这个极值点上，模型计算出观测到“15 cm 体长”的概率 $P(D \mid \text{最佳}\theta, M_1)$ 非常高。</p>
+  </li>
+  <li>
+    <p>对于 M0（漂变模型），因为它没有 $\theta$ 这个参数可以随意调节，只能依赖随机方差去覆盖 15 cm 的观测值，其最大概率值必然低于 M1。</p>
+  </li>
+</ul>
+
+<p><strong>结论：</strong> 似然比总是倾向于支持 M1。因为它允许复杂模型通过调节额外的自由参数来完美“迎合”当前数据。</p>
+
+<h3 id="贝叶斯因子bayes-factor的机制参数空间积分">贝叶斯因子（Bayes Factor）的机制：参数空间积分</h3>
+
+<p>贝叶斯因子不允许模型事后诸葛亮式地挑选“最佳参数”。它要求计算<strong>边缘似然（Marginal Likelihood）</strong>，即模型在引入数据之前，基于先验分布（Prior Distribution）对数据进行预测的加权平均概率。</p>
+
+<p>在计算 M1 的边缘似然时：</p>
+
+<ol>
+  <li>
+    <p><strong>设定先验空间：</strong> 在进行实地测量前，我们并不知道岛屿的最佳体长 $\theta$ 是多少。根据生态学常识，我们设定 $\theta$ 的先验范围可能是 5 cm 到 30 cm 之间的任何值。</p>
+  </li>
+  <li>
+    <p><strong>概率密度的稀释：</strong> 因为 M1 是一个复杂的模型，它的参数空间非常广阔（5~30 cm）。根据概率论，总概率为 1，这意味着支持“$\theta = 15$”的先验概率被广阔的参数空间严重稀释了。</p>
+  </li>
+  <li>
+    <p><strong>积分计算：</strong> 贝叶斯因子要求我们将 $\theta = 5, 6, 7… 15… 30$ 时预测出“体长为 15 cm”的概率全部加起来求平均。</p>
+  </li>
+</ol>
+
+<p><strong>结果分析：</strong></p>
+
+<p>虽然当 $\theta = 15$ 时，M1 预测准确度极高；但当 $\theta = 5$ 或 $\theta = 30$ 时，M1 预测出 15 cm 的概率几乎为零。</p>
+
+<p>当把整个广阔参数空间（5~30 cm）的结果进行平均后，M1 的<strong>整体预测概率（边缘似然）会被那些“错误”的参数值大幅度拉低</strong>。</p>
+
+<h3 id="四-总结">四、 总结</h3>
+
+\[BF = \frac{\text{M1在所有可能参数下的平均预测概率}}{\text{M0在所有可能参数下的平均预测概率}}\]
+
+<p>如果计算出的 BF 仍然大于 1（支持 M1），这就意味着：<strong>M1 并非依靠增加参数来死记硬背当前的数据点，而是其实际的生物学机制（自然选择）所产生的平均预测能力，确实超过了简单模型（中性漂变）。</strong></p>
+
+<p>贝叶斯因子通过“在整个参数空间上求积分”这一数学操作，客观且内在地惩罚了那些虽然能完美拟合数据、但由于参数过多导致先验空间过度膨胀的复杂假说。这就是为什么在评估假说时，贝叶斯因子比仅依赖点估计的检验方法更为严谨的原因。</p>]]></content><author><name>Jia</name></author><category term="Comparative genomics" /><category term="逻辑" /><category term="比较基因组学" /><category term="方法学" /><summary type="html"><![CDATA[为了客观说明贝叶斯因子（Bayes Factor, BF），我们用一个宏观演化生态学的具体观察作为案例。]]></summary></entry><entry><title type="html">比较基因组学的统计第一类错误</title><link href="https://vooooooodga.github.io/comparative%20genomics/2026/04/14/%E6%AF%94%E8%BE%83%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6%E7%9A%84%E7%BB%9F%E8%AE%A1%E7%AC%AC%E4%B8%80%E7%B1%BB%E9%94%99%E8%AF%AF/" rel="alternate" type="text/html" title="比较基因组学的统计第一类错误" /><published>2026-04-14T17:30:14+08:00</published><updated>2026-04-17T13:37:30+08:00</updated><id>https://vooooooodga.github.io/comparative%20genomics/2026/04/14/%E6%AF%94%E8%BE%83%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6%E7%9A%84%E7%BB%9F%E8%AE%A1%E7%AC%AC%E4%B8%80%E7%B1%BB%E9%94%99%E8%AF%AF</id><content type="html" xml:base="https://vooooooodga.github.io/comparative%20genomics/2026/04/14/%E6%AF%94%E8%BE%83%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6%E7%9A%84%E7%BB%9F%E8%AE%A1%E7%AC%AC%E4%B8%80%E7%B1%BB%E9%94%99%E8%AF%AF/"><![CDATA[<blockquote>
+  <p>统计上看到多条分支“同时加速”，并不等于它们因为同一个表型发生了因果趋同。</p>
+</blockquote>
+
+<p>我梳理了两件事：第一，像 <code class="language-plaintext highlighter-rouge">RERconverge</code> 这种把“基因速率信号”直接和离散表型做关联的框架，为什么在真实数据里很容易被树上的过程变异误导；第二，以隐藏状态/贝叶斯层级模型为思路的方法，如何把分支背景变异（例如 $\beta_l^2$）放进模型里，从而把这类误导压下去。</p>
+
+<p>看这么一个例子。假设我们想检验“水生生活是否会出现分子层面的趋同”，于是在树上给物种打标签：鲸豚是水生，海豹和海牛也水生，其他哺乳动物多数陆生。跑完 <code class="language-plaintext highlighter-rouge">RERconverge</code>，很容易看到一个看起来很顺的结果：鲸豚这一大支系的 OR9Q2 都很“快”，和“水生 = 1”的标签对得很整齐，似乎有相关性，是这样吗？</p>
+
+<p>但这个显著性也许不是“水生”的整体效应，而是鲸豚祖先分支上发生过一次背景变化，后代整支系继承了它。我们看到的是“继承 + 很多后代点”，软件读到的却是“很多次独立重复”。</p>
+
+<p>如果用 <code class="language-plaintext highlighter-rouge">RERconverge</code> 这类“速率—性状直接关联”的框架去问：</p>
+
+<blockquote>
+  <p><strong>离散表型（如水生/陆生）是否会在整体上改变某个基因的演化速率？</strong></p>
+</blockquote>
+
+<p>最容易踩到的坑是 <strong>系统发育伪重复（phylogenetic pseudoreplication）</strong>：祖先分支上只发生过<strong>一次</strong>的过程变异，被后代整支系继承；到了相关性检验里，却被当成<strong>很多次独立证据</strong>，再和表型标签对齐，于是 P 值看起来漂亮得不真实。</p>
+
+<p><code class="language-plaintext highlighter-rouge">MuSSCRat</code>（May &amp; Moore 2020）走的是另一条路：把“沿树传递的背景差异”显式写成（祖先或分支上的）$\beta_l^2$（分支背景速率），再和状态效应 $\zeta^2$（离散状态对应的相对速率）一起做后验推断。这样一来：</p>
+
+<ul>
+  <li>单系群里“继承下来的一次加速”，更倾向被解释为<strong>祖先分支的 $\beta^2$</strong>，而不是被写成“表型导致的整体效应（$\zeta^2$）”</li>
+  <li>$\zeta^2$ 不再被“同一事件在很多后代里的拷贝”虚假抬高</li>
+</ul>
+
+<p>我们能看到，在这里不同的方法其实考虑到的“先验概率”是不同的。换句话说，前者有考虑的不全面的地方。但实际情况里，当我们试图建立一个模型，可能还是会有没考虑到的因素。这类因素又被叫做“过程变异”。</p>
+
+<hr />
+
+<h2 id="什么是过程变异">什么是过程变异</h2>
+<p>根据文献Tribble et. al. 2026：
+过程变异是指影响目标性状进化过程的、未被明确纳入统计模型的变异来源。</p>
+
+<p>在系统发育比较方法中：</p>
+
+<ul>
+  <li><strong>过程（Process）</strong>：指生成数据的演化机制及其数学参数（如基因的核苷酸替代率、插入/缺失率）。</li>
+  <li><strong>变异（Variation）</strong>：指这些参数在系统发育树不同分支上存在的异质性或非恒定性。</li>
+</ul>
+
+<p>“过程变异”的严格定义是：模型中未被显式包含的变量所引起的演化速率或模式的改变。</p>
+
+<p>为了理清过程变异的来源，我们可以首先将其分为两种常见的情况：</p>
+
+<ol>
+  <li><strong>Focal Dependency</strong>：这是研究直接关注的因素。例如，在研究染色体数目变化如何影响物种形成速率时，染色体数目与物种形成的关系就是焦点依赖。</li>
+  <li><strong>Nuisance Dependency</strong>：这是影响目标变量但本身并非研究核心的因素。例如，在上述例子中，多倍体亚基因组的归属可能就是一个干扰依赖——研究者不一定对亚基因组本身感兴趣，但忽略它会影响拓扑结构的推断。</li>
+</ol>
+
+<p>过程变异普遍存在且来源复杂。在实际的比较基因组学与演化分析中，常见的过程变异具体情况包括：</p>
+
+<ol>
+  <li><strong>多重未建模因素的影响</strong>：一个性状（如体型、分子演化速率）的进化可能同时依赖于地理分布、环境、有效种群大小波动、与其他性状的遗传或功能连锁等诸多未包含在模型中的因素。</li>
+  <li><strong>系统发育相关模型中的“非重复事件”问题（伪重复）</strong>：当性状进化在系统发育树上只发生了一次（即“非重复事件”），传统的相关性状进化检验（如 Pagel 的离散性状相关模型）极易产生虚假的关联信号。这是因为缺乏统计重复，任何未被建模的背景过程变异都可能导致误判。</li>
+  <li><strong>性状与多样化过程的相互影响</strong>：如果一个性状影响了物种形成或灭绝速率（即存在状态依赖的多样化），那么在推断该性状的进化历史（如祖先状态重建）时，就必须联合推断多样化过程，否则结果将不准确。这是 Maddison (2006) 提出的核心观点。</li>
+  <li><strong>分子与基因组层面的中性偏置</strong>：如局部重组率的改变、GC 偏向性基因转换（gBGC）的增强，或者 DNA 修复机制效率的波动。它们能在纯中性或接近中性的条件下制造出强烈的“速率加速”信号。</li>
+  <li><strong>网状演化与拓扑冲突</strong>：如不完全谱系分流（ILS）或历史上的基因渗入（Introgression）。当模型强制用固定的物种树去拟合具有冲突历史的序列时，拓扑错配的部分会被算法用“异常的分支长度（速率）”来强行补偿。</li>
+</ol>
+
+<p>当分析框架（如 <code class="language-plaintext highlighter-rouge">RERconverge</code>）默认背景演化过程恒定，而没有提供参数去吸收这些客观存在的过程变异时，算法就无处安放由“未知变量”带来的异质性方差。最终，这些波动会被强制归因在模型里唯一标记出来的变量（即观测表型），从而制造出极具欺骗性的假阳性。</p>
+
+<p>既然忽略过程变异会导致如此严重的统计偏差，我们就需要在模型构建中正视并处理它。为了避免上述的强制归因问题，研究者们在系统发育比较方法中开发了多种策略，试图吸收或隔离这些未知的背景异质性。</p>
+
+<hr />
+
+<h2 id="考虑过程变异的几种方法">考虑过程变异的几种方法</h2>
+
+<p>这些方案主要通过引入隐藏状态或修正方差结构来实现。</p>
+
+<h3 id="隐藏状态模型-hidden-state-models">隐藏状态模型 (Hidden-State Models)</h3>
+
+<p>这是目前处理离散性状最主流的方法。该方法起源于分子演化中的共变模型（covarion model），随后被引入表型演化与物种分化模型中（如 HiSSE 等）。</p>
+
+<ul>
+  <li><strong>机制</strong>：模型在标准的马尔可夫（Mk）模型状态空间之上，人工引入一个或多个未观测到的离散变量（隐藏状态）。焦点特征的转移速率被设定为条件依赖于这些隐藏状态。</li>
+  <li><strong>作用</strong>：在似然函数的计算中，任何无法被焦点特征解释的系统发育异质性，都可以被数学分配给这些隐藏状态的转移概率。</li>
+  <li><strong>局限性</strong>：设定单一的隐藏特征或隐藏状态通常是出于计算效率的妥协，缺乏真实的生物学先验支撑。此外，对于系统发育树上仅发生过一次的“未重复事件（unreplicated events）”，标准的隐藏状态模型难以进行准确估计。</li>
+</ul>
+
+<h3 id="连续速率异质性与端点迷雾-tip-fog">连续速率异质性与“端点迷雾” (Tip Fog)</h3>
+
+<p>针对连续性状，研究者无法直接使用分类变量扩展状态空间，因此提出了针对方差-协方差结构的修正方案。</p>
+
+<ul>
+  <li><strong>端点迷雾 (Tip Fog)</strong>：Beaulieu 和 O’Meara 提出在布朗运动 (BM) 模型的方差-协方差矩阵中引入一个独立参数 $\zeta$。该参数专门用于吸收模型主体演化过程未能涵盖的残余方差或观测端点的数据误差。</li>
+  <li><strong>宽松分子钟模拟 (Relaxed Clock Models)</strong>：在如 MuSSCRat 这样的模型中，研究者利用宽松分子钟的架构来处理连续性状的隐藏速率异质性。模型允许连续性状的演化速率在不同的分支上发生服从特定概率分布的偏离。</li>
+</ul>
+
+<h3 id="贝叶斯混合模型-bayesian-mixture-modeling">贝叶斯混合模型 (Bayesian Mixture Modeling)</h3>
+
+<p>为了处理上述方法难以应对的未重复事件（例如全树上仅在某一个单系群发生的演化模式剧变），部分研究者提出了混合模型的思路。</p>
+
+<ul>
+  <li><strong>机制</strong>：Uyeda 等人建议使用贝叶斯混合模型，允许系统发育树的不同部分服从完全不同的演化过程或参数空间。</li>
+  <li><strong>作用</strong>：通过在不同的树结构区间分配不同的子模型，该方法可以隔离局部特异性的过程变异，防止单一分支的特异性事件干扰对全局统计相关性的评估。</li>
+</ul>
+
+<p>在上述各种旨在解决过程变异的尝试中，<code class="language-plaintext highlighter-rouge">MuSSCRat</code> 模型提供了一个非常具体且极具启发性的思路。它巧妙地结合了贝叶斯推断与分支特异性速率的架构，向我们展示了如何在系统发育分析中同步估计背景速率变异并检验目标性状的效应。</p>
+
+<hr />
+
+<h2 id="musscrat检验离散性状对连续性状进化速率的影响">MuSSCRat：检验离散性状对连续性状进化速率的影响</h2>
+<p>MuSSCRat被设计解决一个经典的宏观进化问题：评估一个离散性状（例如，栖息地类型）是否影响了一个或多个连续性状（例如，形态测量值）的进化速率。</p>
+
+<p>文献指出，传统检验此问题的方法是比较两个竞争模型的拟合优度：</p>
+
+<p>零模型：假设连续性状在所有谱系中以单一、恒定的速率（布朗运动） 进化，与离散性状的状态无关。</p>
+
+<p>备择模型：假设连续性状的进化速率依赖于离散性状的状态（即速率可变）。</p>
+
+<p>May和Moore（2020）发现，这种传统方法的零模型（M0）是一个不切实际的“假人”。它假设不存在任何其他原因导致的速率变异。然而在现实中，由于未建模的生态、遗传或历史因素（即 “过程变异”），进化速率在谱系间存在广泛的背景速率变异。当存在未被建模的背景速率变异时，使用过于简单的M0作为基准，会系统性夸大对备择模型（M1，状态依赖模型）的支持，导致假阳性推断。文献将此称为推断中的一种偏差。</p>
+
+<p>MuSSCRat 的突破在于，在推断离散性状（如栖息地）对速率的影响时，明确地允许并估计谱系间存在的、与离散性状无关的背景速率变异。</p>
+
+<p>该方法采用了一种贝叶斯数据增强框架。它为系统发育树上的每个分支都赋予一个潜在（隐藏）的速率乘数。这个乘数捕获了由未知因素导致的背景速率变异。</p>
+
+<p>模型同时估计 1) 背景速率变异（通过分支特异性乘数），和 2) 离散性状状态对速率的额外效应。这样，对状态依赖效应的估计是在控制背景变异的前提下进行的。</p>
+
+<p>在 <code class="language-plaintext highlighter-rouge">MuSSCRat</code> 里，面对“鲸豚类整支系一致加速、但海豹/海牛并不如此”的数据，<strong>“鲸豚类后代普遍高”不必被解释成“水生整体更快”</strong>。模型允许我们说：高方差来自<strong>鲸豚类祖先分支</strong>的一次局部背景跃升，并沿树向下游传递。</p>
+
+<p>其解决背景变异的具体机制可以拆解为以下三个步骤：</p>
+
+<h3 id="1-参数显式分离explicit-parameter-separation">1. 参数显式分离（Explicit Parameter Separation）</h3>
+
+<p>文献指出，传统模型在评估此类问题时，默认背景演化速率是绝对恒定的。这是一个不切实际的“假人”设定。这种极端的零模型（M0）会导致数据中存在的任何由于过程变异引起的异质性方差，最终都被算法强制归因于模型中唯一被允许变动的参数——即观测到的离散状态，导致假阳性推断。</p>
+
+<p>MuSSCRat 的突破在于，在推断离散性状对速率的影响时，明确地允许并估计谱系间存在的、与离散性状无关的背景速率变异。它在连续性状的布朗运动协方差矩阵中引入了两组相互独立的速率乘数：</p>
+
+<ul>
+  <li><strong>状态特异性乘数 ($\zeta_i^2$)</strong>：全局参数，用于捕获连续性状在处于离散状态 $i$ 时演化速率的相对变化。</li>
+  <li><strong>分支特异性乘数 ($\beta_l^2$)</strong>：局部参数，为系统发育树上的每一条分支 $l$ 赋予一个潜在（隐藏）的、独立的基础演化速率乘数。这个乘数正是用来吸收由未知过程变异导致的背景速率波动。</li>
+</ul>
+
+<p>对于系统发育树上的任意分支 $l$，总方差矩阵 $\Sigma_l$ 被严格定义为：</p>
+
+\[\Sigma_l = \beta_l^2 \left[ \tau(\kappa_l,0)\zeta_0^2 + \tau(\kappa_l,1)\zeta_1^2 \right] \Sigma\]
+
+<p>其中，$\tau(\kappa_l,i)$ 代表分支 $l$ 处于离散状态 $i$ 的时间比例。此方程在数学上确立了模型同时估计：1) 背景速率变异（通过分支特异性乘数 $\beta$），和 2) 离散性状状态对速率的额外效应（全局状态依赖效应 $\zeta$）。这样，对状态依赖效应的估计是在控制背景变异的前提下进行的。</p>
+
+<h3 id="2-贝叶斯先验约束bayesian-prior-constraints">2. 贝叶斯先验约束（Bayesian Prior Constraints）</h3>
+
+<p>当同时估计全局状态效应 $\zeta^2$ 和每个分支的潜在背景速率乘数 $\beta_l^2$ 时，模型在数学上会面临严重的不可识别性（Nonidentifiability）：即无穷多种参数组合都可以产生完全相同的似然值。这使得传统的极大似然法失效。</p>
+
+<p>为了解决这一问题，MuSSCRat 采用了一种贝叶斯数据增强框架，通过引入先验分布提供诊断性约束。模型假设所有分支的背景速率乘数 $\beta_l^2$ 均服从一个不相关的对数正态分布（Uncorrelated Lognormal, UCLN）。该分布由一个标准差参数 $\nu$ 控制。</p>
+
+<ul>
+  <li>当真实数据不存在背景速率变异时，后验推断会将 $\nu$ 压缩至趋近于 0，此时模型自动“缩减”为传统的恒定背景速率模型；</li>
+  <li>当数据中存在导致演化速率波动的未建模过程变异时，$\nu$ 增大，允许不同分支的 $\beta_l^2$ 自行吸收这些变异。</li>
+</ul>
+
+<h3 id="3-后验竞争posterior-competition">3. 后验竞争（Posterior Competition）</h3>
+
+<p>在马尔可夫链蒙特卡洛（MCMC）的采样迭代中，模型同时对离散性状的演化历史与连续性状的速率进行联合评估。</p>
+
+<p>在后验拟合里，当模型发现鲸豚类内部许多叶节点的演化速率信号都偏高时，推断算法面临两条竞争性路径：</p>
+
+<ul>
+  <li><strong>路线 A（状态依赖）</strong>：提高全局的 $\zeta_1^2$（解释成“水生整体更快”）。这要求<strong>所有</strong>处于该离散状态（水生）的谱系都必须表现出更快的速率。因此，像海豹、海牛这些同为水生但速率不高的分支，会在似然函数上引发严重的错配惩罚。</li>
+  <li><strong>路线 B（背景变异）</strong>：仅提高鲸豚类共同祖先分支的潜在乘数 $\beta_l^2$。联合拟合会拒绝路线 A 的错配，转而走路线 B：<strong>只调整一个祖先分支的 $\beta^2$</strong>，就能完美吸收残差方差，解释整条鲸豚类支系的高信号。</li>
+</ul>
+
+<p>最终，后验分布往往更倾向路线 B：<strong>把局部的“单系群继承”客观地归因到祖先分支的背景乘数 $\beta^2$ 上</strong>，让全局的 $\zeta^2$ 不至于被伪重复堆高。通过这种贝叶斯竞争机制，模型成功避免了全局状态效应参数被伪重复信号虚假抬高，从而客观地排除了假阳性推断。</p>
+
+<p>回顾从 <code class="language-plaintext highlighter-rouge">RERconverge</code> 的相关性检验到 <code class="language-plaintext highlighter-rouge">MuSSCRat</code> 的处理过程，我们会发现，这不仅是模型里多了几个背景参数，更是底层统计思维的转变。传统框架往往依赖单一的 P 值来下结论，而 <code class="language-plaintext highlighter-rouge">MuSSCRat</code> 则利用后验概率的竞争来分配信号。这就促使我们重新思考一个根本问题：我们在处理这些系统发育数据时，到底想从统计检验里得到什么？这正好也是频率学派与贝叶斯学派分歧的核心。</p>
+
+<hr />
+
+<h2 id="频率-vs-贝叶斯">频率 vs 贝叶斯</h2>
+
+<p>这两种方法在根本上回答不同的问题：</p>
+
+<ol>
+  <li><strong>频率学派</strong>：$P(\text{Data}\mid H_0)$ —— 解释的是：如果零假设为真，看到当前数据（或更极端）的概率多大。</li>
+  <li><strong>贝叶斯</strong>：$P(H\mid \text{Data})$ —— 解释的是：看到当前数据后，我们的假设为真的概率分布是什么。</li>
+</ol>
+
+<p>问题通常不在工具，而在误用。我们在做“离散表型 vs 连续速率”的比较分析时，如果观察到以下情况，就要警惕显著性可能是由伪重复撑起来的：</p>
+
+<ul>
+  <li><strong>显著性由某个单系群内部“整齐一致”的信号驱动</strong>（多个物种同高/同低，像同一祖先事件的后遗症），而不是多个彼此独立的水生类群各自独立复现同一模式。</li>
+  <li><strong>把离散状态当作独立重复</strong>：表型标签相同，但速率信号在系统发育上高度相关（伪重复），检验却把它们当作独立的数据点。</li>
+</ul>
+
+<p>这往往说明我们面对的是 <strong>过程变异 + 树上的非独立性</strong>，更合适的处理方式是把它显式写进模型（例如用 $\beta_l^2$ 吸收单系群背景），而不是采用“标准化并忽略拓扑”的方式去强行解释。</p>
+
+<hr />
+
+<h2 id="另一类看似假阳性的强信号统计学并发加速--生物学因果趋同">另一类“看似假阳性”的强信号：统计学并发加速 ≠ 生物学因果趋同</h2>
+
+<p>Tribble et al. 2026 提到“缺少联合建模会放大过程变异”的时候，我还想到另一种更常见的错位：贝叶斯竞争模型（例如 <code class="language-plaintext highlighter-rouge">PhyloAcc</code> 这类把前景分支组合当成候选并比较 $H_0/H_1/H_2$ 的框架）在某些数据格局下会给出很强的统计支持，但统计支持不等于因果解释成立。</p>
+
+<h3 id="阳性信号可能来自哪些层面">阳性信号可能来自哪些层面</h3>
+
+<p>像“鲸豚 + 海牛”这种互不相近、但都属于水生谱系的前景组合，如果在某个基因上被模型判为并发加速，首先要分清：模型给出的结论，回答的是“这些分支是否都变快了”，不是“它们为什么一起变快”。把统计学上的并发直接翻译成“水生带来的趋同适应”，很容易把因果说错；问题通常出在解释，而不在模型。</p>
+
+<p>另外，分支背景项（例如 $\beta_l^2$）能把“单条分支异常快”的信号吸收到背景里，避免它污染成表型效应；但如果确实有多条分支同时加速，模型不会、也没法替我们判断它们背后是不是同一个动因。</p>
+
+<p>把“阳性信号从哪来”按层面拆开，通常可以按下面几类去排查。</p>
+
+<h4 id="数据层输入序列与同源关系">数据层：输入序列与同源关系</h4>
+
+<ul>
+  <li><strong>隐性旁系同源与比对错误（Hidden Paralogy and Misalignment）</strong>：速率模型默认输入序列是直系同源（ortholog）。如果组装/注释把海牛的序列误取成一个更古老的旁系同源拷贝（paralog），把它塞进物种树对应叶节点时，模型只能靠把海牛分支拉长来解释“多出来的差异”。再叠加鲸豚端的比对问题（例如低质量 reads 引入假突变），两条分支就会同时显得“特别快”。</li>
+</ul>
+
+<h4 id="系统发育层基因树与物种树不一致">系统发育层：基因树与物种树不一致</h4>
+
+<ul>
+  <li><strong>基因树不一致下的枝长扭曲（Branch Length Distortion due to Gene Tree Discordance）</strong>：ILS 或历史基因渗入（introgression）会让该基因的真实拓扑偏离物种树。像 <code class="language-plaintext highlighter-rouge">RERconverge</code> 这类流程通常固定拓扑为物种树；当真实历史被强行拟合进错误拓扑时，速率会被错误地分配到某些分支，用来“补偿”拓扑冲突，于是出现看似异常的加速。这也是 <code class="language-plaintext highlighter-rouge">PhyloAcc-GT</code> 试图用多物种合并模型（MSC）去缓解的问题。</li>
+</ul>
+
+<h4 id="序列统计层替代速率变快但不指向同一表型">序列统计层：替代速率变快，但不指向同一表型</h4>
+
+<ul>
+  <li><strong>净化选择放松与假基因化（parallel relaxation of purifying selection / pseudogenization）</strong>：功能变得可有可无时，净化选择减弱，突变更容易累积，看起来像速率上升。多个谱系都加速时，可能是并行退化，不必指向同一“适应性故事”。</li>
+  <li><strong>基因多效性下的不同选择压力</strong>：同一基因牵涉多条生理通路，不同谱系在不同结构域承受选择，但在“全长速率”统计量里都会被记成“加速”，把它直接归因到某个离散表型很危险。</li>
+  <li><strong>gBGC 等中性偏置</strong>：重组率高的区域，GC 偏向性基因转换会推动固定突变累积，使局部替代率看起来升高；信号可以很强，但和关注的表型无关。</li>
+</ul>
+
+<h4 id="生物学层信号真实但我们没标记出关键变量">生物学层：信号真实，但我们没标记出关键变量</h4>
+
+<ul>
+  <li><strong>未观测表型上的趋同（Convergence on Hidden Traits）</strong>：我们标记的是“水生/陆生”，但该基因真正对应的可能是更具体的生理维度，例如嗅觉依赖下降、特定代谢通路的重排，或某类组织表达的长期下调。鲸豚和海牛都在这些维度上发生了趋同，于是基因加速看起来像“水生效应”。这里缺的是我们给的标签，而不是速率信号。</li>
+  <li><strong>宿主—病原体共演化下的持续正向选择（Continuous Positive Selection driven by Co-evolution）</strong>：免疫相关基因常处在持续选择之下。病原体不同也能把同一类免疫/受体基因推向高替换率；趋同的是“演化模式”，不必指向同一个外部环境因子。</li>
+  <li><strong>上位效应与代偿性演化（Epistasis and Compensatory Evolution）</strong>：网络里存在上位性时，A 上的轻微有害突变会把压力转移到 B，促使 B 在不同谱系里都更快积累代偿突变；扫 B 的速率时，就会看到平行加速。</li>
+</ul>
+
+<h3 id="面对真实存在的随机并行加速应该怎么处理">面对真实存在的随机并行加速，应该怎么处理</h3>
+
+<p>检测到“强支持 $H_2$”之后，更稳妥的做法是把“统计学并发”和“生物学因果”拆开验证。</p>
+
+<p>1) <strong>经验零分布（permulations 思路）</strong>：如果某个前景组合（例如“鲸豚 + 海牛”）在 <code class="language-plaintext highlighter-rouge">PhyloAcc</code> 输出极高 BF，一个自然的问题是：这种程度的并发加速，是否显著超出“该基因在全树上随机出现并发加速”的本底概率？做法是：在物种树上随机生成大量与真实前景在拓扑性质上匹配的伪前景组合（例如保持前景数量与拓扑距离），对同一基因重复计算 BF，得到经验零分布。只有当真实前景的 BF 明显高于该零分布（例如超过 95% 分位数），才更有把握拒绝“随机并行加速”这一类零解释。</p>
+
+<p>2) <strong>拆解速率来源：正向选择 vs 功能丧失</strong>：仅知道“RER 升高/速率加快”并不足以支持适应性趋同。一个常用的后验鉴别是用密码子模型（例如 PAML 的分支-位点模型）去看加速来自哪里：$\omega$ 若趋近 1 并伴随提前终止密码子，更像平行假基因化（功能丧失）；$\omega&gt;1$ 才更像正向选择。即便 $\omega&gt;1$，也需要进一步看加速位点是否集中在相同功能结构域：如果不同前景的加速位点落在不同结构域，更像多效性下的独立事件，而不是同一离散表型驱动的同一因果路径。</p>
+
+<h2 id="附录术语与必要的数学思维卡壳时再读">附录：术语与必要的数学思维（卡壳时再读）</h2>
+
+<h3 id="1-ctmc不是生物学理论而是计算概率的引擎">1) CTMC：不是生物学理论，而是“计算概率的引擎”</h3>
+
+<p>文献里说一个模型在 <strong>CTMC（连续时间马尔可夫链）框架</strong>下，通常只意味着：</p>
+
+<blockquote>
+  <p>给定“状态”与“瞬时转移速率”，算法能在任意枝长 $t$ 上计算从起点状态到终点状态的概率。</p>
+</blockquote>
+
+<p>CTMC 需要三个前提：</p>
+<ol>
+  <li><strong>离散状态</strong>：对象是有限分类。</li>
+  <li><strong>连续时间</strong>：枝长是时间，状态改变可发生在任意瞬间。</li>
+  <li><strong>无后效性（马尔可夫性）</strong>：未来只依赖“当前状态 + 固定速率”。</li>
+</ol>
+
+<h3 id="2-边缘化marginalization把不可观测的维度加总消掉">2) 边缘化（Marginalization）：把不可观测的维度“加总消掉”</h3>
+
+<p>隐藏状态模型里只能观测到 $O$，但内部会引入不可直接观测的 $H$。想要观测层面的概率 $P(O)$，就把所有可能的 $H$ 加总：$P(O) = \sum_H P(O,H)$。直觉翻译：<strong>我不知道隐藏状态是哪一个，但我可以把“所有可能历史”的概率都算进去，再加起来。</strong></p>
+
+<h3 id="3-直接关联-vs-层级建模">3) 直接关联 vs 层级建模</h3>
+
+<p>差别不在“更复杂”，而在“背景异质性有没有显式进模型”。
+“直接做关联”先把树与信号处理成可用于检验的观测量，再做条件推断。层级/隐藏状态类模型则是在概率模型内部显式加入异质性维度（例如 $\beta_l^2$），在后验里让数据分配解释权：哪些归“状态效应”，哪些归“分支背景异质性”。</p>
+
+<h3 id="4-mcmc不是求一个最优解而是在后验里采样">4) MCMC：不是“求一个最优解”，而是“在后验里采样”</h3>
+
+<p>当参数很多时，MCMC 用随机游走的方式在后验分布里采样，得到一整个分布（这也是为什么 MuSSCRat 更自然地表达不确定性）。</p>
+
+<hr />]]></content><author><name>Jia</name></author><category term="Comparative genomics" /><summary type="html"><![CDATA[统计上看到多条分支“同时加速”，并不等于它们因为同一个表型发生了因果趋同。]]></summary></entry><entry><title type="html">SV的检测原理和流程</title><link href="https://vooooooodga.github.io/wgs/2026/04/14/SV%E7%9A%84%E6%A3%80%E6%B5%8B%E5%8E%9F%E7%90%86%E5%92%8C%E6%B5%81%E7%A8%8B/" rel="alternate" type="text/html" title="SV的检测原理和流程" /><published>2026-04-14T16:52:50+08:00</published><updated>2026-04-15T22:28:24+08:00</updated><id>https://vooooooodga.github.io/wgs/2026/04/14/SV%E7%9A%84%E6%A3%80%E6%B5%8B%E5%8E%9F%E7%90%86%E5%92%8C%E6%B5%81%E7%A8%8B</id><content type="html" xml:base="https://vooooooodga.github.io/wgs/2026/04/14/SV%E7%9A%84%E6%A3%80%E6%B5%8B%E5%8E%9F%E7%90%86%E5%92%8C%E6%B5%81%E7%A8%8B/"><![CDATA[<blockquote>
+  <p>结构变异（Structural Variant, SV）通常指基因组上长度大于50 bp的序列改变，主要包括缺失（Deletion）、插入（Insertion）、重复（Duplication）、倒位（Inversion）和易位（Translocation）。</p>
+</blockquote>
+
+<p>工具虽然不少，但其实归纳起来，基于NGS数据的变异检测算法并不多。总的来说主要有以下4种不同的策略和方法，分别是：</p>
+<ol>
+  <li>Read Pair Mapping，简称RP或者PEM；</li>
+  <li>Split Read，简称SR；</li>
+  <li>Read Depth，简称RD，也有人将其称为RC——Read Count的意思，它与Read Depth是同一回事，顾名思义都是利用read覆盖情况来检测变异的方法；</li>
+  <li>序列从头组装（<em>de novo</em> Assembly， 简称AS）的方法。</li>
+</ol>
+
+<p>单个样本的 SV 分析拆分为了 5 个独立的步骤（提取 discordants、排序、提取 splitters、排序、运行 lumpy）和 1 个独立的统计步骤（SV_stat）</p>
+
+<p>参考：https://zhuanlan.zhihu.com/p/40290546</p>
+
+<p>基于 <strong>LUMPY</strong> 算法。在评估SV假说时，LUMPY采用概率模型，通过搜寻两种相互独立的诊断性证据来计算结构变异存在的后验概率：</p>
+
+<ol>
+  <li>
+    <p><strong>异常双端比对（Discordant Read Pairs）</strong>：基于测序文库的插入片段长度（Insert size）先验分布。如果一对双端测序（PE）Reads比对到参考基因组上的物理距离显著偏离预期，或比对方向异常（例如预期为FR，实际为FF或RR），则作为两点之间存在结构变异的诊断性证据。该信号能确定变异类型和大致范围，但断点定位精度较低。</p>
+  </li>
+  <li>
+    <p><strong>分裂比对（Split Reads）</strong>：当一条测序Read恰好跨越变异断点时，BWA算法会将其切断，前半部分和后半部分分别比对到参考基因组的不同位置，产生补充比对（在BAM文件中标记为SA标签）。该信号提供单碱基级别的变异断点（Breakpoint）确凿证据。</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="流程解构与指令分析">流程解构与指令分析</h3>
+
+<p>整个工作流严格遵循“提取特征证据 $\rightarrow$ 联合概率推断 $\rightarrow$ 结果统计”的客观逻辑。以下是对提供脚本的逐步解析：</p>
+
+<p><strong>第一步：提取异常双端比对证据 (Discordants)</strong></p>
+
+<ul>
+  <li>
+    <p><strong>指令</strong>: <code class="language-plaintext highlighter-rouge">samtools view -b -F 1294 [input.bam] &gt; [discordants.unsorted.bam]</code></p>
+  </li>
+  <li>
+    <p><strong>解析</strong>: 核心在于SAM Flag参数 <code class="language-plaintext highlighter-rouge">-F 1294</code>。数字 1294 是以下状态参数的按位或总和：1024（PCR或光学重复）+ 256（非主要比对）+ 8（配对Read未比对上）+ 4（当前Read未比对上）+ 2（处于正常配对状态）。<code class="language-plaintext highlighter-rouge">-F</code> 表示排除这些Reads。过滤后，留下的就是双端均已比对但处于异常配对状态的Discordant Reads。随后通过 <code class="language-plaintext highlighter-rouge">samtools sort</code> 进行坐标排序。</p>
+  </li>
+</ul>
+
+<p><strong>第二步：提取分裂比对证据 (Splitters)</strong></p>
+
+<ul>
+  <li>
+    <p><strong>指令</strong>: <code class="language-plaintext highlighter-rouge">samtools view -h [input.bam] | extractSplitReads_BwaMem -i stdin | samtools view -Sb - &gt; [splitters.unsorted.bam]</code></p>
+  </li>
+  <li>
+    <p><strong>解析</strong>: 直接读取完整BAM文件，利用LUMPY自带的解析脚本提取携带补充比对信息的Split Reads。随后同样执行 <code class="language-plaintext highlighter-rouge">samtools sort</code> 按坐标排序。</p>
+  </li>
+</ul>
+
+<p><strong>第三步：多证据联合计算 (SV Calling)</strong></p>
+
+<ul>
+  <li>
+    <p><strong>指令</strong>: <code class="language-plaintext highlighter-rouge">lumpyexpress -B [input.bam] -S [splitters.bam] -D [discordants.bam] -o [output.sv.vcf]</code></p>
+  </li>
+  <li>
+    <p><strong>解析</strong>: <code class="language-plaintext highlighter-rouge">lumpyexpress</code> 是LUMPY的自动化执行封装。它同时接收三个维度的输入数据：全量BAM（提供测序深度信息等背景先验）、提取的Splitters BAM和Discordants BAM。算法整合这些独立证据的概率分布，输出标准VCF格式的SV结果集。</p>
+  </li>
+</ul>
+
+<p><strong>第四步：变异结果统计</strong></p>
+
+<ul>
+  <li>
+    <p><strong>指令</strong>: <code class="language-plaintext highlighter-rouge">SV_stat.pl [sample_name] [input.sv.vcf] [output.sv.stat]</code></p>
+  </li>
+  <li>
+    <p><strong>解析</strong>: 这是一个定制化的Perl脚本，其目的是解析VCF文本，对最终诊断出的各类SV（如DEL, DUP, INV等）的数量和长度分布进行分类统计归档。</p>
+  </li>
+</ul>
+
+<p>针对你当前的240个样本项目，是否需要我将这套SV提取与推断逻辑整合为适配当前绝对路径和Singularity环境的自动化任务生成脚本（<code class="language-plaintext highlighter-rouge">.sh</code>）？</p>]]></content><author><name>Jia</name></author><category term="WGS" /><category term="原理" /><category term="流程" /><summary type="html"><![CDATA[结构变异（Structural Variant, SV）通常指基因组上长度大于50 bp的序列改变，主要包括缺失（Deletion）、插入（Insertion）、重复（Duplication）、倒位（Inversion）和易位（Translocation）。]]></summary></entry><entry><title type="html">以CSUBST为例：位点趋同的假设与例外</title><link href="https://vooooooodga.github.io/comparative%20genomics/2026/04/11/%E4%BB%A5CSUBST%E4%B8%BA%E4%BE%8B-%E4%BD%8D%E7%82%B9%E8%B6%8B%E5%90%8C%E7%9A%84%E5%81%87%E8%AE%BE%E4%B8%8E%E4%BE%8B%E5%A4%96/" rel="alternate" type="text/html" title="以CSUBST为例：位点趋同的假设与例外" /><published>2026-04-11T19:39:46+08:00</published><updated>2026-04-17T13:37:30+08:00</updated><id>https://vooooooodga.github.io/comparative%20genomics/2026/04/11/%E4%BB%A5CSUBST%E4%B8%BA%E4%BE%8B%EF%BC%9A%E4%BD%8D%E7%82%B9%E8%B6%8B%E5%90%8C%E7%9A%84%E5%81%87%E8%AE%BE%E4%B8%8E%E4%BE%8B%E5%A4%96</id><content type="html" xml:base="https://vooooooodga.github.io/comparative%20genomics/2026/04/11/%E4%BB%A5CSUBST%E4%B8%BA%E4%BE%8B-%E4%BD%8D%E7%82%B9%E8%B6%8B%E5%90%8C%E7%9A%84%E5%81%87%E8%AE%BE%E4%B8%8E%E4%BE%8B%E5%A4%96/"><![CDATA[<p>CSUBST（及其同类方法）虽然强大，但存在一系列重要的<strong>模型假设、数据依赖和场景限制</strong>。理解这些局限性，对于正确使用和合理解读其结果至关重要。</p>
+
+<h2 id="框架总览主要局限性适用范围及影响因素">框架总览：主要局限性、适用范围及影响因素</h2>
+
+<h3 id="核心模型假设的局限性">核心模型假设的局限性</h3>
+
+<ol>
+  <li><strong>「同义突变绝对中性」假设的脆弱性</strong>
+    <ul>
+      <li><strong>问题</strong>：模型的校准基础是同义突变作为完美的中性「标尺」。但大量研究表明，同义突变<strong>并非完全中性</strong>。它们可能受到<strong>密码子使用偏好</strong>、<strong>mRNA稳定性</strong>、<strong>剪接调控</strong>或<strong>翻译效率</strong>等选择压力的影响。</li>
+      <li><strong>影响</strong>：如果同义突变在目标谱系中也受到了选择（无论是正向还是净化选择），那么分母 <code class="language-plaintext highlighter-rouge">(Obs_Syn / Exp_Syn)</code> 就不再是「1」，而是偏离的。这会直接扭曲 ωc 值，可能导致：
+        <ul>
+          <li><strong>假阳性</strong>：如果同义突变受到<strong>净化选择</strong>（观察值 &lt; 期望值），分母变小，即使分子正常，ωc 也会被<strong>人为抬高</strong>。</li>
+          <li><strong>假阴性</strong>：如果同义突变受到<strong>正向选择</strong>（观察值 &gt; 期望值），分母变大，可能掩盖真实的非同义趋同信号。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>「独立进化」与「单一替代」假设</strong>
+    <ul>
+      <li><strong>问题</strong>：模型通常假设趋同事件是<strong>独立的</strong>，且每个位点仅发生<strong>一次</strong>趋同替代。但在长分支上，同一个位点可能经历多次突变（包括逆转），最终「偶然」呈现出趋同状态。模型可能高估了这种「简单趋同」事件的中性概率。</li>
+      <li><strong>影响</strong>：在亲缘关系<strong>较远</strong>的物种比较中（长分支），会<strong>系统性高估</strong>中性趋同的期望值，从而导致<strong>检测效力下降</strong>（更难发现真正的选择信号）。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="数据与输入依赖的局限性">数据与输入依赖的局限性</h3>
+
+<ol>
+  <li><strong>对系统发育树和分支长度极度敏感</strong>
+    <ul>
+      <li><strong>问题</strong>：期望值的计算完全依赖于输入的物种<strong>系统发育树拓扑结构</strong>和<strong>分支长度</strong>（代表进化时间）。如果树不正确或分支长度不准，期望值的计算基础就错了。</li>
+      <li><strong>影响</strong>：这是最大的误差来源之一。特别是在分析<strong>快速辐射演化</strong>的类群时，物种树本身存在不确定性（不完全谱系分选），会导致计算结果极不可靠。</li>
+    </ul>
+  </li>
+  <li><strong>需要准确的序列比对与同源性判断</strong>
+    <ul>
+      <li><strong>问题</strong>：方法的前提是能准确识别出<strong>真正的直系同源位点</strong>。如果序列比对存在错误（特别是在非编码区），或将平行同源基因误判为直系同源，所谓的「趋同位点」根本就是无效的。</li>
+      <li><strong>影响</strong>：直接导致<strong>假阳性</strong>。垃圾进，垃圾出。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="生物学场景的适用范围限制">生物学场景的适用范围限制</h3>
+
+<ol>
+  <li><strong>仅适用于「位点相同替代」型趋同</strong>
+    <ul>
+      <li><strong>问题</strong>：CSUBST 只能检测在<strong>精确的相同氨基酸位点</strong>上发生的趋同替代。它完全<strong>无法检测</strong>其他可能更普遍的趋同机制，例如：
+        <ul>
+          <li><strong>不同位点</strong>产生相同功能。</li>
+          <li><strong>整个基因或调控元件的进化速率</strong>发生趋同性改变（RERconverge的领域）。</li>
+          <li><strong>调控元件的模块化重组</strong>（phyloConverge的领域）。</li>
+          <li>pathway或者GRN水平的趋同。</li>
+        </ul>
+      </li>
+      <li><strong>影响</strong>：对于由<strong>复杂性状</strong>或<strong>基因调控网络</strong>变化驱动的表型趋同，CSUBST的检测能力<strong>非常有限</strong>，可能只揭示了冰山一角。</li>
+    </ul>
+  </li>
+  <li><strong>统计功效受限于谱系数与表型分布</strong>
+    <ul>
+      <li><strong>问题</strong>：方法的统计效力高度依赖于<strong>具有目标表型的独立谱系数量</strong>和<strong>趋同事件的绝对数量</strong>。</li>
+      <li><strong>影响</strong>：
+        <ul>
+          <li><strong>案例稀少时</strong>：如果只有一个或两个独立起源（如蝙蝠与鲸豚的回声定位），即使有真实趋同，统计上也很难达到显著（样本量太小）。</li>
+          <li><strong>近期趋同时</strong>：如果表型是近期才独立演化的，积累的替代变化很少，信号太弱，难以检测。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="深入讨论同义突变作为标尺的例外">深入讨论：同义突变作为「标尺」的例外</h2>
+
+<p>在蛋白质编码区内，同义突变的「近中性」假设通常被认为是相对稳健的，而模型的简化假设也是出于必要性。但现实生物学总是更复杂。下面逐一拆解。</p>
+
+<h3 id="同义突变在编码区内真的不受选择吗">同义突变在编码区内，真的不受选择吗？</h3>
+
+<p>即使在明确的编码区物理限制下，同义突变仍可能通过以下几种机制受到<strong>非中性选择</strong>，从而影响模型校准：</p>
+
+<ol>
+  <li><strong>密码子使用偏好</strong>
+    <ul>
+      <li><strong>机制</strong>：不同生物体、甚至同一生物体的不同基因，对编码同一氨基酸的多个「同义密码子」有强烈的使用偏好。最优密码子通常与更丰富的tRNA配对，能实现<strong>更快、更准确的翻译</strong>。</li>
+      <li><strong>影响</strong>：如果一个趋同谱系（如两种哺乳动物）共享了相同的密码子优化方向（例如，向高表达基因的偏好密码子趋同），那么在同义位点就会观察到<strong>趋同性的净化选择</strong>（清除非最优密码子）或<strong>正向选择</strong>（向最优密码子转变）。这会使 <code class="language-plaintext highlighter-rouge">Obs_Syn / Exp_Syn</code> 显著偏离1，扭曲 ωc。</li>
+    </ul>
+  </li>
+  <li><strong>mRNA二级结构与稳定性</strong>
+    <ul>
+      <li><strong>机制</strong>：同义突变可以改变mRNA的局部二级结构（如茎环），影响其<strong>稳定性、核输出效率和翻译起始效率</strong>。</li>
+      <li><strong>影响</strong>：如果某种mRNA结构对特定细胞环境（如低温、高氧化应激）有利，那么趋同谱系可能在该基因的同义位点发生趋同突变，以优化此结构。这同样是一种适应性趋同。</li>
+    </ul>
+  </li>
+  <li><strong>剪接调控</strong>
+    <ul>
+      <li><strong>机制</strong>：外显子-内含子边界附近的同义突变，可能破坏或创建<strong>剪接增强子/沉默子</strong>序列，导致可变剪接模式的改变。</li>
+      <li><strong>影响</strong>：如果特定的剪接异构体在趋同表型中具有功能优势，驱动其产生的同义突变就会受到选择。这完全超出了「编码氨基酸」的范畴。</li>
+    </ul>
+  </li>
+  <li><strong>共翻译折叠与翻译速率</strong>
+    <ul>
+      <li><strong>机制</strong>：某些同义密码子会引起核糖体<strong>暂停</strong>，从而影响蛋白质<strong>共翻译折叠</strong>的正确性。最优的翻译节奏有助于形成正确的三维结构。</li>
+      <li><strong>影响</strong>：在需要精确折叠的蛋白质（如酶、结构蛋白）中，可能发生同义位点的趋同，以优化翻译动力学。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="如何应对同义标尺可能失效">如何应对同义标尺可能失效</h3>
+
+<p>审慎的研究者会在分析前或分析后检查：</p>
+
+<ul>
+  <li><strong>密码子使用偏好的强度</strong>：计算目标基因或基因组在相关谱系中的<strong>有效密码子使用数</strong>或<strong>密码子适应指数</strong>。如果偏好性很强，则需对同义突变的「中性标尺」角色持怀疑态度。</li>
+  <li><strong>功能基因组学证据</strong>：如果发现一组基因在非同义位点显示趋同信号，应检查它们的同义突变模式是否也异常（如 <code class="language-plaintext highlighter-rouge">Obs_Syn / Exp_Syn</code> 系统性偏离1）。如果是，则需要更保守地解读结果。</li>
+</ul>
+
+<h2 id="深入讨论何时应怀疑独立进化单一替代假设">深入讨论：何时应怀疑「独立进化、单一替代」假设</h2>
+
+<p>当出现以下<strong>生物信息学迹象或进化情景</strong>时，就必须警惕简化假设可能已失效：</p>
+
+<h3 id="需要警惕的五类迹象">需要警惕的五类迹象</h3>
+
+<ol>
+  <li><strong>迹象一：信号集中于「突变热点」或「超变位点」</strong>
+    <ul>
+      <li><strong>表现</strong>：检测到的显著趋同位点，高度集中于已知的<strong>CpG二核苷酸位点</strong>（易发生C→T转换）或具有特定序列背景（如甲基化区域）的位点。</li>
+      <li><strong>推理</strong>：这表明观察到的趋同，很可能只是该位点<strong>极高的本底突变率</strong>导致其在多个谱系中独立、反复突变的结果，而非适应性选择。这本质上是<strong>将趋同性的「原因」误判为适应性，而其实只是突变偏好的副产物</strong>。</li>
+    </ul>
+  </li>
+  <li><strong>迹象二：趋同谱系间存在长分支</strong>
+    <ul>
+      <li><strong>表现</strong>：显示趋同信号的物种对，在系统发育树上<strong>亲缘关系很远</strong>（即连接它们的分支很长）。</li>
+      <li><strong>推理</strong>：在漫长的时间里，同一个氨基酸位点可能经历了<strong>多次替换</strong>（A→B→A→C…），最终状态只是漫长随机游走的偶然结果。更复杂的是，可能出现「<strong>长分支吸引</strong>」现象，系统发育重建本身可能已出错，使趋同判断失去基础。</li>
+    </ul>
+  </li>
+  <li><strong>迹象三：趋同性状本身是「弱约束」或「退化」性状</strong>
+    <ul>
+      <li><strong>表现</strong>：研究的表型是某种功能的<strong>丧失或减弱</strong>，例如地下动物的视觉退化、寄生生物代谢途径的丢失。</li>
+      <li><strong>推理</strong>：这通常对应着进化<strong>约束的放松</strong>（净化选择压力减弱）。在这种情况下，许多位点可能变得近乎中性，允许随机突变积累。多个谱系在同一个位点积累相同突变，可能只是因为该位点在功能丧失后<strong>突变率增高且不受惩罚</strong>，而不是正向选择驱动。</li>
+    </ul>
+  </li>
+  <li><strong>迹象四：基因或位点处于强烈的持续选择压力下</strong>
+    <ul>
+      <li><strong>表现</strong>：目标基因是已知的<strong>宿主-病原体军备竞赛</strong>基因（如免疫相关基因、病毒受体），或处于强烈的<strong>环境选择压力</strong>下（如抗毒素基因）。</li>
+      <li><strong>推理</strong>：这些位点可能处于<strong>反复的「选择-漂变-再选择」循环</strong>中。观察到的「趋同」状态，可能是该位点在两个谱系中<strong>各自经历了多次适应性替换后，恰好收敛于同一氨基酸</strong>，而非一次性独立事件。</li>
+    </ul>
+  </li>
+  <li><strong>迹象五：系统发育信号矛盾或位点特异性速率差异极大</strong>
+    <ul>
+      <li><strong>表现</strong>：使用不同的进化模型或数据分区时，该位点所属的基因树拓扑<strong>剧烈变动</strong>；或者该位点的进化速率<strong>显著高于或低于基因平均水平</strong>。</li>
+      <li><strong>推理</strong>：这提示该位点的进化历史极其复杂，可能涉及<strong>非同寻常的选择压力、功能约束的改变或甚至基因转换事件</strong>，简单的独立单次替代模型无法描述。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="如何应对假设可能失效">如何应对假设可能失效</h3>
+
+<p>当出现上述迹象时，应采取以下策略：</p>
+
+<ol>
+  <li><strong>模型检验与对比</strong>：使用更复杂的、允许<strong>位点特异性速率变化</strong>或<strong>多次替换</strong>的模型重新分析，看信号是否依然稳健。</li>
+  <li><strong>模拟研究</strong>：进行<strong>协方差模拟</strong>，在已知的中性进化或特定选择场景下，评估您的方法产生假阳性信号的频率。</li>
+  <li><strong>寻求一致性</strong>：不依赖单一方法。如果CSUBST检测到的趋同位点，也能被<strong>基于群体的选择扫描</strong>（如PAML的位点模型）或<strong>功能实验</strong>（如定点突变验证功能影响）所支持，那么其可信度将大大增加。</li>
+  <li><strong>聚焦生物学合理性</strong>：最终，最强大的证据来自生物学逻辑：该趋同位点是否位于<strong>蛋白质的关键功能域</strong>？其物化性质的改变是否<strong>与表型适应有联系</strong>？</li>
+</ol>
+
+<h2 id="影响因素速查表">影响因素速查表</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">影响因素</th>
+      <th style="text-align: left">可能导致的后果</th>
+      <th style="text-align: left">应对或检查思路</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>1. 同义突变非中性</strong></td>
+      <td style="text-align: left">ωc 值系统性地扭曲（假阳性/假阴性）</td>
+      <td style="text-align: left">检查目标谱系是否存在强烈的密码子使用偏好；使用更稳健的模型（如考虑突变频谱的模型）。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>2. 系统发育树误差</strong></td>
+      <td style="text-align: left">中性期望值计算错误，统计推断失效</td>
+      <td style="text-align: left">使用高质量、多方法支持的物种树；进行敏感性分析（换不同的树看结果是否稳定）。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>3. 长分支干扰</strong></td>
+      <td style="text-align: left">高估中性趋同概率，检测效力降低</td>
+      <td style="text-align: left">谨慎解释长分支物种间的趋同信号；结合其他证据（如功能实验）。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>4. 性状复杂性</strong></td>
+      <td style="text-align: left">漏检大多数趋同信号（因为非位点型趋同）</td>
+      <td style="text-align: left">明确研究问题：如果关注<strong>关键蛋白的关键残基</strong>，CSUBST很合适；如果关注<strong>复杂性状的整体遗传基础</strong>，必须结合RERconverge、PhyloAcc等工具。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>5. 独立起源数少</strong></td>
+      <td style="text-align: left">统计功效不足，难以得到显著结果</td>
+      <td style="text-align: left">接受其探索性，将结果视为「候选线索」而非结论，需后续验证。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="结论与最佳实践">结论与最佳实践</h2>
+
+<p>CSUBST是一个<strong>强大的「显微镜」</strong>，非常适合在<strong>蛋白质关键功能域</strong>中寻找由<strong>少数关键氨基酸残基</strong>改变驱动的、清晰的适应性趋同信号（例如视觉色素、毒素蛋白的进化）。</p>
+
+<p>然而，它<strong>不是一个「广角镜」</strong>，不能用来全面揭示复杂性状的趋同遗传基础。因此，在当代研究中，<strong>最佳实践是</strong>：</p>
+
+<ol>
+  <li><strong>明确问题</strong>：你的性状很可能由关键位点驱动吗？</li>
+  <li><strong>多方法交叉验证</strong>：将CSUBST的结果与 <strong>RERconverge（速率）</strong>、<strong>PhyloAcc（调控元件）</strong> 的结果进行比较。真正的强信号往往在多个维度上都有体现。</li>
+  <li><strong>警惕假设</strong>：永远记住其核心假设，并对输入数据（系统发育树、比对质量）保持最高要求。</li>
+  <li><strong>功能验证</strong>：计算发现的任何候选趋同位点，最终都需要<strong>实验生物学</strong>的验证才能确认为因果性信号。</li>
+</ol>
+
+<p>简而言之，<strong>了解其局限性，就是正确使用它的开始。</strong> 它是一把锋利的解剖刀，但你不能用它来砍树。</p>]]></content><author><name>Jia</name></author><category term="Comparative genomics" /><category term="CSUBST" /><category term="趋同进化" /><category term="方法学" /><category term="troubleshooting" /><summary type="html"><![CDATA[CSUBST（及其同类方法）虽然强大，但存在一系列重要的模型假设、数据依赖和场景限制。理解这些局限性，对于正确使用和合理解读其结果至关重要。]]></summary></entry><entry><title type="html">Vizueta et. al.（2025）Cell：Adaptive radiation and social evolution of the ants——整合性方法学与论证链条笔记</title><link href="https://vooooooodga.github.io/%E6%96%87%E7%8C%AE%E7%A0%94%E8%AF%BB/2026/04/08/Vizueta-2025-Cell-%E7%A4%BE%E4%BC%9A%E6%80%A7%E9%A2%84%E9%80%82%E5%BA%94-%E5%9F%BA%E5%9B%A0%E5%AE%B6%E6%97%8F%E6%89%A9%E5%BC%A0-%E6%96%B9%E6%B3%95%E5%AD%A6%E7%A0%94%E8%AF%BB/" rel="alternate" type="text/html" title="Vizueta et. al.（2025）Cell：Adaptive radiation and social evolution of the ants——整合性方法学与论证链条笔记" /><published>2026-04-08T23:13:37+08:00</published><updated>2026-04-17T13:37:30+08:00</updated><id>https://vooooooodga.github.io/%E6%96%87%E7%8C%AE%E7%A0%94%E8%AF%BB/2026/04/08/Vizueta-2025-Cell-%E7%A4%BE%E4%BC%9A%E6%80%A7%E9%A2%84%E9%80%82%E5%BA%94-%E5%9F%BA%E5%9B%A0%E5%AE%B6%E6%97%8F%E6%89%A9%E5%BC%A0-%E6%96%B9%E6%B3%95%E5%AD%A6%E7%A0%94%E8%AF%BB</id><content type="html" xml:base="https://vooooooodga.github.io/%E6%96%87%E7%8C%AE%E7%A0%94%E8%AF%BB/2026/04/08/Vizueta-2025-Cell-%E7%A4%BE%E4%BC%9A%E6%80%A7%E9%A2%84%E9%80%82%E5%BA%94-%E5%9F%BA%E5%9B%A0%E5%AE%B6%E6%97%8F%E6%89%A9%E5%BC%A0-%E6%96%B9%E6%B3%95%E5%AD%A6%E7%A0%94%E8%AF%BB/"><![CDATA[<p>文章采用<strong>多层次、互补的整合性方法论</strong>解析蚂蚁社会性的基因组基础：<strong>每一部分角度不同，但证据最终汇聚</strong>，共同支撑从「基因组如何变」到「功能如何组织」的完整故事。</p>
+
+<hr />
+
+<h2 id="文章主要-section-与核心方法论">文章主要 Section 与核心方法论</h2>
+
+<h3 id="section-1基因组资源与系统发育框架">Section 1：基因组资源与系统发育框架</h3>
+
+<ul>
+  <li><strong>内容</strong>：新测序蚂蚁基因组；构建高分辨率物种树，作为后续一切分析的进化背景。</li>
+  <li><strong>方法论</strong>：大规模测序与组装；<strong>OrthoFinder</strong> 等直系同源鉴定；基于大量保守基因座的<strong>串联法</strong>与<strong>溯祖法（coalescent）</strong>构建系统发育树。</li>
+</ul>
+
+<h3 id="section-2祖先基因组的重构与进化动态">Section 2：祖先基因组的重构与进化动态</h3>
+
+<ul>
+  <li><strong>内容</strong>：推断蚂蚁祖先的基因内容、染色体核型；追踪基因家族的扩张/收缩历史。</li>
+  <li><strong>方法论</strong>：<strong>CAFE</strong> 等<strong>基因家族演化分析</strong>，在树上定位扩张与收缩节点；<strong>祖先染色体重建</strong>与基因组重排分析。</li>
+</ul>
+
+<h3 id="section-3与社会性性状相关的选择信号检测">Section 3：与社会性性状相关的选择信号检测</h3>
+
+<ul>
+  <li><strong>内容</strong>：在全基因组范围寻找与关键社会性性状（如后蚁–工蚁二态、复杂等级制度）演化相关的基因。</li>
+  <li><strong>方法论</strong>：
+    <ul>
+      <li><strong>系统发育广义最小二乘（PGLS）</strong>：量化连续性状（如体型二态性程度）与基因演化速率之间的关联。</li>
+      <li><strong>分支位点模型（branch-site models）</strong>：检测在特定谱系（如具特定社会复杂度的支系）中经历正选择的基因。</li>
+      <li><strong>RERconverge</strong>：在独立演化出<strong>类似社会复杂度</strong>的谱系间，检测<strong>表型趋同背后的分子趋同</strong>（演化速率趋同）。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="section-4保守的基因模块与调控景观">Section 4：保守的基因模块与调控景观</h3>
+
+<ul>
+  <li><strong>内容</strong>：尽管基因组经历重排，部分含社会性相关基因的染色体区块（<strong>微同线性</strong>）在演化中被强烈保守；其中基因呈协同表达。</li>
+  <li><strong>方法论</strong>：
+    <ul>
+      <li><strong>微同线性分析</strong>：跨物种比较，鉴定保守的基因邻域/排列区块。</li>
+      <li><strong>基因共表达网络</strong>：利用不同发育阶段与<strong>阶级</strong>的转录组，构建模块，识别协同工作的基因群。</li>
+      <li><strong>Hi-C 染色质构象</strong>：在部分物种中用三维基因组验证：保守区块在物理空间上可对应互作紧密的<strong>拓扑关联域（TADs）</strong>。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="section-5核心社会性调控通路的鉴定与验证">Section 5：核心社会性调控通路的鉴定与验证</h3>
+
+<ul>
+  <li><strong>内容</strong>：整合前述线索，聚焦被反复「点名」的信号通路，并用表达模式验证。</li>
+  <li><strong>方法论</strong>：
+    <ul>
+      <li><strong>通路富集（GO / KEGG）</strong>：对候选基因集做富集，找出过度代表的通路（如保幼激素、胰岛素、MAPK 等）。</li>
+      <li><strong>跨物种、跨阶级表达比较</strong>：同一通路中关键基因在蚂蚁不同阶级（后蚁 vs. 工蚁）、不同发育阶段，以及与其他昆虫间的表达对比。</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="专题祖先基因家族扩张与预适应的细化链条">专题：祖先基因家族扩张与「预适应」的细化链条</h2>
+
+<p>（对应 Section 1–2 与功能、表达验证的衔接；逻辑仍为 <strong>定位事件 → 确定时间 → 关联功能 → 验证表达</strong>。）</p>
+
+<ol>
+  <li><strong>定位扩张</strong>：OrthoFinder 等聚类得到家族目录；比较蚂蚁与非社会性昆虫及社会性蜜蜂的家族大小；在蚂蚁内部树上确认事件落在<strong>共同祖先节点</strong>，而非单支系噪声。</li>
+  <li><strong>确定时间（预适应的时间锚）</strong>：CAFE 将计数映射到高置信度物种树；在<strong>蚂蚁最早共同祖先</strong>节点推断显著<strong>扩张</strong>，早于严格二态、超个体等复杂社会表型的充分展开——即社会性「成型」前的遗传工具包扩充。</li>
+  <li><strong>关联功能</strong>：对祖先节点扩张家族做 GO/KEGG；典型富集包括化学感应（OR/GR）、消化代谢（如胰蛋白酶、脂肪酶、P450）、CHC 合成相关等，与社会识别、通讯、觅食与解毒等群居需求一致。</li>
+  <li><strong>验证表达</strong>：分阶段、分阶级的共表达网络中，扩张家族成员（如化学感知基因）进入与社会性/阶级相关的模块，支持从「拷贝增多」到「接入社会性调控网络」的叙事。</li>
+</ol>
+
+<hr />
+
+<h2 id="作者如何整合各章结论从改变什么到如何组织再到核心机制">作者如何整合各章结论：从「改变什么」到「如何组织」再到「核心机制」</h2>
+
+<p>作者不是罗列发现，而是用一张<strong>逻辑网</strong>串联、汇聚证据。</p>
+
+<h3 id="第一步确立什么被改变了宏观--微观锁定">第一步：确立「什么被改变了」（宏观 → 微观锁定）</h3>
+
+<ol>
+  <li><strong>系统发育框架（Section 1）</strong>：提供演化「地图」——社会性相关表型在何时、在哪些支系上分化。</li>
+  <li><strong>基因组演化动态（Section 2）</strong>：回答<strong>基因组层面变了什么</strong>——祖先基因家族<strong>大规模扩张</strong>（预适应）、伴随剧烈<strong>重排</strong>与祖先核型推断。</li>
+  <li><strong>选择信号（Section 3）</strong>：回答<strong>选择作用于谁</strong>——PGLS、分支位点模型、RERconverge 在全基因组尺度上锁定与社会复杂性相关的基因与趋同信号。</li>
+</ol>
+
+<h3 id="第二步解释改变如何组织从无序重排到有序模块">第二步：解释「改变如何组织」（从无序重排到有序模块）</h3>
+
+<ul>
+  <li><strong>保守模块与三维景观（Section 4）</strong>：在重排「噪音」中抽出<strong>秩序</strong>——含社会性相关基因的微同线性区块长期保守；基因<strong>协同表达</strong>；Hi-C 提示部分结构与 <strong>TAD</strong> 级物理互作一致。含义：社会性不只靠零散单基因，而可能依赖<strong>预置且较稳健的基因模块</strong>。</li>
+</ul>
+
+<h3 id="第三步揭示核心机制是什么现象--通路聚焦">第三步：揭示「核心机制是什么」（现象 → 通路聚焦）</h3>
+
+<ul>
+  <li><strong>通路富集与表达验证（Section 5）</strong>：将被选基因、保守模块中的基因一并做功能归类，<strong>高度汇聚到少数古老发育/生理通路</strong>（如保幼激素、胰岛素、MAPK）。</li>
+  <li><strong>与前几章的对应关系</strong>：
+    <ul>
+      <li>解释 <strong>Section 2 的预适应</strong>：这些通路属于昆虫深层「工具箱」；家族扩张提供组件与变异原料。</li>
+      <li>解释 <strong>Section 3 的选择信号</strong>：选择反复「打磨」这些通路的组分与调控。</li>
+      <li>解释 <strong>Section 4 的保守模块</strong>：通路核心基因常落在保守微同线性区块中；共表达可能与三维基因组结构共同维持程序<strong>鲁棒性</strong>。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="综合叙事synthesis">综合叙事（Synthesis）</h3>
+
+<blockquote>
+  <p>蚂蚁复杂社会性的演化，并非从零发明一批「社会性专用基因」，而是：（1）在祖先节点通过相关家族（如化学感知）<strong>扩张</strong>预先扩充遗传原材料；（2）通过自然选择反复作用于少数<strong>深度保守</strong>、调控生长、代谢与可塑性的<strong>核心通路</strong>（如 JH、胰岛素、MAPK）；（3）被改造的基因往往以<strong>基因组上相连、表达上协同</strong>的<strong>保守模块</strong>形式组织，从而稳定社会性发育与生理程序。</p>
+</blockquote>
+
+<p>从<strong>结构变化（扩张/重排）</strong> → <strong>选择压力（速率与趋同）</strong> → <strong>功能组织原则（通路、模块、三维景观）</strong> 的递进，形成方法学上的<strong>三角互证</strong>，降低单一分析路径的偏倚，提高结论的可信度与解释深度。</p>
+
+<hr />
+
+<h2 id="方法学与工具速查个人笔记用">方法学与工具速查（个人笔记用）</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>层面</th>
+      <th>主要问题</th>
+      <th>代表工具 / 分析</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>资源与树</td>
+      <td>同源关系、物种关系</td>
+      <td>OrthoFinder；串联 / 溯祖系统发育</td>
+    </tr>
+    <tr>
+      <td>家族历史</td>
+      <td>扩张/收缩落在哪一支</td>
+      <td>CAFE 等</td>
+    </tr>
+    <tr>
+      <td>核型与重排</td>
+      <td>祖先基因组如何拼、如何乱</td>
+      <td>祖先染色体重排重建</td>
+    </tr>
+    <tr>
+      <td>性状–演化关联</td>
+      <td>表型与分子演化是否共变</td>
+      <td>PGLS</td>
+    </tr>
+    <tr>
+      <td>支系特异性选择</td>
+      <td>特定支系上的正选择</td>
+      <td>分支位点模型</td>
+    </tr>
+    <tr>
+      <td>趋同</td>
+      <td>独立起源的相似表型是否共享分子模式</td>
+      <td>RERconverge</td>
+    </tr>
+    <tr>
+      <td>线性秩序</td>
+      <td>邻域是否跨物种保守</td>
+      <td>微同线性</td>
+    </tr>
+    <tr>
+      <td>表达组织</td>
+      <td>谁与谁一起动</td>
+      <td>分阶段/分阶级共表达网络</td>
+    </tr>
+    <tr>
+      <td>三维结构</td>
+      <td>保守区块是否空间上成域</td>
+      <td>Hi-C、TAD</td>
+    </tr>
+    <tr>
+      <td>通路解释</td>
+      <td>候选集功能主题</td>
+      <td>GO、KEGG 富集；跨物种/跨阶级表达</td>
+    </tr>
+  </tbody>
+</table>]]></content><author><name>Jia</name></author><category term="文献研读" /><category term="比较基因组学" /><category term="CAFE" /><category term="RERconverge" /><category term="Hi-C" /><category term="Cell" /><category term="社会性昆虫" /><summary type="html"><![CDATA[文章采用多层次、互补的整合性方法论解析蚂蚁社会性的基因组基础：每一部分角度不同，但证据最终汇聚，共同支撑从「基因组如何变」到「功能如何组织」的完整故事。]]></summary></entry><entry><title type="html">RERconverge的几种用法</title><link href="https://vooooooodga.github.io/comparative%20genomics/2026/04/07/RERconverge%E7%9A%84%E5%87%A0%E7%A7%8D%E7%94%A8%E6%B3%95/" rel="alternate" type="text/html" title="RERconverge的几种用法" /><published>2026-04-07T22:36:48+08:00</published><updated>2026-04-17T13:37:30+08:00</updated><id>https://vooooooodga.github.io/comparative%20genomics/2026/04/07/RERconverge%E7%9A%84%E5%87%A0%E7%A7%8D%E7%94%A8%E6%B3%95</id><content type="html" xml:base="https://vooooooodga.github.io/comparative%20genomics/2026/04/07/RERconverge%E7%9A%84%E5%87%A0%E7%A7%8D%E7%94%A8%E6%B3%95/"><![CDATA[<blockquote>
+  <p>算法的基本思想是：如果一个基因（或保守非编码元件）与某个表型（如水生适应、地下生活）的功能相关，那么在该表型独立演化的多个谱系（称为“前景支”）上，该基因所承受的选择压力会发生趋同性的改变。这种改变会体现在其进化速率上——约束放松或正选择可能导致速率加快，而约束加强可能导致速率减慢。算法通过量化并检测这种速率变化的趋同性，来推断基因-表型关联。</p>
+</blockquote>
+
+<p>结合 Kowalczyk 等（2019）的软件发布与 Partha 等（2019）的稳健性改进，RERconverge 的核心目标可以概括为：在系统发育框架下，检测<strong>与趋同表型相关的谱系</strong>是否在某些基因（或保守非编码元件）上呈现<strong>趋同的进化速率变化</strong>。直观地说，如果某个遗传元件与表型适应有关，那么当该表型在多个谱系中独立出现时，这些谱系上该元件的选择约束可能会以相似方向改变，从而导致分支长度（替换率）相对背景出现一致的“加速”或“减速”信号。</p>
+
+<p>下面按算法流程把其逻辑拆成四步（输入 → 速率校正 → 关联检验 → 解释与下游分析）。</p>
+
+<h3 id="算法逻辑总览"><strong>算法逻辑总览</strong></h3>
+
+<ul>
+  <li><strong>基本假设</strong>：各基因树共享相同的物种拓扑（至少在分析时被映射到同一物种树的对应分支上），分支长度可视为该遗传元件在该谱系上的进化速率指标（如每个位点替换数）。</li>
+  <li><strong>核心思想</strong>：先将每个基因的分支长度“扣除”物种层面的背景速率，得到可跨基因比较的<strong>相对进化速率（RER）</strong>；再检验 RER 在“前景支”（表现出目标表型的分支）是否系统性偏高/偏低，从而推断基因-表型关联。</li>
+</ul>
+
+<hr />
+
+<h3 id="第一步输入与数据准备"><strong>第一步：输入与数据准备</strong></h3>
+
+<p>RERconverge 需要两类输入：</p>
+
+<ol>
+  <li><strong>系统发育信息（按基因/元件）</strong>
+    <ul>
+      <li>每个基因（或保守非编码元件）对应一棵带分支长度的树；分支长度代表该元件在该谱系上的演化量（速率 × 时间的综合表现）。</li>
+    </ul>
+  </li>
+  <li><strong>性状信息（按分支或谱系）</strong>
+    <ul>
+      <li><strong>二元性状</strong>：例如“水生/非水生”“地下/地上”等，通常用来定义哪些分支属于“前景支”。</li>
+      <li><strong>连续性状</strong>：例如体重、代谢率等，以连续值形式映射到谱系/分支上。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>实践中，关键是把“基因树的分支”与“物种树的分支/性状编码”对齐：只有对齐后，才能比较同一分支在不同基因上的相对速率变化。</p>
+
+<hr />
+
+<h3 id="第二步计算相对进化速率rers核心计算与-partha-等2019的关键改进"><strong>第二步：计算相对进化速率（RERs）——核心计算与 Partha 等（2019）的关键改进</strong></h3>
+
+<p>这一步的目的，是把“物种层面共同的背景因素”（如分化时间差异、基因组总体突变率差异）从每个基因的分支长度中剥离出来，得到<strong>基因特异、可比尺度</strong>的速率指标。</p>
+
+<ul>
+  <li><strong>基本做法（概念层面）</strong>：<br />
+对于每个基因，将其在各分支上的长度与“背景期望长度”进行比较。背景通常由全基因组层面的平均趋势来代表；将基因分支长度对背景分支长度做回归后，<strong>回归残差</strong>即可解释为该基因在该分支上相对于背景的“偏快/偏慢”（即 RER）：
+    <ul>
+      <li>残差 &gt;0：相对加速</li>
+      <li>残差 &lt;0：相对减速</li>
+    </ul>
+  </li>
+  <li><strong>为什么要改进（异方差问题）</strong>：<br />
+原始残差在统计上常出现<strong>异方差性</strong>：背景分支越长（通常意味着更深分化或更高演化量），对应残差的波动也越大。这会让长分支对回归与后续检验产生不成比例的影响，进而降低稳健性并可能引入假阳性/假阴性。</li>
+  <li><strong>改进后的逻辑（Partha 等，2019）</strong>：<br />
+为了让不同长度分支上的 RER 具有更一致的方差结构，改进版引入了“变换 + 加权”的稳健估计流程：
+    <ol>
+      <li><strong>平方根变换</strong>：先对分支长度做平方根变换以稳定方差。</li>
+      <li><strong>权重估计与加权回归</strong>：初步回归后，用平滑方法（如 LOWESS）拟合“残差方差—背景分支长度”的关系，为每条分支分配权重（长分支权重更低，短分支权重更高），再做加权最小二乘回归。</li>
+      <li><strong>标准化</strong>：将加权回归得到的残差进一步标准化，使其在跨基因比较时处于统一尺度。</li>
+    </ol>
+  </li>
+</ul>
+
+<p><strong>这一步的本质收益</strong>：让最终 RER 更接近同方差假设下的“可比较残差”，从而提升下游关联检验的可靠性，尤其是在树上同时包含很短与很长分支的情况下。</p>
+
+<hr />
+
+<h3 id="第三步基因-性状关联分析convergence-test"><strong>第三步：基因-性状关联分析（convergence test）</strong></h3>
+
+<p>得到每个基因在各分支上的 RER 后，需要检验这些相对速率是否与目标性状一致变化。</p>
+
+<ul>
+  <li><strong>二元性状</strong>：<br />
+将分支划分为“前景支/背景支”，检验前景支上的 RER 是否整体偏高或偏低。常见做法是使用<strong>曼-惠特尼 U 检验</strong>比较两组 RER 分布差异，并输出关联强度（例如基于 P 值的分数）。</li>
+  <li><strong>连续性状</strong>：<br />
+将性状值映射到分支/谱系上，计算每个基因的 RER 与性状之间的相关性（如皮尔逊相关或其他相关度量），以评估速率变化是否随性状连续变化而一致改变。</li>
+</ul>
+
+<p>这一阶段的输出是：<strong>每个基因/元件一个统计量</strong>，表示其“速率变化与性状的匹配程度”。</p>
+
+<hr />
+
+<h3 id="第四步结果解释与下游分析"><strong>第四步：结果解释与下游分析</strong></h3>
+
+<ul>
+  <li><strong>候选列表与排序</strong>：按显著性或分数对基因排序，得到最可能与趋同表型相关的候选集合。</li>
+  <li><strong>功能层面解释</strong>：对候选基因做通路/GO 富集等分析，观察哪些生物学过程被系统性重塑（例如地下生活相关谱系中视觉相关通路的普遍退化）。</li>
+</ul>
+
+<hr />
+
+<h3 id="小结rerconverge-的方法学贡献"><strong>小结：RERconverge 的方法学贡献</strong></h3>
+
+<p>综合上述两篇关键文献，RERconverge 的优势可以概括为：</p>
+
+<ul>
+  <li><strong>概念直观</strong>：用“相对速率”直接连接分子进化信号与趋同表型。</li>
+  <li><strong>流程完整</strong>：从树与性状输入，到稳健的 RER 估计，再到统计检验与功能解释，形成端到端分析框架。</li>
+  <li><strong>统计更稳健</strong>：Partha 等（2019）针对异方差问题的“变换 + 加权”显著提升了在复杂分支长度分布下的推断可靠性与检出力。</li>
+  <li><strong>适用面广</strong>：既可用于蛋白编码基因，也可扩展到保守非编码元件，并支持二元与连续性状。</li>
+</ul>]]></content><author><name>Jia</name></author><category term="Comparative genomics" /><category term="RERconverge" /><category term="比较基因组学" /><category term="方法学" /><category term="趋同进化" /><summary type="html"><![CDATA[算法的基本思想是：如果一个基因（或保守非编码元件）与某个表型（如水生适应、地下生活）的功能相关，那么在该表型独立演化的多个谱系（称为“前景支”）上，该基因所承受的选择压力会发生趋同性的改变。这种改变会体现在其进化速率上——约束放松或正选择可能导致速率加快，而约束加强可能导致速率减慢。算法通过量化并检测这种速率变化的趋同性，来推断基因-表型关联。]]></summary></entry><entry><title type="html">PHAST</title><link href="https://vooooooodga.github.io/comparative%20genomics/2026/04/07/PHAST/" rel="alternate" type="text/html" title="PHAST" /><published>2026-04-07T22:36:48+08:00</published><updated>2026-04-17T13:37:30+08:00</updated><id>https://vooooooodga.github.io/comparative%20genomics/2026/04/07/PHAST</id><content type="html" xml:base="https://vooooooodga.github.io/comparative%20genomics/2026/04/07/PHAST/"><![CDATA[<blockquote>
+  <p>PHAST 是一套用于通过比较多个物种的基因组来检测基因组中保守区域和加速进化区域的工具集。它包含多个命令。</p>
+</blockquote>
+
+<h2 id="phylofit">phyloFit</h2>
+<p>该程序用于构建系统发育树，这些系统发育树可作为物种保护和加速检测的依据。由于其使用方法因应用场景（使用的下游工具）而异，因此下文提供了每种工具的使用说明。</p>
+
+<h2 id="phastcons">PhastCons</h2>
+<p>通过多种类型的基因组比对检测保守区域。</p>
+<h3 id="必要的数据">必要的数据</h3>
+<p>包含要使用的物种的多个比对文件（.maf 等）
+所用物种的系统发育树拓扑结构（以 Newick 格式编写）</p>
+
+<ol>
+  <li>构建系统发育树作为比较标准</li>
+</ol>
+
+<p>首先，我们使用 phyloFit 估计非保守区域的系统发育树初始模型，该模型将作为保守区域检测的基础（并将作为 phastCons 的输入）。需要注意的是，在 phastCons 中，模型会在程序运行时更新，因此该模型并非贯穿整个过程；它仅用于指定初始状态。</p>
+
+<p>以下是最简单的使用方法（使用所有比对结果估计模型）。您也可以使用任何区域，例如 4D 位点或祖先重复序列，请根据需要使用。</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>path/to/phyloFit <span class="se">\</span>
+<span class="nt">--tree</span> <span class="s2">"(((mouse, rat),human),cow)"</span> <span class="se">\</span>
+<span class="nt">--msa-format</span> FASTA <span class="se">\</span>
+<span class="nt">--out-root</span> pri_rod <span class="se">\</span>
+primate-rodent.fa
+</code></pre></div></div>
+
+<p>Input : primate-rodent.fa
+比对文件（phylip|fasta|mpm|ss|maf）
+Output : pri_rod.mod
+描述估计模型的文件(.mod)</p>
+
+<p>–tree [tree topology] ：系统发育树的拓扑结构。可以直接输入字符串，也可以指定包含系统发育关系的文件名。支持 Newick 格式。物种名称必须与比对文件的内容完全一致。
+–msa-format PHYLIP|FASTA|MPM|SS|MAF : 输入文件格式
+–out_root [prefix] : 所有输出文件的前缀</p>
+
+<p>还有其他一些选项可用，请在使用前查看。例如，有几个重要的参数，例如“要使用的基因组区域”和“要使用的碱基替换模型（默认值为 REV）”。</p>
+
+<p>除了上述方法外，似乎还有其他几种方法可以估计输入模型。详情请参阅 http://compgen.cshl.edu/phast/phastCons-HOWTO.html。</p>
+
+<ol>
+  <li>conserved element的检测</li>
+</ol>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>path/to/phastCons <span class="se">\</span>
+<span class="nt">--target-coverage</span> 0.25 <span class="se">\</span>
+<span class="nt">--expected-length</span> 20 <span class="se">\</span>
+<span class="nt">--estimate-trees</span> mytrees <span class="se">\</span>
+<span class="nt">--most-conserved</span> most-cons.bed <span class="se">\</span>
+<span class="nt">--msa-format</span> FASTA <span class="se">\</span>
+primate-rodent.fa <span class="se">\</span>
+pri_rod.mod <span class="se">\</span>
+<span class="o">&gt;</span> scores_mostcons.wig 
+</code></pre></div></div>]]></content><author><name>Jia</name></author><category term="Comparative genomics" /><category term="PHAST" /><summary type="html"><![CDATA[PHAST 是一套用于通过比较多个物种的基因组来检测基因组中保守区域和加速进化区域的工具集。它包含多个命令。]]></summary></entry></feed>

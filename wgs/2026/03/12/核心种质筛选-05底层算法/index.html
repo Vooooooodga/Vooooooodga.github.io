@@ -1,0 +1,1394 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Coreset selection,算法," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="核心种质优化的底层原理。">
+<meta name="keywords" content="Coreset selection, 算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="核心种质筛选-05底层算法">
+<meta property="og:url" content="https://vooooooodga.github.io/wgs/2026/03/12/%E6%A0%B8%E5%BF%83%E7%A7%8D%E8%B4%A8%E7%AD%9B%E9%80%89-05%E5%BA%95%E5%B1%82%E7%AE%97%E6%B3%95/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="核心种质优化的底层原理。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="核心种质筛选-05底层算法">
+<meta name="twitter:description" content="核心种质优化的底层原理。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>核心种质筛选-05底层算法 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/wgs/2026/03/12/%E6%A0%B8%E5%BF%83%E7%A7%8D%E8%B4%A8%E7%AD%9B%E9%80%89-05%E5%BA%95%E5%B1%82%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            核心种质筛选-05底层算法
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-03-12T21:34:13+08:00">
+                2026-03-12
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-03-19T19:38:24+08:00">
+                  2026-03-19
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/WGS" itemprop="url" rel="index">
+                    <span itemprop="name">WGS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <blockquote>
+  <p>核心种质优化的底层原理。</p>
+</blockquote>
+
+<hr />
+
+<h2 id="核心矛盾代表性-vs-内部多样性">核心矛盾：代表性 vs 内部多样性</h2>
+
+<p>任何一种核心种质筛选算法，本质上都是在求解一个多目标优化（或带约束优化）问题，算法的设计主要面临两大相互制约的目标：</p>
+
+<ul>
+  <li><strong>代表性（Representativeness）</strong>：核心集需要完美覆盖整个群体的特征分布，像影子一样“代表”全集。这要求在数学上<strong>最小化</strong>全集到核心集的距离。</li>
+  <li><strong>内部多样性（Internal Diversity）</strong>：核心集内部个体之间应尽量不同，降低互相之间的冗余。这要求在数学上<strong>最大化</strong>核心集内部个体间的距离。</li>
+</ul>
+
+<p>追求极致代表性可能把核心集挤在数据密度最高的中心区域；而追求极致内部多样性又可能导致算法只去“薅”那些分布边缘的离散样本，丢失了群体的主体特征。底层算法的每一次演进，正是在这二者之间寻找更高效的破局点。</p>
+
+<hr />
+
+<h2 id="核心种质筛选算法的演进路线">核心种质筛选算法的演进路线</h2>
+
+<p>伴随着对保护遗传学指标理解的深入，以及计算机算力的发展，抽样与优化算法经历了以下几个主流阶段：</p>
+
+<h3 id="分层抽样法stratified-sampling">分层抽样法（Stratified Sampling）</h3>
+<ul>
+  <li><strong>核心思想</strong>：这是一种基于规则的传统算法。首先计算遗传距离或表型距离矩阵，对材料进行聚类分层（Cluster），然后从每个类簇中按照预设比例抽出样本。</li>
+  <li><strong>分配策略</strong>：
+    <ul>
+      <li><strong>C策略 (Constant)</strong>：每个类簇抽取固定数量（容易导致小群过度代表，大群代表不足）。</li>
+      <li><strong>P策略 (Proportional)</strong>：按类簇成员数比例分配（目前较常用的基线方法）。</li>
+      <li><strong>L策略 (Logarithm)</strong>：按类簇成员数的对数进行分配，以平衡大小群落差异。</li>
+      <li><strong>按多样性分配</strong>：后期研究证实，按各个簇内部的多样性水平来分配抽取名额，能得到最高质量的核心集。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="等位基因富集法m-method--mstrat">等位基因富集法（M-method &amp; MSTRAT）</h3>
+<ul>
+  <li><strong>核心思想</strong>：彻底抛开个体距离的概念，算法的唯一数学目标是<strong>最大化“全集观测到的等位基因在核心集中得到保留”的概率</strong>，直接暴力构建高遗传丰度（Allelic richness）。</li>
+  <li><strong>算法实现</strong>：经典软件 <code class="language-plaintext highlighter-rouge">MSTRAT</code> 实现了一种广义的 M-method。它从全集开始进行采样，使用基础的<strong>爬山算法（Hill-climbing algorithm）</strong>，通过不断替换组内样本来迭代搜索等位基因丰度的局部最优解。</li>
+</ul>
+
+<h3 id="逐步排除与启发式算法stepwise-elimination">逐步排除与启发式算法（Stepwise Elimination）</h3>
+<ul>
+  <li><strong>核心思想</strong>：做减法的逻辑。从满负荷的全集开始，每轮迭代都会在群体里寻找一对“数学距离最近（最冗余）”的个体，并利用规则淘汰掉其中一个，直至规模缩减到期望值。</li>
+  <li><strong>算法实现</strong>：经典软件 <code class="language-plaintext highlighter-rouge">SimEli</code>。剔除时的准则可以是随机的（最小距离逐步随机抽样），也可以是评估剔除谁能使“剩余集合的期望杂合度”或“到剩余个体的总体距离”最大化。它在去冗余方面收敛很快。</li>
+</ul>
+
+<h3 id="基于-k-medoids-的代表性优化gdopt">基于 K-medoids 的代表性优化（GDOpt）</h3>
+<ul>
+  <li><strong>核心思想</strong>：既然业务要求“每个全集个体都能在核心集中找到一个极其相似的兄弟”，那就用类似无监督聚类的中心点思维。将整个数据集划分到若干个中心（Medoids）周围，并将这些中心直接作为核心集。</li>
+  <li><strong>算法实现</strong>：<code class="language-plaintext highlighter-rouge">GDOpt (Genetic distance optimization strategy)</code> 就是这一流派的代表。该算法的唯一目标是粗暴且极其有效地<strong>最小化 A-NE</strong>（Accession-to-Nearest-Entry，即全集到代表的距离）。</li>
+</ul>
+
+<h3 id="变长规模覆盖算法variable-size-core-sampling">变长规模覆盖算法（Variable Size Core Sampling）</h3>
+<ul>
+  <li><strong>核心思想</strong>：颠覆了“给定样本数去优化指标”的常规思路，反过来要求“必须 100% 覆盖所有的等位基因和性状”，然后由算法去求解<strong>最小所需的核心集规模（样本数）</strong>。</li>
+  <li><strong>算法实现</strong>：<code class="language-plaintext highlighter-rouge">PowerCore</code> 使用启发式算法完成全覆盖；而 <code class="language-plaintext highlighter-rouge">GenoCore</code> 则专门针对高密度标记（如几十万个 SNP 位点）的矩阵计算进行了深度性能优化。</li>
+</ul>
+
+<hr />
+
+<h2 id="core-hunter-的算法演进与底层逻辑">Core Hunter 的算法演进与底层逻辑</h2>
+
+<p>在目前的工业级项目中，<strong>Core Hunter 3 (CH3)</strong> 是最常被使用、也最灵活的软件。它把“多目标优化”集成得极其完备。回顾 Core Hunter 的算法迭代史，恰好能说明为什么我们在 03 篇操作中要选用那些参数组合。</p>
+
+<h3 id="ch1--ch2从平均距离到最大化最小距离的性能困境">CH1 &amp; CH2：从平均距离到“最大化最小距离”的性能困境</h3>
+<p>在早期算法理论中，为了让核心集极其丰富，人们认为应当去最大化条目间的<strong>平均距离（Average distance）</strong>。</p>
+<ul>
+  <li><strong>严重的缺陷</strong>：这导致算法走上了歧途——疯狂去挑选那些数据分布上极其边缘的“奇异样本/离群值”，反而忽略了占主体的正常遗传类型。</li>
+  <li><strong>CH2 的救火策略</strong>：为了规避这个问题，Core Hunter 2 在算法中增加了一个约束目标：在最大化平均距离的同时，还必须最大化条目间的<strong>最小距离（Minimum distance）</strong>。</li>
+  <li><strong>算力灾难</strong>：代价是巨大的。优化平均距离用快速的局部搜索算法就行，但要优化最小距离，CH2 不得不设计一套极其复杂的 <strong>MixRep（混合副本搜索）</strong> 架构。它需要并行多套不同类型的随机局部搜索和构建算法，在陷入局部最优时还会像遗传算法那样强行交叉组合解集空间。这使得大规模运算变得异常缓慢。</li>
+</ul>
+
+<h3 id="ch3基于-e-ne-与-a-ne当前主流策略">CH3：基于 E-NE 与 A-NE（当前主流策略）</h3>
+<p>Odong 等学者提出用新的距离总结指标来替换单纯的“平均距离”，这一理论直接成为了 <strong>Core Hunter 3</strong> 的绝对算法基石：</p>
+
+<ol>
+  <li><strong>优化内部多样性</strong>：弃用“平均距离”，转而最大化 <strong>E-NE (Entry-to-Nearest-Entry，在 Core Hunter 中简称为 EN)</strong>，即核心集内每个个体到其最近邻的距离。它完美地剥离了冗余，且不会过度吸引分布极端的离群样本。</li>
+  <li><strong>优化代表性</strong>：使用 <strong>A-NE (Accession-to-Nearest-Entry，在 Core Hunter 中简称为 AN)</strong>，即全体样本到核心集最近邻的距离，来强迫核心集涵盖所有的真实分布。</li>
+</ol>
+
+<p><strong>CH3 引擎相比前辈的降维打击</strong>：</p>
+<ul>
+  <li><strong>抛弃沉重的 MixRep</strong>：CH3 团队在数学上证实，当你最大化 E-NE 时，系统会<strong>间接</strong>且自然地拔高条目间的“最小距离”。这意味着当年把 CH2 拖垮的 MixRep 算法彻底没用了，CH3 重新回归到了极快的<strong>快速局部搜索（Fast local search）</strong>。</li>
+  <li><strong>并行回火（Parallel Tempering）的威力</strong>：这是 CH3 用来逃出局部最优陷阱的启发式大招。算法允许生成多条平行的搜索链，它们处在不同的“温度（随机扰动程度）”下寻优。当链条陷入死胡同，它们会定期交换状态。这样能在高维的基因组位点空间中迅速逼近多目标优化的<strong>帕累托前沿（Pareto Front）</strong>。</li>
+  <li><strong>多维度距离度量引擎</strong>：为了兼容不同数据，CH3 开放了底层距离度量方法的切换。若是基因型，默认距离为改良罗杰斯距离（Modified Roger’s distance，简写为 <strong>MR</strong>）；若是表型，默认距离为 Gower 距离（Gower’s distance，简写为 <strong>GD</strong>）。通过组合加权目标函数（例如 <code class="language-plaintext highlighter-rouge">list(objective("EN", "MR"), objective("AN", "MR"))</code>），可以在极低算力开销下完美达成兼顾多样性与代表性的复杂业务要求。</li>
+</ul>
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/Coreset%20selection" rel="tag"># Coreset selection</a>
+          
+            
+            <a href="/tag/#/%E7%AE%97%E6%B3%95" rel="tag"># 算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/wgs/2026/03/13/%E9%81%97%E4%BC%A0%E8%82%B2%E7%A7%8D%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E8%B7%AF%E7%BA%BF%E9%80%89%E6%8B%A9%E6%8C%87%E5%8D%97/" rel="next" title="遗传育种项目技术路线选择指南">
+                <i class="fa fa-chevron-left"></i> 遗传育种项目技术路线选择指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/wgs/2026/03/12/%E6%A0%B8%E5%BF%83%E7%A7%8D%E8%B4%A8%E7%AD%9B%E9%80%89-04%E7%BB%93%E6%9E%9C%E8%A1%A8%E5%BE%81%E4%B8%8E%E4%B8%9A%E5%8A%A1%E8%A7%A3%E8%AF%BB/" rel="prev" title="核心种质筛选-04结果解读与交付">
+                核心种质筛选-04结果解读与交付 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#核心矛盾代表性-vs-内部多样性"> <span class="nav-number">1</span> <span class="nav-text">核心矛盾：代表性 vs 内部多样性</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#核心种质筛选算法的演进路线"> <span class="nav-number">2</span> <span class="nav-text">核心种质筛选算法的演进路线</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#分层抽样法stratified-sampling"> <span class="nav-number">2.1</span> <span class="nav-text">分层抽样法（Stratified Sampling）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#等位基因富集法m-method--mstrat"> <span class="nav-number">2.2</span> <span class="nav-text">等位基因富集法（M-method &amp; MSTRAT）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#逐步排除与启发式算法stepwise-elimination"> <span class="nav-number">2.3</span> <span class="nav-text">逐步排除与启发式算法（Stepwise Elimination）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#基于-k-medoids-的代表性优化gdopt"> <span class="nav-number">2.4</span> <span class="nav-text">基于 K-medoids 的代表性优化（GDOpt）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#变长规模覆盖算法variable-size-core-sampling"> <span class="nav-number">2.5</span> <span class="nav-text">变长规模覆盖算法（Variable Size Core Sampling）</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#core-hunter-的算法演进与底层逻辑"> <span class="nav-number">3</span> <span class="nav-text">Core Hunter 的算法演进与底层逻辑</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#ch1--ch2从平均距离到最大化最小距离的性能困境"> <span class="nav-number">3.1</span> <span class="nav-text">CH1 &amp; CH2：从平均距离到“最大化最小距离”的性能困境</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#ch3基于-e-ne-与-a-ne当前主流策略"> <span class="nav-number">3.2</span> <span class="nav-text">CH3：基于 E-NE 与 A-NE（当前主流策略）</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

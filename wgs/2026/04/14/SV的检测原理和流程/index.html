@@ -1,0 +1,1417 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="原理,流程," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="结构变异（Structural Variant, SV）通常指基因组上长度大于50 bp的序列改变，主要包括缺失（Deletion）、插入（Insertion）、重复（Duplication）、倒位（Inversion）和易位（Translocation）。">
+<meta name="keywords" content="原理, 流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SV的检测原理和流程">
+<meta property="og:url" content="https://vooooooodga.github.io/wgs/2026/04/14/SV%E7%9A%84%E6%A3%80%E6%B5%8B%E5%8E%9F%E7%90%86%E5%92%8C%E6%B5%81%E7%A8%8B/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="结构变异（Structural Variant, SV）通常指基因组上长度大于50 bp的序列改变，主要包括缺失（Deletion）、插入（Insertion）、重复（Duplication）、倒位（Inversion）和易位（Translocation）。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SV的检测原理和流程">
+<meta name="twitter:description" content="结构变异（Structural Variant, SV）通常指基因组上长度大于50 bp的序列改变，主要包括缺失（Deletion）、插入（Insertion）、重复（Duplication）、倒位（Inversion）和易位（Translocation）。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>SV的检测原理和流程 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/wgs/2026/04/14/SV%E7%9A%84%E6%A3%80%E6%B5%8B%E5%8E%9F%E7%90%86%E5%92%8C%E6%B5%81%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            SV的检测原理和流程
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-04-14T16:52:50+08:00">
+                2026-04-14
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-04-15T22:28:24+08:00">
+                  2026-04-15
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/WGS" itemprop="url" rel="index">
+                    <span itemprop="name">WGS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <div id="protect-wgs-2026-04-14-sv-e7-9a-84-e6-a3-80-e6-b5-8b-e5-8e-9f-e7-90-86-e5-92-8c-e6-b5-81-e7-a8-8b-form" class="post-protect-form">
+      <p>本页面已设置访问密码，请输入密码查看全文：</p>
+      <input type="password" id="protect-wgs-2026-04-14-sv-e7-9a-84-e6-a3-80-e6-b5-8b-e5-8e-9f-e7-90-86-e5-92-8c-e6-b5-81-e7-a8-8b-input" />
+      <button type="button" onclick="window.checkPassword_protect_wgs_2026_04_14_sv_e7_9a_84_e6_a3_80_e6_b5_8b_e5_8e_9f_e7_90_86_e5_92_8c_e6_b5_81_e7_a8_8b && window.checkPassword_protect_wgs_2026_04_14_sv_e7_9a_84_e6_a3_80_e6_b5_8b_e5_8e_9f_e7_90_86_e5_92_8c_e6_b5_81_e7_a8_8b()">确认</button>
+      <p id="protect-wgs-2026-04-14-sv-e7-9a-84-e6-a3-80-e6-b5-8b-e5-8e-9f-e7-90-86-e5-92-8c-e6-b5-81-e7-a8-8b-message" style="color:red;"></p>
+    </div>
+    <div id="protect-wgs-2026-04-14-sv-e7-9a-84-e6-a3-80-e6-b5-8b-e5-8e-9f-e7-90-86-e5-92-8c-e6-b5-81-e7-a8-8b-content" style="display:none;">
+      <blockquote>
+  <p>结构变异（Structural Variant, SV）通常指基因组上长度大于50 bp的序列改变，主要包括缺失（Deletion）、插入（Insertion）、重复（Duplication）、倒位（Inversion）和易位（Translocation）。</p>
+</blockquote>
+
+<p>工具虽然不少，但其实归纳起来，基于NGS数据的变异检测算法并不多。总的来说主要有以下4种不同的策略和方法，分别是：</p>
+<ol>
+  <li>Read Pair Mapping，简称RP或者PEM；</li>
+  <li>Split Read，简称SR；</li>
+  <li>Read Depth，简称RD，也有人将其称为RC——Read Count的意思，它与Read Depth是同一回事，顾名思义都是利用read覆盖情况来检测变异的方法；</li>
+  <li>序列从头组装（<em>de novo</em> Assembly， 简称AS）的方法。</li>
+</ol>
+
+<p>单个样本的 SV 分析拆分为了 5 个独立的步骤（提取 discordants、排序、提取 splitters、排序、运行 lumpy）和 1 个独立的统计步骤（SV_stat）</p>
+
+<p>参考：https://zhuanlan.zhihu.com/p/40290546</p>
+
+<p>基于 <strong>LUMPY</strong> 算法。在评估SV假说时，LUMPY采用概率模型，通过搜寻两种相互独立的诊断性证据来计算结构变异存在的后验概率：</p>
+
+<ol>
+  <li>
+    <p><strong>异常双端比对（Discordant Read Pairs）</strong>：基于测序文库的插入片段长度（Insert size）先验分布。如果一对双端测序（PE）Reads比对到参考基因组上的物理距离显著偏离预期，或比对方向异常（例如预期为FR，实际为FF或RR），则作为两点之间存在结构变异的诊断性证据。该信号能确定变异类型和大致范围，但断点定位精度较低。</p>
+  </li>
+  <li>
+    <p><strong>分裂比对（Split Reads）</strong>：当一条测序Read恰好跨越变异断点时，BWA算法会将其切断，前半部分和后半部分分别比对到参考基因组的不同位置，产生补充比对（在BAM文件中标记为SA标签）。该信号提供单碱基级别的变异断点（Breakpoint）确凿证据。</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="流程解构与指令分析">流程解构与指令分析</h3>
+
+<p>整个工作流严格遵循“提取特征证据 $\rightarrow$ 联合概率推断 $\rightarrow$ 结果统计”的客观逻辑。以下是对提供脚本的逐步解析：</p>
+
+<p><strong>第一步：提取异常双端比对证据 (Discordants)</strong></p>
+
+<ul>
+  <li>
+    <p><strong>指令</strong>: <code class="language-plaintext highlighter-rouge">samtools view -b -F 1294 [input.bam] &gt; [discordants.unsorted.bam]</code></p>
+  </li>
+  <li>
+    <p><strong>解析</strong>: 核心在于SAM Flag参数 <code class="language-plaintext highlighter-rouge">-F 1294</code>。数字 1294 是以下状态参数的按位或总和：1024（PCR或光学重复）+ 256（非主要比对）+ 8（配对Read未比对上）+ 4（当前Read未比对上）+ 2（处于正常配对状态）。<code class="language-plaintext highlighter-rouge">-F</code> 表示排除这些Reads。过滤后，留下的就是双端均已比对但处于异常配对状态的Discordant Reads。随后通过 <code class="language-plaintext highlighter-rouge">samtools sort</code> 进行坐标排序。</p>
+  </li>
+</ul>
+
+<p><strong>第二步：提取分裂比对证据 (Splitters)</strong></p>
+
+<ul>
+  <li>
+    <p><strong>指令</strong>: <code class="language-plaintext highlighter-rouge">samtools view -h [input.bam] | extractSplitReads_BwaMem -i stdin | samtools view -Sb - &gt; [splitters.unsorted.bam]</code></p>
+  </li>
+  <li>
+    <p><strong>解析</strong>: 直接读取完整BAM文件，利用LUMPY自带的解析脚本提取携带补充比对信息的Split Reads。随后同样执行 <code class="language-plaintext highlighter-rouge">samtools sort</code> 按坐标排序。</p>
+  </li>
+</ul>
+
+<p><strong>第三步：多证据联合计算 (SV Calling)</strong></p>
+
+<ul>
+  <li>
+    <p><strong>指令</strong>: <code class="language-plaintext highlighter-rouge">lumpyexpress -B [input.bam] -S [splitters.bam] -D [discordants.bam] -o [output.sv.vcf]</code></p>
+  </li>
+  <li>
+    <p><strong>解析</strong>: <code class="language-plaintext highlighter-rouge">lumpyexpress</code> 是LUMPY的自动化执行封装。它同时接收三个维度的输入数据：全量BAM（提供测序深度信息等背景先验）、提取的Splitters BAM和Discordants BAM。算法整合这些独立证据的概率分布，输出标准VCF格式的SV结果集。</p>
+  </li>
+</ul>
+
+<p><strong>第四步：变异结果统计</strong></p>
+
+<ul>
+  <li>
+    <p><strong>指令</strong>: <code class="language-plaintext highlighter-rouge">SV_stat.pl [sample_name] [input.sv.vcf] [output.sv.stat]</code></p>
+  </li>
+  <li>
+    <p><strong>解析</strong>: 这是一个定制化的Perl脚本，其目的是解析VCF文本，对最终诊断出的各类SV（如DEL, DUP, INV等）的数量和长度分布进行分类统计归档。</p>
+  </li>
+</ul>
+
+<p>针对你当前的240个样本项目，是否需要我将这套SV提取与推断逻辑整合为适配当前绝对路径和Singularity环境的自动化任务生成脚本（<code class="language-plaintext highlighter-rouge">.sh</code>）？</p>
+
+    </div>
+    <script>
+      (function() {
+        var CORRECT = "temp";
+        var formId = "protect-wgs-2026-04-14-sv-e7-9a-84-e6-a3-80-e6-b5-8b-e5-8e-9f-e7-90-86-e5-92-8c-e6-b5-81-e7-a8-8b-form";
+        var contentId = "protect-wgs-2026-04-14-sv-e7-9a-84-e6-a3-80-e6-b5-8b-e5-8e-9f-e7-90-86-e5-92-8c-e6-b5-81-e7-a8-8b-content";
+        var inputId = "protect-wgs-2026-04-14-sv-e7-9a-84-e6-a3-80-e6-b5-8b-e5-8e-9f-e7-90-86-e5-92-8c-e6-b5-81-e7-a8-8b-input";
+        var msgId = "protect-wgs-2026-04-14-sv-e7-9a-84-e6-a3-80-e6-b5-8b-e5-8e-9f-e7-90-86-e5-92-8c-e6-b5-81-e7-a8-8b-message";
+
+        function check() {
+          var input = document.getElementById(inputId);
+          var msg = document.getElementById(msgId);
+          if (!input) return;
+          if (input.value === CORRECT) {
+            var form = document.getElementById(formId);
+            var content = document.getElementById(contentId);
+            if (form) form.style.display = "none";
+            if (content) content.style.display = "block";
+          } else {
+            if (msg) msg.textContent = "密码错误，请重试。";
+          }
+        }
+
+        window.checkPassword_protect_wgs_2026_04_14_sv_e7_9a_84_e6_a3_80_e6_b5_8b_e5_8e_9f_e7_90_86_e5_92_8c_e6_b5_81_e7_a8_8b = check;
+      })();
+    </script>
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/%E5%8E%9F%E7%90%86" rel="tag"># 原理</a>
+          
+            
+            <a href="/tag/#/%E6%B5%81%E7%A8%8B" rel="tag"># 流程</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/comparative%20genomics/2026/04/14/%E6%AF%94%E8%BE%83%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6%E7%9A%84%E7%BB%9F%E8%AE%A1%E7%AC%AC%E4%B8%80%E7%B1%BB%E9%94%99%E8%AF%AF/" rel="next" title="比较基因组学的统计第一类错误">
+                <i class="fa fa-chevron-left"></i> 比较基因组学的统计第一类错误
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/comparative%20genomics/2026/04/11/%E4%BB%A5CSUBST%E4%B8%BA%E4%BE%8B-%E4%BD%8D%E7%82%B9%E8%B6%8B%E5%90%8C%E7%9A%84%E5%81%87%E8%AE%BE%E4%B8%8E%E4%BE%8B%E5%A4%96/" rel="prev" title="以CSUBST为例：位点趋同的假设与例外">
+                以CSUBST为例：位点趋同的假设与例外 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-3"> <a class="nav-link" href="#流程解构与指令分析"> <span class="nav-number">1</span> <span class="nav-text">流程解构与指令分析</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

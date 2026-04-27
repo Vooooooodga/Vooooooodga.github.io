@@ -1,0 +1,1577 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="趋同进化,方法学," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这是一份旨在消除概念断层、统一群体遗传学（微观）与系统发育学（宏观）视角的演化基因组学学习笔记。">
+<meta name="keywords" content="趋同进化, 方法学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正选择的几种形式">
+<meta property="og:url" content="https://vooooooodga.github.io/comparative%20genomics/2021/04/20/%E6%AD%A3%E9%80%89%E6%8B%A9%E7%9A%84%E5%87%A0%E7%A7%8D%E5%BD%A2%E5%BC%8F/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="这是一份旨在消除概念断层、统一群体遗传学（微观）与系统发育学（宏观）视角的演化基因组学学习笔记。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="assets/images/20260418174134.png">
+<meta property="og:image" content="assets/images/20260418174302.png">
+<meta property="og:image" content="assets/images/20260418203837.png">
+<meta property="og:image" content="assets/images/20260418204012.png">
+<meta property="og:image" content="assets/images/20260418204348.png">
+<meta property="og:image" content="assets/images/20260418204545.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="正选择的几种形式">
+<meta name="twitter:description" content="这是一份旨在消除概念断层、统一群体遗传学（微观）与系统发育学（宏观）视角的演化基因组学学习笔记。">
+<meta name="twitter:image" content="assets/images/20260418174134.png">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>正选择的几种形式 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/comparative%20genomics/2021/04/20/%E6%AD%A3%E9%80%89%E6%8B%A9%E7%9A%84%E5%87%A0%E7%A7%8D%E5%BD%A2%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            正选择的几种形式
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-20T05:04:19+08:00">
+                2021-04-20
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-04-27T15:45:31+08:00">
+                  2026-04-27
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Comparative%20genomics" itemprop="url" rel="index">
+                    <span itemprop="name">Comparative genomics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <p>这是一份旨在消除概念断层、统一群体遗传学（微观）与系统发育学（宏观）视角的演化基因组学学习笔记。</p>
+
+<p>一定要记得，在演化生物学中，任何涉及“为了适应…”、“为了产生新功能…”的表述都含有目的论的逻辑谬误。演化没有预设的终点或目标。</p>
+
+<p>正向选择不是一种“力量”或“意图”，而是一个<strong>统计学结果</strong>。当一个特定的等位基因（突变）在当前特定的环境参数下，能够使其携带者产生统计学上显著更高的相对生殖成功率（Differential reproductive success，即选择系数 s&gt;0）时，该等位基因在下一代群体中的频率会呈现确定性的上升趋势。</p>
+
+<p>几个基础概念：</p>
+
+<ul>
+  <li>
+    <p><strong>突变 (Mutation)：</strong> 发生在单一个体层面的随机 DNA 复制错误。它是演化的原材料。</p>
+  </li>
+  <li>
+    <p><strong>固定 (Fixation)：</strong> 微观演化的终点。特定等位基因在种群中的频率（f）通过自然选择或遗传漂变达到 1.0（100%）。</p>
+  </li>
+  <li>
+    <p><strong>替换 (Substitution)：</strong> 宏观演化的起点。两个独立演化支完全分化后，在同源序列对比中观察到的固定差异。</p>
+  </li>
+  <li>
+    <p><strong>同义替换 (dS) 与 非同义替换 (dN)：</strong> 宏观计算的期望值。dN/dS (ω) 衡量的是非同义突变在历史长河中被固定的<strong>累积速率</strong>，而非单次固定事件。</p>
+  </li>
+</ul>
+
+<h2 id="演化动态的基线维持与衰退">演化动态的基线（维持与衰退）</h2>
+
+<p>在讨论正向选择之前，必须建立演化动态的中性/负向基线。</p>
+
+<h3 id="纯化选择-purifying--negative-selection">纯化选择 (Purifying / Negative Selection)</h3>
+
+<ul>
+  <li>
+    <p><strong>核心机制：</strong> 选择系数 $s &lt; 0$。自然环境保持稳定，当前的野生型序列处于局部适应度峰值。</p>
+  </li>
+  <li>
+    <p><strong>微观动态过程：</strong> 野生型存在 $\to$ 产生非同义突变 A ($s &lt; 0$) $\to$ 携带突变 A 的个体生殖期望值下降 $\to$ 突变 A 频率趋近于 0 并被剔除 $\to$ 产生突变 B ($s &lt; 0$) $\to$ 被剔除……</p>
+  </li>
+  <li>
+    <p><strong>时间尺度表现：</strong></p>
+
+    <ul>
+      <li>
+        <p>微观（群体内）： 维持极低的非同义多态性，偶尔观察到极低频的罕见变异。</p>
+      </li>
+      <li>
+        <p>宏观（物种间）： 千万年无非同义替换累积，$\omega \ll 1$（如组蛋白、核糖体蛋白）。</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="纯化选择放松-relaxed-purifying-selection">纯化选择放松 (Relaxed Purifying Selection)</h3>
+
+<ul>
+  <li>
+    <p><strong>核心机制：</strong> 原有的选择压解除。通常由有效种群大小 ($N_e$) 剧烈缩减（瓶颈效应增大遗传漂变），或物种进入无竞争/无绝对约束的生态位引起。</p>
+  </li>
+  <li>
+    <p><strong>微观动态过程：</strong> 种群瓶颈/环境改变 $\to$ 原本的有害突变 A 其选择系数变为 $s \approx 0$ $\to$ 突变 A 发生 $\to$ 受遗传漂变（随机游走）驱动 $\to$ 突变 A 随机固定 $\to$ 突变 B ($s \approx 0$) 发生 $\to$ 随机固定……</p>
+  </li>
+  <li>
+    <p><strong>时间尺度表现：</strong></p>
+
+    <ul>
+      <li>
+        <p>微观（群体内）： 非同义变异频谱（SFS）向中等或高频率偏移，与同义突变频谱无显著差异。</p>
+      </li>
+      <li>
+        <p>宏观（物种间）： 基因丧失保守性，非同义替换率上升，$\omega$ 值向 1 靠拢，但极少显著大于 1。最终往往导致基因假基因化（Pseudogenization）。</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<p>正向选择（$s &gt; 0$）的本质是有利等位基因频率的确定性上升。根据突变起源、遗传架构和时间连续性，其具体形式拆解如下：</p>
+
+<h2 id="基于替换的视角">基于替换的视角：</h2>
+
+<p>在这里，我们将演化视为物种或谱系间的长期积累过程。其使用的数据主要是固定下来的种间差异（Fixed differences）。</p>
+<ul>
+  <li><strong>核心参数：</strong> 依赖于替换率的比例（如 dN/dS 或 ω）。此类模型（如 PAML, RERconverge）关注的是：在系统发育树的<strong>哪个时间段/哪个分支</strong>上，积累的非同义替换显著超出了中性预期。
+换句话说，在这个视角我们考虑的是演化的结果。</li>
+</ul>
+
+<h3 id="持续性正向选择-continuous--pervasive-positive-selection">持续性正向选择 (Continuous / Pervasive Positive Selection)</h3>
+
+<ul>
+  <li>
+    <p><strong>定义：</strong> 长期、持续的定向选择压力，驱动有利突变在群体中不断固定。这种模式通常发生在长期的环境渐变或持续的宿主-病原体拮抗演化中。（红皇后！）</p>
+  </li>
+  <li><strong>微观动态过程：</strong> 环境状态 1 $\to$ 突变 A 发生 $\to$ 正选择使其迅速固定 $\to$ 导致病原体适应/环境演变进入状态 2 $\to$ 突变 B 发生 $\to$ 正选择使其固定 $\to$ 环境状态 3 $\to$ 突变 C 发生 $\to$ 固定……</li>
+  <li>
+    <p><strong>宏观表现：</strong> 只有这种<strong>高频、持续的微观固定事件叠加</strong>，才能在宏观时间尺度上抵消同义突变的背景积累，产生 $\omega &gt; 1$ 的统计显著性。</p>
+  </li>
+  <li>
+    <p><strong>参数特征：</strong> 在多个连续的系统发育分支或整个进化枝上，非同义替换率持续显著高于同义替换率（$dN/dS &gt; 1$ 或 $\omega &gt; 1$）。</p>
+  </li>
+  <li><strong>排他性证据与替代假说：</strong>
+    <ul>
+      <li>诊断性证据： 跨多个节点的连续正向选择信号。</li>
+      <li>替代假说：  GC 偏向性基因转换（GC-biased gene conversion, gBGC）引起的假阳性。gBGC 会在重组率高的区域加速 AT 向 GC 的替换，在纯序列分析中易被误判为持续的正向选择。
+<img src="assets/images/20260418174134.png" alt="" /></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="间歇性正向选择-episodic-positive-selection">间歇性正向选择 (Episodic Positive Selection)</h3>
+
+<ul>
+  <li>
+    <p><strong>定义：</strong> 适应性进化仅发生在一个或少数几个特定的历史时期或特定谱系中（适应性辐射，通常对应环境剧变、生态位转换）。在适应性改变完成后，该性状或基因往往会受到严格的纯化选择以维持新的最优状态。</p>
+  </li>
+  <li><strong>微观动态过程：</strong> 祖先种群分裂 $\to$ 目标谱系进入新生态位 $\to$ 突变 A、B、C 连续发生并受正选择迅速固定 $\to$ 达到新的适应度峰值 $\to$ 环境稳定，选择系数重新转为 $s &lt; 0$ $\to$ 突变 D 发生（有害）$\to$ 纯化选择将其剔除。</li>
+  <li>
+    <p><strong>宏观表现：</strong> 表现为 aBSREL 等分支-位点模型中，特定目标分支 $\omega &gt; 1$，但背景分支及后续子代分支 $\omega &lt; 1$。必须严格使用贝叶斯因子排除“纯化选择放松”的替代假说。</p>
+  </li>
+  <li>
+    <p><strong>参数特征：</strong> 目标分支（Foreground branch）上的 $\omega &gt; 1$，但其祖先分支及后代背景分支（Background branches）的 $\omega &lt; 1$。</p>
+  </li>
+  <li><strong>排他性证据与模型构建：</strong>
+    <ul>
+      <li>现有的 HyPhy 框架（如 aBSREL 或 MEME 模型）在位点和分支水平部分实现了此类检测。</li>
+      <li>诊断性证据： 短期的高替换率伴随随后的低替换率。</li>
+      <li>替代假说： 必须与“纯化选择放松”进行竞争。纯化选择放松的特征是替换率上升且在后续分支中保持高替换率的随机漂变状态（即后代分支 $\omega \approx 1$）。区分两者的关键在于对后代分支纯化选择恢复速度和强度的量化。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="平衡选择-balancing-selection">平衡选择 (Balancing Selection)</h3>
+
+<ul>
+  <li>
+    <p><strong>定义：</strong> 包含超显性（杂合子优势）、频率依赖性选择或时空异质性选择等机制，其共同结果是阻止单一等位基因固定，从而在种群中长期维持两个或多个等位基因的多态性。<strong>（维持多样性，而不是固定单一突变）</strong></p>
+  </li>
+  <li><strong>微观动态过程：</strong> 突变 A 与野生型 W 共存 $\to$ 杂合子 WA 具有最高适应度 $\to$ A 频率过高时纯合子 AA 适应度低导致频率下降 $\to$ A 频率过低时杂合优势导致其频率上升 $\to$ A 和 W 的频率被锁定在稳定中值（如 0.5）。</li>
+  <li>
+    <p><strong>宏观表现：</strong> 物种分化后，A 和 W 等位基因继续在两个新物种中分别被保留数百万年。形成<strong>跨物种多态性 (Trans-species polymorphism)</strong>，其基因溯祖树的内部节点时间显著早于物种分歧时间。必须严格排除不完全谱系分选 (ILS) 噪音。</p>
+  </li>
+  <li>
+    <p><strong>参数特征：</strong> 跨物种多态性（Trans-species polymorphism, TSP），即等位基因的分歧时间早于物种的分歧时间。在群体层面表现为 Tajima’s $D &gt; 0$ 或存在过量的中等频率等位基因。</p>
+  </li>
+  <li><strong>排他性证据与模型构建：</strong>
+    <ul>
+      <li>仅依赖固定差异（Fixed differences）的系统发育模型极难检测平衡选择。</li>
+      <li>诊断性证据： 基因树内部存在极端的深度溯祖（Deep coalescence），且特定位点的局部树拓扑结构与物种树存在统计学上不可调和的持续性冲突。</li>
+      <li>替代假说： 最大的噪音来源是不完全谱系分选（Incomplete Lineage Sorting, ILS）。祖先群体的随机多态性可能在物种分化时被随机保留，产生与跨物种多态性一致的基因树/物种树冲突。必须结合溯祖模型（Coalescent theory），计算在给定祖先 Ne​ 和分歧时间的条件下，多态性维持到现在的概率。如果观测到的深度溯祖事件显著超出了中性 ILS 所能解释的上限极限，才可确认为平衡选择。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>构建该基因的<strong>基因树 (Gene tree)</strong> 时，发现物种 A 中的某些等位基因在拓扑结构上更接近物种 B 的等位基因，而不是与 A 中的其他等位基因聚类。这表明这些等位基因的分歧时间（溯祖时间）早于物种 A 和 B 的物种形成事件。
+<img src="assets/images/20260418174302.png" alt="" /></p>
+
+<h2 id="基于分离位点segregating-sites的视角考虑">基于分离位点(Segregating sites)的视角考虑：</h2>
+
+<p>在这里我们将演化视为群体内部等位基因频率（Allele frequency）在世代间的动态变化过程。</p>
+<ul>
+  <li><strong>核心参数：</strong> 依赖于局部核苷酸多样性（π）、连锁不平衡（LD）、多态性频谱（如 Tajima’s D）以及基因座间的协方差。此类分析（如选择性清除扫描、GWAS 关联计算）关注的是：突变是如何在群体中<strong>扩散并达到固定</strong>的。
+换句话说，这个视角我们更多考虑演化的过程/机制。</li>
+</ul>
+
+<h3 id="硬扫荡-hard-sweep">硬扫荡 (Hard Sweep)</h3>
+
+<ul>
+  <li>
+    <p><strong>定义：</strong> 当环境中出现极强的全新选择压力时，一个<strong>新发突变 (De novo mutation)</strong> 提供显著的适应性优势。该突变在群体中迅速扩散并固定。由于扩增速度极快，基因重组 (Recombination) 无法及时打破该有利突变与其周围物理连锁的中性变异之间的关联。</p>
+  </li>
+  <li><strong>微观动态过程：</strong> 极强新选择压出现 $\to$ 新发突变 A ($s \gg 0$) 出现 $\to$ 携带突变 A 的单一单倍型呈对数级扩增 $\to$ 迅速达到固定（$f=1$）$\to$ 消除周边所有多态性（局部 $\pi \to 0$）。</li>
+  <li>
+    <p><strong>宏观表现：</strong> 在漫长的物种形成史中，这仅仅贡献了 <strong>1 个</strong> 替换点。由于时间积分效应，全局 $\omega$ 依然远小于 1。需要通过微观统计量（如极端的局部 LD、极度负值的 Tajima’s $D$）作为排他性证据进行检测。</p>
+  </li>
+  <li>参数特征：
+    <ul>
+      <li><strong>极强的连锁不平衡 (Linkage Disequilibrium, LD)：</strong> 在目标位点周围形成极长的单一单倍型 (Haplotype) 区块。</li>
+      <li><strong>局部核苷酸多样性 ($\pi$) 骤降：</strong> 目标区域的变异被“清空”。</li>
+      <li><strong>极端负值的 Tajima’s $D$：</strong> 扫荡完成后，该区域新积累的突变大多为低频罕见变异，导致统计量显著偏离中性预期。</li>
+    </ul>
+  </li>
+  <li><strong>具体事例：</strong> 杀虫剂抗性的快速演化。例如，某些蚊子种群中电压门控钠离子通道基因 (<em>vgsc</em>) 的 <em>kdr</em> 突变。面对拟除虫菊酯类杀虫剂的强力筛选，携带有该单一抗性突变的单倍型在数代之内于局部种群中达到近乎 100% 的频率，周围侧翼序列呈现典型的多样性低谷。
+<img src="assets/images/20260418203837.png" alt="" /></li>
+</ul>
+
+<h3 id="软扫荡-soft-sweep">软扫荡 (Soft Sweep)</h3>
+
+<ul>
+  <li>
+    <p><strong>定义：</strong> 选择压力作用于<strong>既有变异 (Standing genetic variation)</strong>（在环境改变前以低/中等频率存在且呈中性或微弱有害的等位基因），或者同一个有利突变在群体中<strong>多重起源 (Multiple independent origins)</strong>并同时受到选择。</p>
+  </li>
+  <li><strong>微观动态过程：</strong> 环境稳定 $\to$ 突变 A ($s \approx 0$) 处于低频状态（如 $f=0.05$），并已重组到多种遗传背景中 $\to$ 环境剧变 $\to$ 突变 A 选择系数变为 $s &gt; 0$ $\to$ 多个携带突变 A 的不同单倍型并发扩增 $\to$ 突变 A 固定。</li>
+  <li>
+    <p><strong>宏观表现：</strong> 同样仅贡献 1 个替换点。微观上局部多样性下降不明显，需利用单倍型纯合度统计量（如 $H_{12}$）检测。极易与种群历史（Demography）混淆，需以全基因组中性背景作为零模型进行排除。</p>
+  </li>
+  <li>参数特征：
+    <ul>
+      <li><strong>单倍型多样性保留：</strong> 群体中同时出现多个频率升高的单倍型区块，而非单一主导区块。</li>
+      <li><strong>弱化的 LD 与不明显的 $\pi$ 下降：</strong> 因为既有变异在被选择前已有足够的时间经历基因重组，有利突变周围的背景变异更加丰富。</li>
+      <li><strong>统计检验难度高：</strong> 基于频谱分布的统计量（如 Tajima’s $D$）往往无法捕捉异常，需依赖如基于单倍型频率纯合度的统计量（如 $H_{12}$）进行检测。</li>
+    </ul>
+  </li>
+  <li><strong>具体事例：</strong> 三刺鱼 (Threespine stickleback) 骨板的退化。海洋三刺鱼全身覆盖骨板，而淡水三刺鱼骨板退化。研究表明，控制骨板退化的 <em>Eda</em> 基因低频率地存在于海洋祖先种群中（既有变异）。当它们独立定殖于不同的淡水湖泊时，缺乏捕食者和钙质匮乏的环境引发软扫荡，导致相同的隐性 <em>Eda</em> 等位基因在多个淡水种群中平行固定，且周围保留了不同的遗传背景。
+<img src="assets/images/20260418204012.png" alt="" /></li>
+</ul>
+
+<h3 id="多基因适应-polygenic-adaptation">多基因适应 (Polygenic Adaptation)</h3>
+
+<ul>
+  <li>
+    <p><strong>定义：</strong> 选择压力不针对单一基因，而是同时作用于基因组中成百上千个微效基因座。每个位点的等位基因频率仅发生极其微小的定向偏移，通过复杂性状的遗传加和效应 (Additive genetic effect) 实现种群表型均值的显著偏移。</p>
+  </li>
+  <li><strong>微观动态过程：</strong> 选择压出现 $\to$ 突变 A、B、… Z ($s$ 极小) 同时受到微弱正选择 $\to$ 突变 A 频率由 0.3 升至 0.35 $\to$ 突变 B 频率由 0.6 升至 0.62… $\to$ 没有任何单一突变达到固定 $\to$ 表型均值完成适应性偏移。</li>
+  <li>
+    <p><strong>宏观/微观表现：</strong> 系统发育上的 $dN/dS$ 扫描<strong>彻底失效</strong>。局部扫描无法检测到扫荡信号。必须利用 GWAS 汇总数据，计算具有相同效应方向的等位基因组的跨物种频率协方差偏移。</p>
+  </li>
+  <li>参数特征：
+    <ul>
+      <li><strong>无传统选择信号：</strong> 局部区域不发生 $\pi$ 下降，$\omega$ ($dN/dS$) 接近 1，无 LD 异常。</li>
+      <li><strong>定向的频率协方差 (Covariance)：</strong> 在具有增加表型值效应的位点群中，等位基因频率跨群体的微小偏移呈现统计学上的方向一致性。检测依赖基于全基因组关联分析 (GWAS) 汇总统计量构建的多基因风险评分 (Polygenic Score, PGS) 和相应的极性检验（如 $Q_X$ 统计量）。</li>
+    </ul>
+  </li>
+  <li><strong>具体事例：</strong> 欧洲人群身高的纬度梯度分布。北欧人群平均身高高于南欧人群。全基因组层面的扫描未发现驱动该性状的单一主效突变扫荡，但整合十万级样本的 GWAS 数据表明，数千个与身高微弱正相关的等位基因在北欧人群中的频率一致性地高出中性漂变的理论预期（每个位点仅升高约 1%-2%），累加后形成了显著的表型差异。
+<img src="assets/images/20260418204348.png" alt="" /></li>
+</ul>
+
+<h3 id="上位性代偿性选择-epistatic--compensatory-selection">上位性/代偿性选择 (Epistatic / Compensatory Selection)</h3>
+
+<ul>
+  <li>
+    <p><strong>定义：</strong> 一个突变的适应度严格依赖于其遗传背景（其他位点的状态）。代偿性选择是其典型表现：当位点 A 发生轻微有害突变导致结构或功能受损时，强烈的选择压力会驱动与之有物理或网络互作的位点 B 发生特定突变，以恢复整体系统的分子功能。</p>
+  </li>
+  <li><strong>微观动态过程：</strong> 结构域 1 发生轻微有害突变 A ($s &lt; 0$) $\to$ 由于有效种群变小或遗传搭车，突变 A 偶然达到固定 $\to$ 蛋白质失稳，对恢复稳定性的突变产生极强选择压 $\to$ 结构域 2 发生代偿突变 B ($s \gg 0$, 仅在含有 A 的背景下) $\to$ 突变 B 迅速固定。</li>
+  <li>
+    <p><strong>宏观表现：</strong> 表现为跨独立系统发育分支的共演化速率位移（Co-evolutionary rate shift）。基因 A 和基因 B 的相对演化速率方差存在高度的统计耦合。步骤依赖性。突变固定具有严格的先后次序或协同性。</p>
+  </li>
+  <li>参数特征：
+    <ul>
+      <li><strong>系统发育相关性 (Phylogenetic co-evolution)：</strong> 基因 A 和基因 B（或同一蛋白的两个结构域）在多个独立谱系上的演化速率（或替换事件）在时间节点上呈现高度的统计相关性。</li>
+      <li><strong>结构邻近性：</strong> 在 3D 蛋白结构或基因调控网络中，发生代偿演化的两个位点通常存在直接的物理接触或功能耦合。</li>
+    </ul>
+  </li>
+  <li><strong>具体事例：</strong> 核糖体 RNA (rRNA) 二级结构中的茎环 (Stem-loop) 碱基配对。如果一个 C-G 碱基对中的 C 突变为 U（产生错配 U-G，轻微有害），代偿性选择会迅速驱动对应的 G 突变为 A，形成新的稳定配对 (U-A)。在比较系统发育树上，这两个位点的变异始终保持紧密的共生状态。
+<img src="assets/images/20260418204545.png" alt="" /></li>
+</ul>
+
+<h3 id="正向频率依赖性选择-positive-frequency-dependent-selection">正向频率依赖性选择 (Positive Frequency-Dependent Selection)</h3>
+
+<ul>
+  <li>
+    <p><strong>定义：</strong> 某一表型（或等位基因）在群体中存在的频率越高，其赋予个体的适应度 (Fitness) 就越高。这会产生一种正反馈机制，导致局部群体的极端纯化。</p>
+  </li>
+  <li><strong>特征：</strong>
+    <ul>
+      <li>过程特征： 具有频率阈值。一旦某等位基因频率突破该阈值，将被极其迅速地推向 100% 固定。</li>
+      <li>参数特征：
+        <ol>
+          <li><strong>极端的局部固定：</strong> 亚群体内部完全同质化。</li>
+          <li><strong>空间尺度上的陡峭断层：</strong> 在地理上相邻的两个群体可能固定了完全不同的表型，两者之间存在极高的分化指数 ($F_{ST}$) 和极窄的地理交界线 (Geographic cline)，且这种分化无法用中性基因流受限（地理隔离）来解释。</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li><strong>具体事例：</strong> 蝴蝶的缪勒拟态 (Müllerian mimicry)。例如新热带区的袖蝶属 (<em>Heliconius</em>)。多种有毒蝴蝶在同一地区会演化出完全相同的警告色（拟态环）。某种颜色模式在当地越普遍，捕食者（鸟类）通过误食进行学习的成本就分摊得越薄，该模式下蝴蝶个体的生存率就越高。这导致相邻的山谷可能被不同颜色模式的同种蝴蝶完全占据，边界极其分明。</li>
+</ul>
+
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/%E8%B6%8B%E5%90%8C%E8%BF%9B%E5%8C%96" rel="tag"># 趋同进化</a>
+          
+            
+            <a href="/tag/#/%E6%96%B9%E6%B3%95%E5%AD%A6" rel="tag"># 方法学</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/2021/04/21/%E7%BE%A4%E4%BD%93%E7%BB%93%E6%9E%84/" rel="next" title="群体结构">
+                <i class="fa fa-chevron-left"></i> 群体结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/%E6%96%87%E7%8C%AE%E7%A0%94%E8%AF%BB/2020/11/02/jc01/" rel="prev" title="Increased complexity of mushroom body Kenyon cell subtypes in the brain is associated with behavioral evolution in hymenopteran insects">
+                Increased complexity of mushroom body Kenyon cell subtypes in the brain is associated with behavioral evolution in hymenopteran insects <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#演化动态的基线维持与衰退"> <span class="nav-number">1</span> <span class="nav-text">演化动态的基线（维持与衰退）</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#纯化选择-purifying--negative-selection"> <span class="nav-number">1.1</span> <span class="nav-text">纯化选择 (Purifying / Negative Selection)</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#纯化选择放松-relaxed-purifying-selection"> <span class="nav-number">1.2</span> <span class="nav-text">纯化选择放松 (Relaxed Purifying Selection)</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#基于替换的视角"> <span class="nav-number">2</span> <span class="nav-text">基于替换的视角：</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#持续性正向选择-continuous--pervasive-positive-selection"> <span class="nav-number">2.1</span> <span class="nav-text">持续性正向选择 (Continuous / Pervasive Positive Selection)</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#间歇性正向选择-episodic-positive-selection"> <span class="nav-number">2.2</span> <span class="nav-text">间歇性正向选择 (Episodic Positive Selection)</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#平衡选择-balancing-selection"> <span class="nav-number">2.3</span> <span class="nav-text">平衡选择 (Balancing Selection)</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#基于分离位点segregating-sites的视角考虑"> <span class="nav-number">3</span> <span class="nav-text">基于分离位点(Segregating sites)的视角考虑：</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#硬扫荡-hard-sweep"> <span class="nav-number">3.1</span> <span class="nav-text">硬扫荡 (Hard Sweep)</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#软扫荡-soft-sweep"> <span class="nav-number">3.2</span> <span class="nav-text">软扫荡 (Soft Sweep)</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#多基因适应-polygenic-adaptation"> <span class="nav-number">3.3</span> <span class="nav-text">多基因适应 (Polygenic Adaptation)</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#上位性代偿性选择-epistatic--compensatory-selection"> <span class="nav-number">3.4</span> <span class="nav-text">上位性/代偿性选择 (Epistatic / Compensatory Selection)</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#正向频率依赖性选择-positive-frequency-dependent-selection"> <span class="nav-number">3.5</span> <span class="nav-text">正向频率依赖性选择 (Positive Frequency-Dependent Selection)</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

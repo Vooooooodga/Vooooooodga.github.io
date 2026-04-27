@@ -1,0 +1,1503 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="原理,总览," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本篇文章从个体、家系到自然群体三个层级梳理遗传育种项目中常见的研究设计路径，并比较 WGS、液相芯片与固相芯片在原理、成本和应用场景上的差异，从而在不同样本规模与目标性状假设下，快速做出合理的技术路线选择。">
+<meta name="keywords" content="原理, 总览">
+<meta property="og:type" content="article">
+<meta property="og:title" content="遗传育种项目技术路线选择指南">
+<meta property="og:url" content="https://vooooooodga.github.io/wgs/2026/03/13/%E9%81%97%E4%BC%A0%E8%82%B2%E7%A7%8D%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E8%B7%AF%E7%BA%BF%E9%80%89%E6%8B%A9%E6%8C%87%E5%8D%97/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="本篇文章从个体、家系到自然群体三个层级梳理遗传育种项目中常见的研究设计路径，并比较 WGS、液相芯片与固相芯片在原理、成本和应用场景上的差异，从而在不同样本规模与目标性状假设下，快速做出合理的技术路线选择。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="遗传育种项目技术路线选择指南">
+<meta name="twitter:description" content="本篇文章从个体、家系到自然群体三个层级梳理遗传育种项目中常见的研究设计路径，并比较 WGS、液相芯片与固相芯片在原理、成本和应用场景上的差异，从而在不同样本规模与目标性状假设下，快速做出合理的技术路线选择。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>遗传育种项目技术路线选择指南 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/wgs/2026/03/13/%E9%81%97%E4%BC%A0%E8%82%B2%E7%A7%8D%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E8%B7%AF%E7%BA%BF%E9%80%89%E6%8B%A9%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            遗传育种项目技术路线选择指南
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-03-13T21:56:14+08:00">
+                2026-03-13
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-03-17T21:48:56+08:00">
+                  2026-03-17
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/WGS" itemprop="url" rel="index">
+                    <span itemprop="name">WGS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <blockquote>
+  <p>本篇文章从个体、家系到自然群体三个层级梳理遗传育种项目中常见的研究设计路径，并比较 WGS、液相芯片与固相芯片在原理、成本和应用场景上的差异，从而在不同样本规模与目标性状假设下，快速做出合理的技术路线选择。</p>
+</blockquote>
+
+<h3 id="1-个体研究n1或极少数">1. 个体研究（N=1 或极少数）</h3>
+
+<p>个体研究无法进行群体水平的统计学关联检验，其诊断性证据依赖于直接的物理比对或已知功能验证。</p>
+
+<ul>
+  <li>
+    <p><strong>科学假说</strong>：目标性状由具有绝对外显率的单基因突变（或结构变异）决定，或者该个体具有作为基准的代表性价值。</p>
+  </li>
+  <li>
+    <p><strong>业务应用场景</strong>：</p>
+
+    <ul>
+      <li>
+        <p><strong>参考基因组构建</strong>：在开启一个新物种或新亚种的研究前，必须选取一个具有代表性的纯系个体，利用三代长读长测序（PacBio/ONT）组装高质量的参考基因组（Reference Genome），作为后续所有变异检测（SNP calling）的底层坐标系。</p>
+      </li>
+      <li>
+        <p><strong>已知致病/功能位点排查</strong>：对于表现出罕见极端表型（如某种致命单基因遗传病，或极其优异的偶发突变）的单一个体，直接进行全外显子（WES）或全基因组（WGS）测序，与正常参考基因组比对，寻找无义突变或移码突变。</p>
+      </li>
+      <li>
+        <p><strong>核心种质资产评估</strong>：在商业育种中，对即将用于大规模人工授精的“特级种公猪”或“核心种牛”进行个体高深度测序，以确认其是否携带已知的致死性隐性有害突变，或确认其是否具有特定的优良等位基因。</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="2-家系研究family--pedigree--双亲及子代群体">2. 家系研究（Family / Pedigree / 双亲及子代群体）</h3>
+
+<p>家系群体（如 F2 代、回交群体 BC、重组自交系 RIL）是经过人工控制交配产生的。其核心特征是<strong>重组事件少，连锁不平衡（LD）衰减极慢</strong>。</p>
+
+<ul>
+  <li>
+    <p><strong>科学假说</strong>：目标性状受少数几个主效基因（QTL）控制，且这些基因在选择的两个亲本之间存在多态性差异。通过追踪标记与性状在子代中的共分离（Co-segregation）现象来定位基因。</p>
+  </li>
+  <li>
+    <p><strong>诊断性优势（高统计效力）</strong>：由于只经历了少数几次减数分裂重组，家系中的染色体是以极大的“区块（Block）”进行遗传的。这意味着只需较少的样本量（数百个）和较低密度的标记（如低深度重测序或简化基因组测序），就能获得极高的统计学显著性。</p>
+  </li>
+  <li>
+    <p><strong>诊断性劣势（低定位精度）</strong>：正是由于 LD 区块极大，定位到的显著区间（QTL 区域）通常长达数百万个碱基（Mb），内部包含几十上百个基因。家系研究很难直接精细定位到单一的致因突变（Causal Mutation）。</p>
+  </li>
+  <li>
+    <p><strong>业务应用场景</strong>：早期阶段的 QTL 初定位；缺乏历史重组积累的新育成品种的遗传分析；植物自花授粉作物的图位克隆（Map-based cloning）。</p>
+  </li>
+</ul>
+
+<h3 id="3-自然群体研究natural-population--cohort">3. 自然群体研究（Natural Population / Cohort）</h3>
+
+<p>自然群体包含大量无近亲关系的个体（或亲缘关系较远）。其核心特征是<strong>经历了成百上千代的历史同源重组，连锁不平衡（LD）衰减极快</strong>。</p>
+
+<ul>
+  <li>
+    <p><strong>科学假说</strong>：目标性状是受微效多基因控制的复杂数量性状。通过扫描整个基因组上的历史重组断点，寻找与表型在统计学上显著关联的极小基因组区域。</p>
+  </li>
+  <li>
+    <p><strong>诊断性优势（极高定位精度）</strong>：由于历史重组打碎了染色体区块，LD 距离通常只有几 KB 到几十 KB。 此时如果检测到显著的关联信号（GWAS 曼哈顿图上的峰），该信号所在的物理区间极小，可以直接锁定单一候选基因甚至具体的调控元件。</p>
+  </li>
+  <li>
+    <p><strong>诊断性劣势（需要庞大样本与高密度标记）</strong>：为了捕捉到极短的 LD 区块，必须使用高密度的变异标记（全基因组重测序 WGS 或高密度芯片）。同时，为了克服多基因微弱效应和多重假设检验的严苛阈值（如 Bonferroni 校正，通常 P&lt;5×10−8），必须依赖极其庞大的样本量（几千到几万）才能提供足够的统计效力。</p>
+  </li>
+  <li>
+    <p><strong>业务应用场景</strong>：全基因组关联分析（GWAS）；群体进化与选择消除分析（寻找整个物种驯化史中受到选择的区域）；构建全基因组选择（GS）的底层参考模型。</p>
+  </li>
+</ul>
+
+<h3 id="wgs液相固相检测的区别">WGS、液相、固相检测的区别</h3>
+
+<ol>
+  <li>除WGS外，目前液相芯片（genotypeing by target sequencing）和固相芯片也在农业育种得到越来越多的应用。三者的区别？
+    <h4 id="总结">总结</h4>
+  </li>
+</ol>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>评估维度</td>
+      <td>WGS (全基因组重测序)</td>
+      <td>液相芯片 (靶向捕获测序)</td>
+      <td>固相芯片 (DNA Microarray)</td>
+    </tr>
+    <tr>
+      <td>底层原理</td>
+      <td>随机打断，无偏差高通量测序</td>
+      <td>溶液杂交捕获目标区域，高通量测序</td>
+      <td>探针固定于固相基质，光学荧光信号检测</td>
+    </tr>
+    <tr>
+      <td>数据输出</td>
+      <td>未知的全基因组序列 (A/T/C/G)</td>
+      <td>靶向区域的序列 (A/T/C/G)</td>
+      <td>已知位点的基因型 (荧光强弱)</td>
+    </tr>
+    <tr>
+      <td>生产端研发成本</td>
+      <td>无（无需定制探针）</td>
+      <td>中（需合成特异性探针库）</td>
+      <td>极高（需开模、光刻制造物理芯片）</td>
+    </tr>
+    <tr>
+      <td>消费端单样本成本</td>
+      <td>最高（线性增长）</td>
+      <td>低（适合中大规模群体）</td>
+      <td>极低（仅限极大样本量且位点固定）</td>
+    </tr>
+    <tr>
+      <td>生信分析算力消耗</td>
+      <td>极高 (集群运算，TB级数据)</td>
+      <td>极低 (单机可完成，GB级数据)</td>
+      <td>无需传统生信比对 (直接输出基因型矩阵)</td>
+    </tr>
+    <tr>
+      <td>业务适用场景</td>
+      <td>第一阶段：从头寻找未知变异</td>
+      <td>第三阶段：数百至数千样本的特定位点筛查</td>
+      <td>第三阶段：数十万级别样本的标准商业化鉴定</td>
+    </tr>
+  </tbody>
+</table>
+
+<ol>
+  <li>
+    <p>大队列研究，为什么要用这么多样本？客户想解决什么？能否用靶向测序代替或者低深度+panel插补代替？</p>
+  </li>
+  <li>
+    <p>我们是否有过承接大队列项目的先例？遇到了什么问题和难点？最后是如何解决的？哪些没解决？</p>
+  </li>
+  <li>
+    <p>我们目前似乎是通过偏个性化定制的方式来进行育种项目。后续会从纯粹的“按需定制服务”转向“标准化产品交付”吗？</p>
+  </li>
+</ol>
+
+<h4 id="原理差异">原理差异</h4>
+
+<ul>
+  <li>
+    <p><strong>WGS：</strong> 采用非靶向策略。提取样本DNA后，随机超声打断为短片段，直接连接测序接头并上机。其诊断性特征是<strong>无预设偏好</strong>，能够发现样本中存在的所有类型的已知和未知变异（SNP、InDel、SV等）。</p>
+  </li>
+  <li>
+    <p><strong>液相芯片：</strong> 采用靶向富集策略。DNA打断后，加入预先设计好的生物素标记探针。在液相环境中，探针与目标DNA序列发生互补杂交，随后利用链霉亲和素磁珠将杂交复合物“拉下来”（Pull-down），洗脱非目标片段后，仅对富集到的目标区域进行二代测序。</p>
+  </li>
+  <li>
+    <p><strong>固相芯片：</strong> 采用原位杂交与光学检测策略。几十万到上百万个寡核苷酸探针被化学固定在硅基或玻璃基片上的特定物理坐标处。样本DNA被荧光标记后流经芯片表面，若发生完美互补配对，该坐标点在激光扫描下会发出特定波长的荧光。其诊断性特征是<strong>不涉及真正的“测序（读取碱基）”</strong>，而是通过坐标和荧光颜色判定基因型。</p>
+  </li>
+</ul>
+
+<h4 id="研发成本差异">研发成本差异</h4>
+
+<ul>
+  <li>
+    <p><strong>WGS：</strong> 研发成本为 <strong>0</strong>。公司不需要为特定物种或特定性状预先开发任何试剂，收到样本即可进行标准化建库。重资产主要集中在后端的计算集群和存储设备上。</p>
+  </li>
+  <li>
+    <p><strong>液相芯片：</strong> 研发成本<strong>中等</strong>（数万元人民币级别）。主要成本在于根据目标位点设计并合成那一管探针混合物（Panel）。其优势在于迭代极快，如果发现某个育种位点无效，下一批次直接在探针库中剔除即可，无需废弃硬件。</p>
+  </li>
+  <li>
+    <p><strong>固相芯片：</strong> 研发与制造成本<strong>极高</strong>（数十万至上百万元人民币级别）。需要极高的光刻或微阵列打印技术。一旦版图设计完成并投入生产，位点组合就完全固化，任何一个位点的增删都需要重新开模。</p>
+  </li>
+</ul>
+
+<h4 id="测序成本差异">测序成本差异</h4>
+
+<ul>
+  <li>
+    <p><strong>WGS：</strong> 单样本绝对成本<strong>最高</strong>。为了保证杂合位点的准确检出，每个样本通常需要测定基因组大小10倍至30倍的数据量。这导致试剂和机时成本居高不下，且无论测1个样本还是1000个样本，单样本成本下降空间极其有限。</p>
+  </li>
+  <li>
+    <p><strong>固相芯片：</strong> 单样本绝对成本<strong>最低</strong>，但存在<strong>极高的起订门槛</strong>。只有当客户承诺数万甚至数十万的检测量时，生产端的开模成本才能被有效摊薄。非常适合成熟的、大规模的商业育种企业进行常规筛查。</p>
+  </li>
+  <li>
+    <p><strong>液相芯片：</strong> 处于两者之间的<strong>最优解</strong>。对于几百到几千个样本的育种群体，液相芯片的单样本建库和测序总成本远低于WGS（因为测序数据量不到WGS的1%），同时又避免了固相芯片的高昂开模费和死板的定制限制。</p>
+  </li>
+</ul>
+
+<h4 id="数据交付周期差异">数据交付周期差异</h4>
+
+<ul>
+  <li>
+    <p><strong>WGS：</strong> 湿实验极快（标准化建库通常1-2天即可上机）。但时间瓶颈集中在后端的生信分析阶段。由于数据量庞大，几十个样本的比对、变异检测和质控可能需要耗费数周的高性能计算时间。</p>
+  </li>
+  <li>
+    <p><strong>固相芯片：</strong> 首次定制周期极长（通常需要几个月来设计、验证和生产物理芯片）。但一旦拥有现成芯片，样本检测极快，且下机数据直接就是包含基因型的表格，几乎不需要进行复杂的生物信息学计算。</p>
+  </li>
+  <li>
+    <p><strong>液相芯片：</strong> 首次探针合成需要2-4周。在日常生产中，由于增加了液相杂交和洗脱步骤，湿实验建库时间比WGS长1-2天。然而，由于产出的下机数据量极小，生信比对和变异检测通常在几小时到一两天内即可全部完成。</p>
+  </li>
+</ul>
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/%E5%8E%9F%E7%90%86" rel="tag"># 原理</a>
+          
+            
+            <a href="/tag/#/%E6%80%BB%E8%A7%88" rel="tag"># 总览</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/unix/2026/03/15/Container%E5%AE%89%E8%A3%85/" rel="next" title="Container安装">
+                <i class="fa fa-chevron-left"></i> Container安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/wgs/2026/03/12/%E6%A0%B8%E5%BF%83%E7%A7%8D%E8%B4%A8%E7%AD%9B%E9%80%89-05%E5%BA%95%E5%B1%82%E7%AE%97%E6%B3%95/" rel="prev" title="核心种质筛选-05底层算法">
+                核心种质筛选-05底层算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-3"> <a class="nav-link" href="#1-个体研究n1或极少数"> <span class="nav-number">1</span> <span class="nav-text">1. 个体研究（N=1 或极少数）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#2-家系研究family--pedigree--双亲及子代群体"> <span class="nav-number">2</span> <span class="nav-text">2. 家系研究（Family / Pedigree / 双亲及子代群体）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#3-自然群体研究natural-population--cohort"> <span class="nav-number">3</span> <span class="nav-text">3. 自然群体研究（Natural Population / Cohort）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#wgs液相固相检测的区别"> <span class="nav-number">4</span> <span class="nav-text">WGS、液相、固相检测的区别</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#总结"> <span class="nav-number">4.1</span> <span class="nav-text">总结</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#原理差异"> <span class="nav-number">4.2</span> <span class="nav-text">原理差异</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#研发成本差异"> <span class="nav-number">4.3</span> <span class="nav-text">研发成本差异</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#测序成本差异"> <span class="nav-number">4.4</span> <span class="nav-text">测序成本差异</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#数据交付周期差异"> <span class="nav-number">4.5</span> <span class="nav-text">数据交付周期差异</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

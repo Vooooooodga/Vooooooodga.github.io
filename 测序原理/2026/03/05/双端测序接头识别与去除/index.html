@@ -1,0 +1,1522 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="原理,fastqc," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在双端测序（Paired-end Sequencing）中，测序得到的R1和R2确实并非总是完整的、无冗余的正反向序列。根据文库插入片段长度（Insert Size, $L_I$）与单端读长（Read Length, $L_R$）的比例关系，实际下机数据会出现以下几种典型情况。">
+<meta name="keywords" content="原理, fastqc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="双端测序接头识别与去除">
+<meta property="og:url" content="https://vooooooodga.github.io/%E6%B5%8B%E5%BA%8F%E5%8E%9F%E7%90%86/2026/03/05/%E5%8F%8C%E7%AB%AF%E6%B5%8B%E5%BA%8F%E6%8E%A5%E5%A4%B4%E8%AF%86%E5%88%AB%E4%B8%8E%E5%8E%BB%E9%99%A4/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="在双端测序（Paired-end Sequencing）中，测序得到的R1和R2确实并非总是完整的、无冗余的正反向序列。根据文库插入片段长度（Insert Size, $L_I$）与单端读长（Read Length, $L_R$）的比例关系，实际下机数据会出现以下几种典型情况。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="双端测序接头识别与去除">
+<meta name="twitter:description" content="在双端测序（Paired-end Sequencing）中，测序得到的R1和R2确实并非总是完整的、无冗余的正反向序列。根据文库插入片段长度（Insert Size, $L_I$）与单端读长（Read Length, $L_R$）的比例关系，实际下机数据会出现以下几种典型情况。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>双端测序接头识别与去除 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/%E6%B5%8B%E5%BA%8F%E5%8E%9F%E7%90%86/2026/03/05/%E5%8F%8C%E7%AB%AF%E6%B5%8B%E5%BA%8F%E6%8E%A5%E5%A4%B4%E8%AF%86%E5%88%AB%E4%B8%8E%E5%8E%BB%E9%99%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            双端测序接头识别与去除
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-03-05T21:52:21+08:00">
+                2026-03-05
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-03-13T13:59:06+08:00">
+                  2026-03-13
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/%E6%B5%8B%E5%BA%8F%E5%8E%9F%E7%90%86" itemprop="url" rel="index">
+                    <span itemprop="name">测序原理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <p>在双端测序（Paired-end Sequencing）中，测序得到的R1和R2确实并非总是完整的、无冗余的正反向序列。根据文库插入片段长度（Insert Size, $L_I$）与单端读长（Read Length, $L_R$）的比例关系，实际下机数据会出现以下几种典型情况。</p>
+
+<p>我们可以将其视为针对不同 $L_I$ 值的竞争性假说，并通过特定的序列特征进行推断：</p>
+
+<hr />
+
+<h3 id="1-插入片段过短接头读穿read-through"><strong>1. 插入片段过短：接头读穿（Read-through）</strong></h3>
+
+<ul>
+  <li>
+    <p><strong>假说条件：</strong> $L_I &lt; L_R$</p>
+  </li>
+  <li>
+    <p><strong>现象：</strong> 测序反应在完成插入片段的测序后，由于尚未达到预设读长，会继续向后测序进入 3’ 端的接头序列。</p>
+  </li>
+  <li>
+    <p><strong>数据特征（诊断性证据）：</strong></p>
+
+    <ul>
+      <li>
+        <p>R1 的末端包含 P7 接头的反向互补序列。</p>
+      </li>
+      <li>
+        <p>R2 的末端包含 P5 接头的反向互补序列。</p>
+      </li>
+      <li>
+        <p>R1 与 R2 存在完全的重叠，且重叠长度等于 $L_I$。</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>结果：</strong> 实际有效的插入片段信息少于 $L_R$，多余部分为无用的接头序列。</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="2-插入片段长度中等存在重叠overlapping"><strong>2. 插入片段长度中等：存在重叠（Overlapping）</strong></h3>
+
+<ul>
+  <li>
+    <p><strong>假说条件：</strong> $L_R &lt; L_I &lt; 2 \times L_R$</p>
+  </li>
+  <li>
+    <p><strong>现象：</strong> R1 和 R2 从两端向中间延伸，并在中间区域交汇并超过彼此的起始点。</p>
+  </li>
+  <li>
+    <p><strong>数据特征（诊断性证据）：</strong></p>
+
+    <ul>
+      <li>
+        <p>在 R1 和 R2 的序列中均未发现接头序列。</p>
+      </li>
+      <li>
+        <p>R1 的 3’ 端序列与 R2 的 3’ 端序列（反向互补后）存在一段匹配的区域。</p>
+      </li>
+      <li>
+        <p>重叠长度 $L_O = 2 \times L_R - L_I$。</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>结果：</strong> 插入片段被 100% 覆盖，且中间重叠区域具备双倍的测序深度，可用于校正测序错误。</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="3-插入片段过长存在缺口gap"><strong>3. 插入片段过长：存在缺口（Gap）</strong></h3>
+
+<ul>
+  <li>
+    <p><strong>假说条件：</strong> $L_I &gt; 2 \times L_R$</p>
+  </li>
+  <li>
+    <p><strong>现象：</strong> 这是理想化的 PE 测序状态，R1 和 R2 之间存在一段未被测序覆盖的物理区域。</p>
+  </li>
+  <li>
+    <p><strong>数据特征（诊断性证据）：</strong></p>
+
+    <ul>
+      <li>
+        <p>R1 和 R2 均无接头序列。</p>
+      </li>
+      <li>
+        <p>R1 与 R2 无法通过序列比对直接拼接。</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>结果：</strong> 存在“序列遗漏”。这段缺口序列的长度为 $L_G = L_I - 2 \times L_R$。在基因组组装中，这有助于跨越重复序列（Repeat regions）。</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="4-接头二聚体adapter-dimer"><strong>4. 接头二聚体（Adapter Dimer）</strong></h3>
+
+<ul>
+  <li>
+    <p><strong>假说条件：</strong> $L_I \approx 0$</p>
+  </li>
+  <li>
+    <p><strong>现象：</strong> 在文库构建过程中，插入片段未能成功连接，导致 P5 和 P7 接头直接相连。</p>
+  </li>
+  <li>
+    <p><strong>数据特征（诊断性证据）：</strong></p>
+
+    <ul>
+      <li>
+        <p>R1 从第 1 个碱基开始即为 P7 接头的 RC 序列。</p>
+      </li>
+      <li>
+        <p>R2 从第 1 个碱基开始即为 P5 接头的 RC 序列。</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>结果：</strong> 该 Read 对完全不包含任何基因组插入片段信息。</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="5-信号衰减与-poly-g技术性遗漏"><strong>5. 信号衰减与 Poly-G（技术性遗漏）</strong></h3>
+
+<ul>
+  <li>
+    <p><strong>假说条件：</strong> 测序周期耗尽或模板脱落。</p>
+  </li>
+  <li>
+    <p><strong>现象：</strong> 在使用双色荧光化学技术（如 NovaSeq, NextSeq）时，若测序进行到末端由于模板缺失或质量极差导致无法识别碱基（无荧光信号），机器会默认将其记为 <code class="language-plaintext highlighter-rouge">G</code>。</p>
+  </li>
+  <li>
+    <p><strong>数据特征（诊断性证据）：</strong></p>
+
+    <ul>
+      <li>Reads 的 3’ 端出现连续的 <code class="language-plaintext highlighter-rouge">GGGGGG...</code>。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>结果：</strong> 这部分序列并非真实的生物样本序列，属于技术性信息缺失。</p>
+  </li>
+</ul>
+
+<p>注：双色荧光的原理</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>A=Red + Green
+C=Red
+T=Green
+G=None
+开启光路激发荧光进行两次拍照，分别为红色信号通道，绿色信号通道
+</code></pre></td></tr></tbody></table></div></div>
+
+<hr />
+
+<h3 id="总结导致遗漏或偏差的因素表"><strong>总结：导致“遗漏”或“偏差”的因素表</strong></h3>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>因素</strong></th>
+      <th><strong>影响结果</strong></th>
+      <th><strong>解决方案</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>$L_I &lt; L_R$</strong></td>
+      <td>包含冗余接头，有效序列短</td>
+      <td>接头过滤（Adapter Trimming）</td>
+    </tr>
+    <tr>
+      <td><strong>$L_I &gt; 2 \times L_R$</strong></td>
+      <td>中间存在未测序缺口</td>
+      <td>增加读长或减小文库片段长度</td>
+    </tr>
+    <tr>
+      <td><strong>文库污染</strong></td>
+      <td>产生接头二聚体，无有效数据</td>
+      <td>加强文库构建中的粒径筛选（Size Selection）</td>
+    </tr>
+    <tr>
+      <td><strong>仪器效应</strong></td>
+      <td>产生 Poly-G，掩盖真实末端</td>
+      <td>质量过滤（Quality Trimming）</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>当我们拿到 R1/R2 时，首先应通过 K-mer 分析或 Adapter 搜索来评估上述假说。</p>
+
+<h3 id="cleandata生产">CleanData生产</h3>
+
+<ol>
+  <li>接头识别和去除：允许一定比例的mismatch；判断R1和R2是否存在重叠，若重叠则说明读穿了待测区域；若重叠区碱基不一致，根据质量值Phred Score判断保留哪个或修正。</li>
+  <li>质量过滤：Phred score Q=-10log（P）
+    <ol>
+      <li>滑动窗口算法，5‘到3’滑动固定长度的窗口，计算窗口内的平均质量值，若其低于阈值，则被判定后续序列可靠性不足，切除该位置及之后的所有碱基。</li>
+      <li>低质量碱基占比过滤：统计整条read质量值低于阈值的碱基比例。若超过限制则丢弃整个read。</li>
+    </ol>
+  </li>
+  <li>N碱基和Poly-G过滤
+    <ol>
+      <li>无法识别的碱基为N，若高于设定阈值则剔除。</li>
+      <li>对于Illumina Novaseq等双色荧光平台，信号缺失为G，若read末端有连续G序列，切除。</li>
+    </ol>
+  </li>
+  <li>长度过滤：若以上操作后整条read变得过短，则剔除。若一对reads中的一条被剔除，失去配对的read移动到unpaired文件，已确保主输出文件的R1和R2一一对应。</li>
+  <li>重复序列评估
+    <ol>
+      <li>软件检测完全一致的reads对。这类完全一致的reads可能是因为样本中缺失存在多个相同分子（例如高表达基因或者多拷贝基因），或者由于PCR导致的过量拷贝等技术因素。</li>
+      <li>通常QC时仅统计，待比对后根据映射到基因组的位置再继续判断是否为重复。</li>
+    </ol>
+  </li>
+</ol>
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/%E5%8E%9F%E7%90%86" rel="tag"># 原理</a>
+          
+            
+            <a href="/tag/#/fastqc" rel="tag"># fastqc</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/%E7%A7%91%E7%A0%94%E7%BB%98%E5%9B%BE/2026/03/06/%E6%8A%80%E6%9C%AF%E8%B7%AF%E7%BA%BF%E7%9A%84%E7%BB%98%E5%88%B6/" rel="next" title="技术路线的绘制">
+                <i class="fa fa-chevron-left"></i> 技术路线的绘制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/%E6%B5%8B%E5%BA%8F%E5%8E%9F%E7%90%86/2026/03/05/%E4%B8%8A%E6%9C%BA%E6%B5%8B%E5%BA%8F/" rel="prev" title="上机测序">
+                上机测序 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-3"> <a class="nav-link" href="#1-插入片段过短接头读穿read-through"> <span class="nav-number">1</span> <span class="nav-text">1. 插入片段过短：接头读穿（Read-through）</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#2-插入片段长度中等存在重叠overlapping"> <span class="nav-number">2</span> <span class="nav-text">2. 插入片段长度中等：存在重叠（Overlapping）</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#3-插入片段过长存在缺口gap"> <span class="nav-number">3</span> <span class="nav-text">3. 插入片段过长：存在缺口（Gap）</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#4-接头二聚体adapter-dimer"> <span class="nav-number">4</span> <span class="nav-text">4. 接头二聚体（Adapter Dimer）</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#5-信号衰减与-poly-g技术性遗漏"> <span class="nav-number">5</span> <span class="nav-text">5. 信号衰减与 Poly-G（技术性遗漏）</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#总结导致遗漏或偏差的因素表"> <span class="nav-number">6</span> <span class="nav-text">总结：导致“遗漏”或“偏差”的因素表</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#cleandata生产"> <span class="nav-number">7</span> <span class="nav-text">CleanData生产</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

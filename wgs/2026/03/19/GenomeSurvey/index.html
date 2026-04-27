@@ -1,0 +1,1706 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="流程," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文档结合了基因组复杂性评估标准以及多维数据综合判定方法。">
+<meta name="keywords" content="流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Genome Survey">
+<meta property="og:url" content="https://vooooooodga.github.io/wgs/2026/03/19/GenomeSurvey/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="本文档结合了基因组复杂性评估标准以及多维数据综合判定方法。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/kmer.png">
+<meta property="og:image" content="/assets/images/kmer2.png">
+<meta property="og:image" content="/assets/images/kmer3.png">
+<meta property="og:image" content="/assets/images/kmer4.png">
+<meta property="og:image" content="/assets/images/kmer5.png">
+<meta property="og:image" content="/assets/images/kmer6.png">
+<meta property="og:image" content="/assets/images/kmer7.png">
+<meta property="og:image" content="/assets/images/kmer8.png">
+<meta property="og:image" content="/assets/images/kmer9.png">
+<meta property="og:image" content="/assets/images/kmer10.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Genome Survey">
+<meta name="twitter:description" content="本文档结合了基因组复杂性评估标准以及多维数据综合判定方法。">
+<meta name="twitter:image" content="/assets/images/kmer.png">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>Genome Survey | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/wgs/2026/03/19/GenomeSurvey/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            Genome Survey
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-03-19T01:20:01+08:00">
+                2026-03-19
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-03-25T10:16:46+08:00">
+                  2026-03-25
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/WGS" itemprop="url" rel="index">
+                    <span itemprop="name">WGS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <div id="protect-wgs-2026-03-19-genomesurvey-form" class="post-protect-form">
+      <p>本页面已设置访问密码，请输入密码查看全文：</p>
+      <input type="password" id="protect-wgs-2026-03-19-genomesurvey-input" />
+      <button type="button" onclick="window.checkPassword_protect_wgs_2026_03_19_genomesurvey && window.checkPassword_protect_wgs_2026_03_19_genomesurvey()">确认</button>
+      <p id="protect-wgs-2026-03-19-genomesurvey-message" style="color:red;"></p>
+    </div>
+    <div id="protect-wgs-2026-03-19-genomesurvey-content" style="display:none;">
+      <blockquote>
+  <p>本文档结合了基因组复杂性评估标准以及多维数据综合判定方法。</p>
+</blockquote>
+
+<hr />
+
+<h2 id="基因组-survey-的核心目的">基因组 Survey 的核心目的</h2>
+
+<p>基因组调研（Genome Survey）是基因组组装前的“勘探”阶段。其核心目标是评估<strong>基因组复杂程度</strong>，为后续的测序策略（如测序深度、库型选择）和组装算法提供科学依据。</p>
+
+<ul>
+  <li><strong>高杂合度影响</strong>：导致姊妹染色体无法合并，组装结果倾向于大于实际基因组（冗余）。</li>
+  <li><strong>高重复序列影响</strong>：导致组装过程中序列折叠或产生缺口（Gaps），组装结果倾向于小于实际基因组（碎片化）。</li>
+</ul>
+
+<hr />
+
+<h2 id="基因组复杂程度判定标准">基因组复杂程度判定标准</h2>
+
+<p>基于测序数据，我们通过以下指标划分基因组的复杂等级：</p>
+
+<h3 id="经验性评价指标">经验性评价指标</h3>
+
+<p>|<strong>复杂度等级</strong>|<strong>杂合度 (ρ)</strong>|<strong>重复序列比例</strong>|<strong>GC 含量</strong>|
+|—|—|—|—|
+|<strong>简单基因组</strong>|$&lt; 0.5\%$|$&lt; 50\%$|$35\% - 65\%$|
+|<strong>复杂基因组</strong>|$0.5\% - 1.2\%$|$50\% - 65\%$|$&lt; 35\%$ 或 $&gt; 65\%$|
+|<strong>高度复杂基因组</strong>|$&gt; 1.2\%$|$&gt; 65\%$|极端 GC 分布|</p>
+<blockquote>
+  <p><strong>注</strong>：多倍体基因组（如三倍体、四倍体）通常直接归类为复杂或高度复杂基因组。</p>
+  <h4 id="杂合度-heterozygosityρ">杂合度 (Heterozygosity, ρ)</h4>
+</blockquote>
+
+<ul>
+  <li><strong>生物学定义</strong>：在二倍体或多倍体生物中，同源染色体上对应位点的等位基因（Allele）存在序列差异的程度。</li>
+  <li><strong>数学表示</strong>：通常指随机选择两个同源位点时，碱基不同的概率。若杂合率为 1%，意味着平均每 100 个碱基中存在一个变异位点（如 SNP 或 Indel）。</li>
+  <li><strong>对测序的影响</strong>：杂合位点会导致测序 Reads 被分为两群不同的序列，在 k-mer 分布中产生 1/2 频数的次峰。</li>
+</ul>
+
+<h4 id="重复序列-repetitive-sequences">重复序列 (Repetitive Sequences)</h4>
+
+<ul>
+  <li><strong>生物学定义</strong>：在单倍体基因组中，以多个拷贝形式存在的 DNA 序列。</li>
+  <li><strong>分类</strong>：
+    <ul>
+      <li><strong>散在重复序列</strong>：如转座子（TEs），随机分布在基因组各处。</li>
+      <li><strong>串联重复序列</strong>：如微卫星 DNA（SSR），呈首尾相连状排列。</li>
+    </ul>
+  </li>
+  <li><strong>对测序的影响</strong>：由于序列高度相似，大量 Reads 会来源于这些拷贝，在 k-mer 分布中产生高频波峰（2M,3M,…）或明显的右侧拖尾。</li>
+</ul>
+
+<hr />
+
+<h2 id="k-mer-分析原理与数学基础">K-mer 分析原理与数学基础</h2>
+
+<h3 id="什么是-k-mer">什么是 K-mer？</h3>
+
+<p>K-mer 是指从测序 Read 中截取的长度为 $K$ 的连续子串。</p>
+
+<ul>
+  <li>
+    <p><strong>数量计算</strong>：一段长度为 $L$ 的 Read，可以产生的 K-mer 数量为 $L - K + 1$。</p>
+  </li>
+  <li>
+    <p><strong>$K$ 取值原则</strong>：通常取奇数（如 17, 19, 21），目的是为了避免在处理反向互补序列时产生歧义。</p>
+  </li>
+  <li>
+    <p><strong>多样性上限</strong>：对于长度为 $K$ 的 K-mer，理论上存在 $4^K$ 种排列组合。</p>
+  </li>
+</ul>
+
+<p><img src="/assets/images/kmer.png" alt="kmer" /></p>
+
+<p><img src="/assets/images/kmer2.png" alt="kmer2" /></p>
+
+<h3 id="k-mer-频数分布图-k-mer-species-profile">K-mer 频数分布图 (K-mer Species Profile)</h3>
+
+<p>通过统计所有 K-mer 出现的频数（Depth），以频数为横坐标，该频数对应的 K-mer 种类数为纵坐标，绘制分布图。在理想状态（无错误、无重复、纯合）下，该图符合<strong>泊松分布</strong>。
+<img src="/assets/images/kmer3.png" alt="kmer3" /></p>
+
+<hr />
+
+<h2 id="波峰解读">波峰解读</h2>
+
+<p>在分析 K-mer 图时，我们需要针对观测到的不同波峰提出竞争性假说，并寻找诊断性证据。</p>
+
+<p><img src="/assets/images/kmer4.png" alt="kmer4" /></p>
+
+<h3 id="错误峰-error-peak">错误峰 (Error Peak)</h3>
+
+<ul>
+  <li><strong>位置</strong>：通常位于频数 $1 - 2$ 处。</li>
+  <li><strong>原因</strong>：随机测序错误产生的 K-mer 通常只出现极少数次数。</li>
+  <li><strong>处理</strong>：在进行数学拟合时需排除此区域。</li>
+</ul>
+
+<h3 id="主峰-mainhomozygous-peak">主峰 (Main/Homozygous Peak)</h3>
+
+<ul>
+  <li><strong>位置</strong>：位于平均测序深度 $M$ 处。</li>
+  <li><strong>意义</strong>：代表基因组中单拷贝且纯合的序列。</li>
+</ul>
+
+<h3 id="杂合峰-heterozygous-peak">杂合峰 (Heterozygous Peak)</h3>
+
+<ul>
+  <li><strong>位置</strong>：位于 $1/2 M$ 处。</li>
+  <li><strong>诊断逻辑</strong>：若此处出现独立峰，说明大量 K-mer 的来源频率仅为总深度的一半，这是<strong>杂合性</strong>的直接证据。杂合度越高，该峰越高。</li>
+</ul>
+
+<h3 id="重复峰与拖尾-repetitive-peak--tail">重复峰与拖尾 (Repetitive Peak &amp; Tail)</h3>
+
+<ul>
+  <li><strong>位置</strong>：位于 $2M, 3M, \dots nM$ 处，或在主峰右侧形成长尾。</li>
+  <li><strong>诊断逻辑</strong>：反映了在基因组中多次出现的序列。右侧曲线下面积（AUC）占比越大，重复率越高。</li>
+</ul>
+
+<p><img src="/assets/images/kmer5.png" alt="kmer5" /></p>
+
+<hr />
+
+<h2 id="倍性判定高级分布特征">倍性判定：高级分布特征</h2>
+
+<p>不同倍性的基因组在 K-mer 分布图上具有独特的“指纹”：</p>
+
+<ul>
+  <li><strong>纯合二倍体</strong>：仅有一个清晰的主峰。</li>
+</ul>
+
+<p><img src="/assets/images/kmer6.png" alt="kmer6" /></p>
+
+<ul>
+  <li><strong>杂合二倍体</strong>：在 $1/2 M$ 和 $M$ 处有两个峰。</li>
+</ul>
+
+<p><img src="/assets/images/kmer7.png" alt="kmer7" /></p>
+
+<ul>
+  <li><strong>杂合三倍体</strong>：可能在 $1/3 M, 2/3 M, M$ 处出现多个峰值，峰高比例反映了等位基因的分布。</li>
+</ul>
+
+<p><img src="/assets/images/kmer8.png" alt="kmer8" /></p>
+
+<ul>
+  <li>
+    <p><strong>异源多倍体</strong>：由于不同基因组间的差异，波峰分布会更加复杂，通常表现为多个重叠的泊松分布。</p>
+
+    <ul>
+      <li>异源杂合四倍体</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/images/kmer9.png" alt="kmer9" /></p>
+
+<ul>
+  <li>同源杂合四倍体</li>
+</ul>
+
+<p><img src="/assets/images/kmer10.png" alt="kmer10" /></p>
+
+<hr />
+
+<h2 id="比对报告中看到高-duplication-rate-时">比对报告中看到高 Duplication Rate 时</h2>
+
+<h4 id="假说-a技术冗余pcr-duplicates">假说 A：技术冗余（PCR Duplicates）</h4>
+
+<ul>
+  <li><strong>来源</strong>：文库构建过程中的 PCR 过度扩增。</li>
+  <li><strong>逻辑</strong>：样本序列中存在大量物理意义上完全一致的分子。</li>
+  <li><strong>诊断特征</strong>：1）K-mer 图的主峰高度和位置符合预期，但整体 K-mer 数量远超基因组大小的估算，且没有明显的杂合峰或重复峰。2）在比对文件中，这些 Reads 的起始和终止坐标完全重合。</li>
+</ul>
+
+<h4 id="假说-b样本杂合性heterozygosity-induced-misalignment">假说 B：样本杂合性（Heterozygosity-induced Misalignment）</h4>
+
+<ul>
+  <li><strong>来源</strong>：样本基因组是杂合的，但参考基因组是纯合的。</li>
+  <li><strong>逻辑</strong>：样本的两个等位基因 A1 和 A2 存在序列差异。如果参考基因组只包含 A1 的版本，A2 的 Reads 可能会被迫比对到 A1 的位置。</li>
+  <li><strong>结果</strong>：在比对层面上表现为该位置的深度（Depth）异常或非特异性堆叠，被误认为是某种形式的冗余。</li>
+</ul>
+
+<h4 id="假说-c参考基因组塌缩collapsed-repeats">假说 C：参考基因组塌缩（Collapsed Repeats）</h4>
+
+<ul>
+  <li><strong>来源</strong>：样本基因组中有 10 个重复拷贝，但参考基因组由于组装问题只保留了 1 个。</li>
+  <li><strong>逻辑</strong>：样本中来自 10 个物理位置的 Reads 都会比对到参考基因组的这 1 个点上。</li>
+  <li><strong>结果</strong>：产生极高的“多对一”比对率。</li>
+</ul>
+
+<h3 id="另pcr-偏好在-k-mer-分布中的具体体现及诊断证据">另：PCR 偏好在 k-mer 分布中的具体体现及诊断证据</h3>
+
+<h4 id="主峰的形态畸变峰宽与过离散overdispersion">主峰的形态畸变：峰宽与过离散（Overdispersion）</h4>
+
+<p>在理想状态下，k-mer 频数应符合泊松分布，其方差等于均值（Var=μ）。</p>
+
+<ul>
+  <li>
+    <p><strong>PCR 偏好的表现</strong>：由于不同区域的扩增效率不同，原本应该集中在深度 M 的 k-mer 被“打散”到了 0.5M到 1.5M 的区间内。</p>
+  </li>
+  <li>
+    <p><strong>诊断证据</strong>：k-mer 主峰变得<strong>矮胖、宽阔</strong>，甚至失去明显的峰尖。在数学拟合中，这被称为<strong>过离散现象</strong>。</p>
+  </li>
+  <li>
+    <p><strong>后果</strong>：这会导致 GenomeScope 等软件在计算时，残差（Residuals）变大，降低对杂合度和重复率估算的置信度。</p>
+  </li>
+</ul>
+
+<h4 id="gc-含量诱导的伪重复与伪缺失">GC 含量诱导的伪重复与伪缺失</h4>
+
+<p>PCR 酶对不同 GC 含量的序列具有化学选择性（通常偏向扩增 GC 含量中等的片段）。</p>
+
+<ul>
+  <li>
+    <p><strong>假说 A（高 GC 偏好）</strong>：若样本中某些区域 GC 含量适中，被过度扩增。</p>
+
+    <ul>
+      <li><strong>k-mer 表现</strong>：这些区域的 k-mer 会向右移动，进入“重复序列”的高频区（2M,3M 层级）。这会产生<strong>伪重复（False Positives for Repeats）</strong>的假象。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>假说 B（极端 GC 抑制）</strong>：极高或极低 GC 区域扩增效率极低。</p>
+
+    <ul>
+      <li><strong>k-mer 表现</strong>：这些区域的 k-mer 频数向左移动，掉入低频区（1−5×），甚至与测序错误峰重叠。这会导致<strong>基因组大小被低估</strong>。</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="k-mer-与-gc-含量的联合分布gc-content-plot">K-mer 与 GC 含量的联合分布（GC-Content Plot）</h4>
+
+<p>要确证 k-mer 分布异常是否由 PCR 偏好引起，通常需要引入第二维证据：<strong>k-mer 频数 vs. GC 含量图</strong>。</p>
+
+<ul>
+  <li>
+    <p><strong>诊断证据</strong>：</p>
+
+    <ul>
+      <li>
+        <p>如果发现 <strong>k-mer 深度</strong> 随 <strong>GC 含量</strong> 呈现明显的抛物线关系（即 GC 在 45%−55% 时深度最高，两端骤降）。</p>
+      </li>
+      <li>
+        <p><strong>结论</strong>：此时 k-mer 分布图中的“长尾”或“多峰”极有可能是 PCR 偏好造成的<strong>技术偏离</strong>，而非样本基因组真实的生物学重复。</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<h2 id="综合判定方法k-mer-与其他技术的结合">综合判定方法：K-mer 与其他技术的结合</h2>
+
+<p>k-mer 分析虽然强大，但在处理空间结构和系统偏差时存在局限，需结合其他方法：</p>
+
+<h3 id="外部基准验证">外部基准验证</h3>
+
+<ul>
+  <li>
+    <p><strong>C-value 查询</strong>：在实验前通过流式细胞术或数据库（如 Kew Garden, GenomeSize.com）获取预估基因组大小，用于校准 K-mer 计算结果。</p>
+  </li>
+  <li>
+    <p><strong>$G = \frac{N_{total}}{M}$</strong>：利用 K-mer 总数除以主峰深度得到估算大小。若此值显著大于组装长度，提示存在大量<strong>重复序列塌缩</strong>。</p>
+  </li>
+</ul>
+
+<h3 id="污染与偏差检查">污染与偏差检查</h3>
+
+<ul>
+  <li>
+    <p><strong>GC 分布图</strong>：检测是否存在 GC 偏好性。若 GC 含量极高，二代测序会产生大量碎片。</p>
+  </li>
+  <li>
+    <p><strong>NT 库比对</strong>：通过随机抽取 Reads 进行 BLAST 比对，排除外源物种污染导致的高重复假象。</p>
+  </li>
+</ul>
+
+<h3 id="结构性验证">结构性验证</h3>
+
+<ul>
+  <li>
+    <p><strong>BAM 比对频率图</strong>：利用 <code class="language-plaintext highlighter-rouge">Picard</code> 识别 PCR 冗余（技术重复），区分其与生物学重复序列。</p>
+  </li>
+  <li>
+    <p><strong>BUSCO 评估</strong>：通过单拷贝基因的找回率判定基因组的完整性及是否存在多倍化情况。</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="常用软件工具">常用软件工具</h2>
+
+<h3 id="k-mer分析软件简介">k-mer分析软件简介</h3>
+
+<p>k-mer分析分为<strong>k-mer频数统计</strong>和<strong>基因组特征评估</strong>两步。此外，Smudgeplot还可以用k-mer分析评估物种的倍性。</p>
+
+<ol>
+  <li>jellyfish </li>
+</ol>
+
+<ul>
+  <li>jellyfish可以实现第一步k-mer频数统计。</li>
+  <li>特点是使用Hash表存储数据，能多线程运行；速度快，内存消耗小。</li>
+</ul>
+
+<ol>
+  <li>KMC </li>
+</ol>
+
+<ul>
+  <li>KMC可以实现第一步k-mer频数统计。</li>
+</ul>
+
+<ol>
+  <li>GenomeScope </li>
+</ol>
+
+<ul>
+  <li>GenomeScope可以实现第二步，利用k-mer频数统计结果进行基因组特征评估。</li>
+  <li>1.0版本用于二倍体物种，2.0版本用于多倍体物种。</li>
+</ul>
+
+<ol>
+  <li>KAT(The k-mer Analysis Toolkit) </li>
+</ol>
+
+<ul>
+  <li>KAT(The k-mer Analysis Toolkit)可以实现k-mer频数统计和基因组特征评估两步。</li>
+  <li>包含多个工具来帮助用户通过使用k-mer对测序数据进行简单分析，如组装完整性、测序错误、是否有污染等。</li>
+</ul>
+
+<ol>
+  <li>GCE </li>
+</ol>
+
+<ul>
+  <li>GCE可以分别实现k-mer频数统计和基因组特征评估两步。</li>
+</ul>
+
+<ol>
+  <li>KmerGenie </li>
+</ol>
+
+<ul>
+  <li>KmerGenie可以同时实现k-mer频数统计和基因组特征评估两步。</li>
+  <li>最大优点在于可以实现在多个预设k-mer下的自动分析，除了进行常规的k-mer频数统计之外，还能够基于不同k-mer自动计算基因组大小，并为基因组组装评估一个最佳组装k-mer数值作为备选。</li>
+</ul>
+
+<h3 id="一些使用软件的经验总结">一些使用软件的经验总结</h3>
+
+<ul>
+  <li>【推荐】用Smudgeplot评估物种倍性后，用组合jellyfish+GenomeScope1.0做二倍体物种的基因组调查，用组合KMC+GenomeScope2.0做多倍体物种的基因组调查。</li>
+  <li>k-mer长度常用17/21。</li>
+  <li>软件KmerGenie，GCE和jellyfish获取的频数分布表，都可用于软件genomescope和GCE第二步骤的分析。</li>
+  <li>由于老版本的GCE第一步骤支持的最大k-mer频数为255，大于255的数据被合并（新版本GCE好像更新了，目前没有这个限制了）；而jellyfish统计到10000行，预估结果会更为准确。</li>
+  <li>GenomeScope对于高重复序列的基因组统计的基因组大小会偏小，建议max kmer coverage设置大一点，大于等于10000。</li>
+  <li>有些软件（比如GCE）有另一个参数需注意和设定，单倍体模式还是杂合模式，可以两种模式都分析，查看差别。</li>
+  <li>实践经验发现，k-mer值设置得越高，估计出来的基因组size会越大；</li>
+  <li>另外，在jellyfish里的jellyfish histo统计频数分布时，用参数-h 10000把统计上限调高，以及在GenomeScope阶段，Max kmer coverage设置的大一些(即统计进的kmer数量越多)，估算出来的基因组大小也会略大一些。</li>
+</ul>
+
+
+    </div>
+    <script>
+      (function() {
+        var CORRECT = "LC2434";
+        var formId = "protect-wgs-2026-03-19-genomesurvey-form";
+        var contentId = "protect-wgs-2026-03-19-genomesurvey-content";
+        var inputId = "protect-wgs-2026-03-19-genomesurvey-input";
+        var msgId = "protect-wgs-2026-03-19-genomesurvey-message";
+
+        function check() {
+          var input = document.getElementById(inputId);
+          var msg = document.getElementById(msgId);
+          if (!input) return;
+          if (input.value === CORRECT) {
+            var form = document.getElementById(formId);
+            var content = document.getElementById(contentId);
+            if (form) form.style.display = "none";
+            if (content) content.style.display = "block";
+          } else {
+            if (msg) msg.textContent = "密码错误，请重试。";
+          }
+        }
+
+        window.checkPassword_protect_wgs_2026_03_19_genomesurvey = check;
+      })();
+    </script>
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/%E6%B5%81%E7%A8%8B" rel="tag"># 流程</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/conserved%20genomics/2026/03/24/SNeP%E4%BC%B0%E7%AE%97Ne%E5%8E%86%E5%8F%B2%E6%9B%B2%E7%BA%BF%E7%9A%84%E5%8E%9F%E7%90%86/" rel="next" title="SNeP估算Ne历史曲线的原理">
+                <i class="fa fa-chevron-left"></i> SNeP估算Ne历史曲线的原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/unix/2026/03/15/Container%E5%AE%89%E8%A3%85/" rel="prev" title="Container安装">
+                Container安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#基因组-survey-的核心目的"> <span class="nav-number">1</span> <span class="nav-text">基因组 Survey 的核心目的</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#基因组复杂程度判定标准"> <span class="nav-number">2</span> <span class="nav-text">基因组复杂程度判定标准</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#经验性评价指标"> <span class="nav-number">2.1</span> <span class="nav-text">经验性评价指标</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#杂合度-heterozygosityρ"> <span class="nav-number">2.1.1</span> <span class="nav-text">杂合度 (Heterozygosity, ρ)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#重复序列-repetitive-sequences"> <span class="nav-number">2.1.2</span> <span class="nav-text">重复序列 (Repetitive Sequences)</span> </a> </li> </ol> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#k-mer-分析原理与数学基础"> <span class="nav-number">3</span> <span class="nav-text">K-mer 分析原理与数学基础</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#什么是-k-mer"> <span class="nav-number">3.1</span> <span class="nav-text">什么是 K-mer？</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#k-mer-频数分布图-k-mer-species-profile"> <span class="nav-number">3.2</span> <span class="nav-text">K-mer 频数分布图 (K-mer Species Profile)</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#波峰解读"> <span class="nav-number">4</span> <span class="nav-text">波峰解读</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#错误峰-error-peak"> <span class="nav-number">4.1</span> <span class="nav-text">错误峰 (Error Peak)</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#主峰-mainhomozygous-peak"> <span class="nav-number">4.2</span> <span class="nav-text">主峰 (Main/Homozygous Peak)</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#杂合峰-heterozygous-peak"> <span class="nav-number">4.3</span> <span class="nav-text">杂合峰 (Heterozygous Peak)</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#重复峰与拖尾-repetitive-peak--tail"> <span class="nav-number">4.4</span> <span class="nav-text">重复峰与拖尾 (Repetitive Peak &amp; Tail)</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#倍性判定高级分布特征"> <span class="nav-number">5</span> <span class="nav-text">倍性判定：高级分布特征</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#比对报告中看到高-duplication-rate-时"> <span class="nav-number">6</span> <span class="nav-text">比对报告中看到高 Duplication Rate 时</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#另pcr-偏好在-k-mer-分布中的具体体现及诊断证据"> <span class="nav-number">6.1</span> <span class="nav-text">另：PCR 偏好在 k-mer 分布中的具体体现及诊断证据</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#主峰的形态畸变峰宽与过离散overdispersion"> <span class="nav-number">6.1.1</span> <span class="nav-text">主峰的形态畸变：峰宽与过离散（Overdispersion）</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#gc-含量诱导的伪重复与伪缺失"> <span class="nav-number">6.1.2</span> <span class="nav-text">GC 含量诱导的伪重复与伪缺失</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#k-mer-与-gc-含量的联合分布gc-content-plot"> <span class="nav-number">6.1.3</span> <span class="nav-text">K-mer 与 GC 含量的联合分布（GC-Content Plot）</span> </a> </li> </ol> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#综合判定方法k-mer-与其他技术的结合"> <span class="nav-number">7</span> <span class="nav-text">综合判定方法：K-mer 与其他技术的结合</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#外部基准验证"> <span class="nav-number">7.1</span> <span class="nav-text">外部基准验证</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#污染与偏差检查"> <span class="nav-number">7.2</span> <span class="nav-text">污染与偏差检查</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#结构性验证"> <span class="nav-number">7.3</span> <span class="nav-text">结构性验证</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#常用软件工具"> <span class="nav-number">8</span> <span class="nav-text">常用软件工具</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#k-mer分析软件简介"> <span class="nav-number">8.1</span> <span class="nav-text">k-mer分析软件简介</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#一些使用软件的经验总结"> <span class="nav-number">8.2</span> <span class="nav-text">一些使用软件的经验总结</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

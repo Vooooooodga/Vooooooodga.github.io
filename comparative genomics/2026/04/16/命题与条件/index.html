@@ -1,0 +1,1437 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="比较基因组学,方法学," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这是设计实验和解读结果时经常混淆的逻辑。">
+<meta name="keywords" content="比较基因组学, 方法学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="命题与条件">
+<meta property="og:url" content="https://vooooooodga.github.io/comparative%20genomics/2026/04/16/%E5%91%BD%E9%A2%98%E4%B8%8E%E6%9D%A1%E4%BB%B6/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="这是设计实验和解读结果时经常混淆的逻辑。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="命题与条件">
+<meta name="twitter:description" content="这是设计实验和解读结果时经常混淆的逻辑。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>命题与条件 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/comparative%20genomics/2026/04/16/%E5%91%BD%E9%A2%98%E4%B8%8E%E6%9D%A1%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            命题与条件
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-04-16T16:58:18+08:00">
+                2026-04-16
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-04-17T13:37:30+08:00">
+                  2026-04-17
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Comparative%20genomics" itemprop="url" rel="index">
+                    <span itemprop="name">Comparative genomics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <blockquote>
+  <p>这是设计实验和解读结果时经常混淆的逻辑。</p>
+</blockquote>
+
+<h3 id="一-分析条件a预适应与必要条件">一、 分析条件A：预适应与必要条件</h3>
+
+<p>在命题逻辑中，条件A被定义为目标性状（T）产生的必要条件，即 $T \Rightarrow A$。</p>
+
+<p><strong>贝叶斯视角的评估：</strong></p>
+
+<p>我们关注的不仅仅是 $T$ 发生时 $A$ 是否发生，而是观测到 $A$ 对于推断 $T$ 的<strong>诊断性价值（Diagnostic Value）</strong>。这取决于似然比（Likelihood Ratio）或贝叶斯因子：</p>
+
+\[\text{似然比} = \frac{P(A \mid T)}{P(A \mid \neg T)}\]
+
+<p>根据预适应的定义，已知 $P(A \mid T) = 1$。但核心问题在于 $P(A  \mid  \neg T)$（在不具备目标性状的物种中观测到A的概率）可能非常高。</p>
+
+<ul>
+  <li>
+    <p>在进化生物学中，物种之间共享大量的基础基因组结构、代谢通路和系统发育历史。</p>
+  </li>
+  <li>
+    <p>如果 $A$ 是一种高度保守的生理条件或广泛存在的祖先性状，那么 $P(A \mid \neg T)$ 将接近于 1。</p>
+  </li>
+  <li>
+    <p>当似然比接近 1 时，观测到 $A$ 无法提供任何排他性证据来支持 $T$ 的演化。这种推理确实只能“顺着推”证实必要性，而无法“倒着推”提供解释力。</p>
+  </li>
+</ul>
+
+<h3 id="二-分析条件b排他性条件与替代假说">二、 分析条件B：排他性条件与替代假说</h3>
+
+<p>条件B被定义为：仅在具有目标性状的物种中具备B，没有此性状的物种绝不具有B。</p>
+
+<p>逻辑上，这是充要条件：$T \Leftrightarrow B$。</p>
+
+<p>贝叶斯视角下，$P(B \mid T) = 1$ 且 $P(B \mid \neg T) = 0$。观测到 $B$ 具有无限大的诊断性价值。</p>
+
+<p>除了“T导致了B（产物）”之外，完全相关的两个变量还存在以下解释：</p>
+
+<ol>
+  <li>
+    <p><strong>因果关系倒置（B是T的直接原因）：</strong> B可能是某一种特定的基因组调控事件或环境阈值，它是诱发复杂性状T产生的直接驱动力，且一旦B出现，T必然出现。</p>
+  </li>
+  <li>
+    <p><strong>多效性（Pleiotropy）或紧密连锁：</strong> 存在一个未被观测到的底层变量 $X$（例如某个上游转录因子的突变），它同时且必然地导致了 $T$ 和 $B$ 的平行发生。$T$ 和 $B$ 互为伴生关系，而非直接因果关系。</p>
+  </li>
+  <li>
+    <p><strong>系统发育的系统性偏差（Phylogenetic Confounding）：</strong> 如果性状 $T$ 在进化树上仅发生了一次单系起源，那么该分支上任何固定的衍征（Synapomorphy）都会与 $T$ 呈现完美的共现关系（即表现为条件B），即使它们在生物学功能上毫无关联。</p>
+  </li>
+</ol>
+
+<h3 id="三-分析条件c未知反事实下的推断">三、 分析条件C：未知反事实下的推断</h3>
+
+<p>假设已知具备目标性状（T）的物种都具有条件（c），即 $P(c \mid T) = 1$。</p>
+
+<p>在未知 $P(c \mid \neg T)$ 的情况下，问题是：<strong>能否断言目标性状T是产生c的唯一解释？</strong></p>
+
+<p>断言“T是产生c的唯一解释”意味着：只要观测到c，就必然是因为T的存在，逻辑上等同于 $c \Rightarrow T$。</p>
+
+<p><strong>命题逻辑视角：</strong></p>
+
+<p>已知 $T \Rightarrow c$，推导 $c \Rightarrow T$ 属于典型的<strong>肯定后件谬误（Affirming the consequent）</strong>。两者并不等价。</p>
+
+<p><strong>贝叶斯视角：</strong></p>
+
+<p>我们需要计算在观测到 $c$ 的条件下，$T$ 存在的后验概率 $P(T \mid c)$。根据贝叶斯定理：</p>
+
+\[P(T \mid c) = \frac{P(c \mid T) P(T)}{P(c \mid T) P(T) + P(c \mid \neg T) P(\neg T)}\]
+
+<p>代入已知条件 $P(c \mid T) = 1$：</p>
+
+\[P(T \mid c) = \frac{P(T)}{P(T) + P(c \mid \neg T) P(\neg T)}\]
+
+<p>要使断言成立（即 $P(T \mid c) = 1$），必须满足分母中的 $P(c \mid \neg T) P(\neg T) = 0$。由于 $P(\neg T)$不为 0（宇宙中存在不具备目标性状的物种），因此<strong>必须证明 $P(c \mid \neg T) = 0$</strong>。</p>
+
+<p>在尚未知不具有目标性状的物种是否具有c（即 $P(c \mid \neg T)$ 未知）的情况下，我们缺少计算分母中“证据的边际概率”的核心数据。如果 $c$ 是一种常见的非特异性条件，$P(c \mid \neg T)$ 可能会很大，从而导致 $P(T \mid c)$非常低。因此，<strong>在缺乏对对照组（不具备目标性状物种）的排他性观察时，绝对不能断言目标性状是产生该条件的唯一解释。</strong></p>
+
+<h3 id="四-分析条件d充分非必要条件与衍生推断">四、 分析条件D：充分非必要条件与衍生推断</h3>
+
+<p>定义条件d：</p>
+<ol>
+  <li>带有目标性状A的物种并不一定都有d：$P(d \mid A) &lt; 1$</li>
+  <li>不具有A的物种一定没有d：$P(d \mid \neg A) = 0$</li>
+</ol>
+
+<p><strong>命题逻辑视角：</strong></p>
+
+<p>由“不具有A一定没有d”可得 $\neg A \Rightarrow \neg d$。其逆否命题为 $d \Rightarrow A$。
+结合第一点 $A \nRightarrow d$，可以得出结论：<strong>条件d是产生目标性状A的充分不必要条件</strong>（或者说，目标性状A是拥有条件d的必要不充分条件）。</p>
+
+<p><strong>贝叶斯视角的评估：</strong></p>
+
+<p>在这个场景下，观测到条件d具有极高的<strong>正向诊断价值（Positive Diagnostic Value）</strong>，但缺乏反向排除能力。</p>
+
+<p>通过贝叶斯定理计算观测到 $d$ 时目标性状 $A$ 存在的后验概率：</p>
+
+\[P(A \mid d) = \frac{P(d \mid A) P(A)}{P(d \mid A) P(A) + P(d \mid \neg A) P(\neg A)}\]
+
+<p>由于已知 $P(d \mid \neg A) = 0$，分母中的第二项消除，得到：</p>
+
+\[P(A \mid d) = \frac{P(d \mid A) P(A)}{P(d \mid A) P(A) + 0} = 1\]
+
+<p>这意味着，只要在物种中观测到条件d，就可以100%确定该物种具有性状A。似然比 $\frac{P(d \mid A)}{P(d \mid \neg A)}$ 趋近于无穷大，提供了极强的排他性证据。</p>
+
+<p>然而，如果<strong>未观测到d（即 $\neg d$）</strong>，我们不能据此排除A的存在：</p>
+
+\[P(A \mid \neg d) = \frac{P(\neg d \mid A) P(A)}{P(\neg d \mid A) P(A) + P(\neg d \mid \neg A) P(\neg A)}\]
+
+<p>因为 $P(d \mid \neg A) = 0$，所以 $P(\neg d \mid \neg A) = 1$。公式转化为：</p>
+
+\[P(A \mid \neg d) = \frac{P(\neg d \mid A) P(A)}{P(\neg d \mid A) P(A) + P(\neg A)}\]
+
+<p>因为带有性状A的物种不一定有d，即 $P(\neg d \mid A) &gt; 0$，所以 $P(A \mid \neg d)$ 是一个大于0的值。缺失d无法作为否认A存在的证据。</p>
+
+<p><strong>进化生物学解释：</strong></p>
+
+<p>在比较基因组学中，观测到这种模式通常有以下几种可能：</p>
+
+<ol>
+  <li>
+    <p><strong>系统发育的序列演化（衍生性状假说）：</strong> 性状A是一个更为古老的基础演化事件（祖先节点的共有衍征），而条件d是发生在A演化支内部的一个后续创新事件。演化次序决定了d只能在已经具备A的遗传背景或生理基础的物种中发生。因此，所有具备d的物种都属于A的分支，但A分支下只有部分子类群演化出了d。</p>
+  </li>
+  <li>
+    <p><strong>多变量协同网络（A作为必要底物或前置条件）：</strong> 条件d的产生受到多个变量的共同调控。性状A是产生d所必需的结构基础、代谢底物或遗传网络核心节点，但仅有A是不够的。还需要未知的环境变量 $E$ 或其他基因组事件 $X$ 共同作用（即 $A \land X \Rightarrow d$）。这就解释了为什么没有A一定没有d，但有了A也不一定产生d。</p>
+  </li>
+  <li>
+    <p><strong>性状A的趋同演化与多路径实现：</strong> 如果我们将 $d \Rightarrow A$ 视作因果关系，那么d可能是诱发A的具体途径之一。自然界中可能存在多种不同的进化路径（如路径d、路径e、路径f）最终都导致了性状A的产生。因此，具备d的物种必定产生了A，但具备A的物种可能是通过路径e演化而来的，并不包含d。</p>
+  </li>
+  <li>
+    <p><strong>抽样偏差的诊断性质疑：</strong> 在实证研究中，必须对 $P(d \mid \neg A) = 0$ 这一绝对声明保持警惕。这种完美的排他性可能是由于对对照组（不具备A的物种）的测序深度不够或取样偏差造成的。寻找排他性证据时，需要主动扩大进化树上远缘物种的数据集进行搜索，以测试是否真的不存在“既没有A又拥有d”的反例。</p>
+  </li>
+</ol>
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/%E6%AF%94%E8%BE%83%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6" rel="tag"># 比较基因组学</a>
+          
+            
+            <a href="/tag/#/%E6%96%B9%E6%B3%95%E5%AD%A6" rel="tag"># 方法学</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/comparative%20genomics/2026/04/17/Francesco-2026-MBE-%E7%BE%A4%E5%B1%85%E8%A1%8C%E4%B8%BA%E7%9A%84%E5%88%86%E5%AD%90%E8%B6%8B%E5%90%8C-%E6%BC%94%E5%8C%96%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6%E4%B8%AD%E7%9A%84%E7%AE%97%E6%B3%95%E7%A1%AE%E4%BF%A1%E4%B8%8E%E7%BB%9F%E8%AE%A1%E7%9B%B2%E5%8C%BA/" rel="next" title="演化基因组学中的算法确信与统计盲区-审视Heliconiinae蝶类群居行为的趋同推断">
+                <i class="fa fa-chevron-left"></i> 演化基因组学中的算法确信与统计盲区-审视Heliconiinae蝶类群居行为的趋同推断
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/comparative%20genomics/2026/04/16/%E4%BC%BC%E7%84%B6%E6%AF%94%E6%A3%80%E9%AA%8C%E7%9A%84%E5%B1%80%E9%99%90%E4%B8%8E%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%9B%A0%E5%AD%90/" rel="prev" title="似然比检验的局限与贝叶斯因子">
+                似然比检验的局限与贝叶斯因子 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-3"> <a class="nav-link" href="#一-分析条件a预适应与必要条件"> <span class="nav-number">1</span> <span class="nav-text">一、 分析条件A：预适应与必要条件</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#二-分析条件b排他性条件与替代假说"> <span class="nav-number">2</span> <span class="nav-text">二、 分析条件B：排他性条件与替代假说</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#三-分析条件c未知反事实下的推断"> <span class="nav-number">3</span> <span class="nav-text">三、 分析条件C：未知反事实下的推断</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#四-分析条件d充分非必要条件与衍生推断"> <span class="nav-number">4</span> <span class="nav-text">四、 分析条件D：充分非必要条件与衍生推断</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

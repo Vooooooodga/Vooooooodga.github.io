@@ -1,0 +1,1613 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Singularity," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本指南详细说明如何在高性能计算（HPC）集群环境中，通过容器化方式安装和部署软件。以K-mer计数器（KMC）为例，展示从创建专用目录、配置参数、构建容器到最终同步验证的完整流程。适用于需要在多节点环境中保证软件环境一致性的分析任务。">
+<meta name="keywords" content="Singularity">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Container安装">
+<meta property="og:url" content="https://vooooooodga.github.io/unix/2026/03/15/Container%E5%AE%89%E8%A3%85/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="本指南详细说明如何在高性能计算（HPC）集群环境中，通过容器化方式安装和部署软件。以K-mer计数器（KMC）为例，展示从创建专用目录、配置参数、构建容器到最终同步验证的完整流程。适用于需要在多节点环境中保证软件环境一致性的分析任务。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Container安装">
+<meta name="twitter:description" content="本指南详细说明如何在高性能计算（HPC）集群环境中，通过容器化方式安装和部署软件。以K-mer计数器（KMC）为例，展示从创建专用目录、配置参数、构建容器到最终同步验证的完整流程。适用于需要在多节点环境中保证软件环境一致性的分析任务。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>Container安装 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/unix/2026/03/15/Container%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            Container安装
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-03-15T00:49:54+08:00">
+                2026-03-15
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-03-23T17:17:04+08:00">
+                  2026-03-23
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/unix" itemprop="url" rel="index">
+                    <span itemprop="name">unix</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <div id="protect-unix-2026-03-15-container-e5-ae-89-e8-a3-85-form" class="post-protect-form">
+      <p>本页面已设置访问密码，请输入密码查看全文：</p>
+      <input type="password" id="protect-unix-2026-03-15-container-e5-ae-89-e8-a3-85-input" />
+      <button type="button" onclick="window.checkPassword_protect_unix_2026_03_15_container_e5_ae_89_e8_a3_85 && window.checkPassword_protect_unix_2026_03_15_container_e5_ae_89_e8_a3_85()">确认</button>
+      <p id="protect-unix-2026-03-15-container-e5-ae-89-e8-a3-85-message" style="color:red;"></p>
+    </div>
+    <div id="protect-unix-2026-03-15-container-e5-ae-89-e8-a3-85-content" style="display:none;">
+      <blockquote>
+  <p>本指南详细说明如何在高性能计算（HPC）集群环境中，通过容器化方式安装和部署软件。以K-mer计数器（KMC）为例，展示从创建专用目录、配置参数、构建容器到最终同步验证的完整流程。适用于需要在多节点环境中保证软件环境一致性的分析任务。</p>
+</blockquote>
+
+<h2 id="环境与路径准备">环境与路径准备</h2>
+
+<h3 id="进入容器专用节点">进入容器专用节点</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code><span class="c"># 通过集群调度系统或直接登录容器专用节点</span>
+ssh user@container-node
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="创建工作目录">创建工作目录</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code><span class="c"># 创建个人测试目录（示例路径）</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> /mnt/data1/prog1/Container/Test/JiaYuhang
+<span class="nb">cd</span> /mnt/data1/prog1/Container/Test/JiaYuhang
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="获取容器构建工具">获取容器构建工具</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code><span class="c"># 从代码仓库复制容器构建脚本和参数文件（1.5版本）</span>
+<span class="nb">cp</span> /mnt/data1/prog1/Programs/container_maker/1.5/container_maker.sh <span class="nb">.</span>
+<span class="nb">cp</span> /mnt/data1/prog1/Programs/container_maker/1.5/parameter_container_maker.txt <span class="nb">.</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="3-参数文件配置详解">3. 参数文件配置详解</h2>
+
+<h3 id="31-参数说明">3.1 参数说明</h3>
+<p>编辑 <code class="language-plaintext highlighter-rouge">parameter_container_maker.txt</code> 文件，以下是各关键参数的详细解释：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数名</th>
+      <th>说明</th>
+      <th>示例值</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>App_name</strong></td>
+      <td>容器/应用的名称，用于标识</td>
+      <td><code class="language-plaintext highlighter-rouge">genomesurvey</code></td>
+    </tr>
+    <tr>
+      <td><strong>container_dir</strong></td>
+      <td>容器构建的输出目录</td>
+      <td><code class="language-plaintext highlighter-rouge">./</code> （当前目录）</td>
+    </tr>
+    <tr>
+      <td><strong>based_sif</strong></td>
+      <td>基础镜像路径，支持系统名称或.sif文件路径</td>
+      <td><code class="language-plaintext highlighter-rouge">/mnt/data1/prog1/Container/hub/ubuntu/ubuntubase_V1.1</code></td>
+    </tr>
+    <tr>
+      <td><strong>yum_install</strong></td>
+      <td>需要安装的yum/rpm依赖包，逗号分隔</td>
+      <td><code class="language-plaintext highlighter-rouge">wget,gcc,make,git</code></td>
+    </tr>
+    <tr>
+      <td><strong>pip_install</strong></td>
+      <td>Python 2需要安装的pip包，逗号分隔</td>
+      <td><code class="language-plaintext highlighter-rouge">numpy,biopython</code></td>
+    </tr>
+    <tr>
+      <td><strong>pip3_install</strong></td>
+      <td>Python 3需要安装的pip包，逗号分隔</td>
+      <td><code class="language-plaintext highlighter-rouge">numpy,pandas</code></td>
+    </tr>
+    <tr>
+      <td><strong>perl_install_interactive</strong></td>
+      <td>是否交互式安装Perl模块（YES/NO）</td>
+      <td><code class="language-plaintext highlighter-rouge">YES</code></td>
+    </tr>
+    <tr>
+      <td><strong>perl_install</strong></td>
+      <td>需要安装的Perl模块名，逗号分隔</td>
+      <td><code class="language-plaintext highlighter-rouge">Bio::Perl,Statistics::Descriptive</code></td>
+    </tr>
+    <tr>
+      <td><strong>R_install_interactive</strong></td>
+      <td>是否交互式安装R包（YES/NO）</td>
+      <td><code class="language-plaintext highlighter-rouge">YES</code></td>
+    </tr>
+    <tr>
+      <td><strong>files_in_out</strong></td>
+      <td>外部文件复制到容器内的映射，格式：<code class="language-plaintext highlighter-rouge">外部路径:内部路径</code></td>
+      <td><code class="language-plaintext highlighter-rouge">/opt/software:/usr/local/software</code></td>
+    </tr>
+    <tr>
+      <td><strong>login</strong></td>
+      <td>目标同步服务器的IP或主机名</td>
+      <td><code class="language-plaintext highlighter-rouge">110.1.1.22</code></td>
+    </tr>
+    <tr>
+      <td><strong>port</strong></td>
+      <td>同步服务器的SSH端口</td>
+      <td><code class="language-plaintext highlighter-rouge">50000</code></td>
+    </tr>
+    <tr>
+      <td><strong>login_dir</strong></td>
+      <td>同步到目标服务器的目录路径</td>
+      <td><code class="language-plaintext highlighter-rouge">/public23/4_After_Sales_Personal/JiaYuhang</code></td>
+    </tr>
+    <tr>
+      <td><strong>user_id</strong></td>
+      <td>同步使用的用户名</td>
+      <td><code class="language-plaintext highlighter-rouge">ReSeq</code></td>
+    </tr>
+    <tr>
+      <td><strong>development_mode</strong></td>
+      <td><strong>开发者模式（YES/NO）</strong>，YES生成空容器进入交互安装</td>
+      <td><code class="language-plaintext highlighter-rouge">YES</code></td>
+    </tr>
+    <tr>
+      <td><strong>bind</strong></td>
+      <td>开发者模式下，挂载外部路径到容器内</td>
+      <td><code class="language-plaintext highlighter-rouge">/mnt/data1/prog1/Container/Test/JiaYuhang:/mnt</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="kmc安装配置示例">KMC安装配置示例</h3>
+<p>以下是为安装KMC调整后的参数配置：</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29</pre></td><td class="code"><pre class="highlight"><code><span class="c"># KMC容器构建参数</span>
+<span class="nv">App_name</span><span class="o">=</span>kmc_container
+<span class="nv">container_dir</span><span class="o">=</span>./
+<span class="nv">based_sif</span><span class="o">=</span>/mnt/data1/prog1/Container/hub/ubuntu/ubuntubase_V1.1
+<span class="nv">yum_install</span><span class="o">=</span>gcc,gcc-c++,make,zlib-devel
+<span class="nv">pip_install</span><span class="o">=</span>NA
+<span class="nv">pip3_install</span><span class="o">=</span>NA
+<span class="nv">perl_install_interactive</span><span class="o">=</span>NO
+<span class="nv">perl_install</span><span class="o">=</span>NA
+<span class="nv">R_install_interactive</span><span class="o">=</span>NO
+<span class="nv">files_in_out</span><span class="o">=</span>NA
+
+<span class="nv">login</span><span class="o">=</span>110.1.1.22
+<span class="nv">port</span><span class="o">=</span>50000
+<span class="nv">login_dir</span><span class="o">=</span>/public23/4_After_Sales_Personal/JiaYuhang
+<span class="nv">user_id</span><span class="o">=</span>ReSeq
+
+<span class="nv">development_mode</span><span class="o">=</span>YES
+<span class="nb">bind</span><span class="o">=</span>/mnt/data1:/mnt/data1
+
+<span class="c"># 自定义软件安装指令块</span>
+<span class="c"># &gt;&gt; 块开始标记</span>
+<span class="c"># 下载并编译KMC</span>
+wget https://github.com/refresh-bio/KMC/releases/download/v3.2.1/KMC3.2.1.linux.tar.gz <span class="o">&amp;&amp;</span>
+<span class="nb">tar</span> <span class="nt">-zxvf</span> KMC3.2.1.linux.tar.gz <span class="o">&amp;&amp;</span>
+<span class="nb">cd </span>KMC3.2.1.linux <span class="o">&amp;&amp;</span>
+make <span class="o">&amp;&amp;</span>
+<span class="nb">cp </span>bin/<span class="k">*</span> /usr/local/bin/
+<span class="c"># &gt;&gt; 块结束标记</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="分步操作流程">分步操作流程</h2>
+
+<p>因为我在这里执行的时候还不知道可以初始化就能挂载路径，所以重复进行了。</p>
+
+<h3 id="第一次执行开发者模式挂载路径">第一次执行（开发者模式，挂载路径）</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25</pre></td><td class="code"><pre class="highlight"><code><span class="c"># 1. 修改参数文件，确保以下设置：</span>
+<span class="c">#   development_mode=YES</span>
+<span class="c">#   bind=/mnt/data1:/mnt/data1  # 根据实际情况调整</span>
+
+<span class="c"># 2. 执行构建脚本</span>
+bash container_maker.sh
+
+<span class="c"># 3. 脚本会提示进入交互式shell</span>
+<span class="c"># 此时容器已创建并运行，自动进入容器内部终端</span>
+<span class="c"># 检查路径是否正确挂载：</span>
+<span class="nb">ls</span> /mnt/data1  <span class="c"># 应该能看到外部目录内容</span>
+
+<span class="c"># 4. 在容器内手动安装所需软件（示例安装KMC）：</span>
+<span class="nb">cd</span> /tmp
+wget https://github.com/refresh-bio/KMC/releases/download/v3.2.1/KMC3.2.1.linux.tar.gz
+<span class="nb">tar</span> <span class="nt">-zxvf</span> KMC3.2.1.linux.tar.gz
+<span class="nb">cd </span>KMC3.2.1.linux
+make
+<span class="nb">cp </span>bin/<span class="k">*</span> /usr/local/bin/
+
+<span class="c"># 5. 测试安装</span>
+kmc <span class="nt">--version</span>
+
+<span class="c"># 6. 退出容器（这不会终止容器，只是退出shell）</span>
+<span class="nb">exit</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="第二次执行封装sif并同步">第二次执行（封装sif并同步）</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16</pre></td><td class="code"><pre class="highlight"><code><span class="c"># 1. 修改参数文件，更改以下设置：</span>
+<span class="c">#   development_mode=NO  # 关闭开发者模式</span>
+<span class="c">#   确保自定义安装指令已正确填写在文件中</span>
+
+<span class="c"># 2. 再次执行构建脚本（不要覆盖沙盒）</span>
+bash container_maker.sh
+
+<span class="c"># 3. 脚本将：</span>
+<span class="c">#   - 基于已存在的容器沙盒进行封装</span>
+<span class="c">#   - 生成最终的.sif镜像文件</span>
+<span class="c">#   - 自动同步到指定的远程节点</span>
+<span class="c">#   - 显示同步状态和完成信息</span>
+
+<span class="c"># 4. 注意观察日志，确认：</span>
+<span class="c">#   - "Creating final SIF image..." 成功</span>
+<span class="c">#   - "Synchronizing to remote node..." 成功</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="验证与测试">验证与测试</h2>
+
+<h3 id="在目标节点验证">在目标节点验证</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20</pre></td><td class="code"><pre class="highlight"><code><span class="c"># 登录到同步的目标节点（或其他分析节点）</span>
+ssh <span class="nt">-p</span> 50000 ReSeq@110.1.1.22
+
+<span class="c"># 进入同步目录</span>
+<span class="nb">cd</span> /public23/4_After_Sales_Personal/JiaYuhang
+
+<span class="c"># 查看同步的sif文件</span>
+<span class="nb">ls</span> <span class="nt">-lh</span> <span class="k">*</span>.sif
+
+<span class="c"># 测试容器运行</span>
+<span class="c"># 方法1：直接运行命令</span>
+singularity <span class="nb">exec </span>kmc_container.sif kmc <span class="nt">--version</span>
+
+<span class="c"># 方法2：进入容器交互模式测试</span>
+singularity shell kmc_container.sif
+kmc <span class="nt">--help</span>
+<span class="nb">exit</span>
+
+<span class="c"># 方法3：运行完整分析流程测试</span>
+singularity <span class="nb">exec </span>kmc_container.sif kmc <span class="nt">-k31</span> <span class="nt">-ci1</span> /path/to/reads/<span class="k">*</span>.fastq output /tmp
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="最佳实践建议">最佳实践建议</h2>
+
+<ol>
+  <li><strong>路径管理</strong>：
+    <ul>
+      <li>使用绝对路径而非相对路径</li>
+      <li>统一容器内部外部路径结构</li>
+      <li>为不同软件创建专用目录</li>
+    </ul>
+  </li>
+  <li><strong>版本控制</strong>：
+    <ul>
+      <li>为每个软件版本创建独立的容器</li>
+      <li>在容器名称中包含版本号：<code class="language-plaintext highlighter-rouge">kmc_v3.2.1.sif</code></li>
+      <li>保留构建参数文件备查</li>
+    </ul>
+  </li>
+  <li><strong>资源优化</strong>：
+    <ul>
+      <li>仅在必要时使用开发者模式</li>
+      <li>清理容器内临时文件后再封装</li>
+    </ul>
+  </li>
+  <li><strong>文档记录</strong>：
+    <ul>
+      <li>记录每个容器的构建日期和用途</li>
+      <li>保存安装软件的具体版本信息</li>
+      <li>记录遇到的特殊依赖和解决方法</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="附录">附录</h2>
+
+<h3 id="快速参考命令">快速参考命令</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11</pre></td><td class="code"><pre class="highlight"><code><span class="c"># 查看容器信息</span>
+singularity inspect kmc_container.sif
+
+<span class="c"># 导出容器内容</span>
+singularity run <span class="nt">--bind</span> /host/path:/container/path kmc_container.sif
+
+<span class="c"># 清理临时文件</span>
+singularity cache clean
+
+<span class="c"># 列出所有容器</span>
+<span class="nb">ls</span> /mnt/data1/prog1/Container/hub/ubuntu/<span class="k">*</span>.sif
+</code></pre></td></tr></tbody></table></div></div>
+
+
+    </div>
+    <script>
+      (function() {
+        var CORRECT = "LC2434";
+        var formId = "protect-unix-2026-03-15-container-e5-ae-89-e8-a3-85-form";
+        var contentId = "protect-unix-2026-03-15-container-e5-ae-89-e8-a3-85-content";
+        var inputId = "protect-unix-2026-03-15-container-e5-ae-89-e8-a3-85-input";
+        var msgId = "protect-unix-2026-03-15-container-e5-ae-89-e8-a3-85-message";
+
+        function check() {
+          var input = document.getElementById(inputId);
+          var msg = document.getElementById(msgId);
+          if (!input) return;
+          if (input.value === CORRECT) {
+            var form = document.getElementById(formId);
+            var content = document.getElementById(contentId);
+            if (form) form.style.display = "none";
+            if (content) content.style.display = "block";
+          } else {
+            if (msg) msg.textContent = "密码错误，请重试。";
+          }
+        }
+
+        window.checkPassword_protect_unix_2026_03_15_container_e5_ae_89_e8_a3_85 = check;
+      })();
+    </script>
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/Singularity" rel="tag"># Singularity</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/wgs/2026/03/19/GenomeSurvey/" rel="next" title="Genome Survey">
+                <i class="fa fa-chevron-left"></i> Genome Survey
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/wgs/2026/03/13/%E9%81%97%E4%BC%A0%E8%82%B2%E7%A7%8D%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E8%B7%AF%E7%BA%BF%E9%80%89%E6%8B%A9%E6%8C%87%E5%8D%97/" rel="prev" title="遗传育种项目技术路线选择指南">
+                遗传育种项目技术路线选择指南 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#环境与路径准备"> <span class="nav-number">1</span> <span class="nav-text">环境与路径准备</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#进入容器专用节点"> <span class="nav-number">1.1</span> <span class="nav-text">进入容器专用节点</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#创建工作目录"> <span class="nav-number">1.2</span> <span class="nav-text">创建工作目录</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#获取容器构建工具"> <span class="nav-number">1.3</span> <span class="nav-text">获取容器构建工具</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#3-参数文件配置详解"> <span class="nav-number">2</span> <span class="nav-text">3. 参数文件配置详解</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#31-参数说明"> <span class="nav-number">2.1</span> <span class="nav-text">3.1 参数说明</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#kmc安装配置示例"> <span class="nav-number">2.2</span> <span class="nav-text">KMC安装配置示例</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#分步操作流程"> <span class="nav-number">3</span> <span class="nav-text">分步操作流程</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#第一次执行开发者模式挂载路径"> <span class="nav-number">3.1</span> <span class="nav-text">第一次执行（开发者模式，挂载路径）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#第二次执行封装sif并同步"> <span class="nav-number">3.2</span> <span class="nav-text">第二次执行（封装sif并同步）</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#验证与测试"> <span class="nav-number">4</span> <span class="nav-text">验证与测试</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#在目标节点验证"> <span class="nav-number">4.1</span> <span class="nav-text">在目标节点验证</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#最佳实践建议"> <span class="nav-number">5</span> <span class="nav-text">最佳实践建议</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#附录"> <span class="nav-number">6</span> <span class="nav-text">附录</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#快速参考命令"> <span class="nav-number">6.1</span> <span class="nav-text">快速参考命令</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

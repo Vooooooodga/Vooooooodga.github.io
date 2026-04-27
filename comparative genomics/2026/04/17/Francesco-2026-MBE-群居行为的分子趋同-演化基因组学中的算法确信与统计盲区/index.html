@@ -1,0 +1,1404 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="逻辑," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在这项研究中，作者们借助多维度的基因组学扫描，为我们细致地梳理出了一系列可能与蝶类群居行为演化相关的候选分子印记。">
+<meta name="keywords" content="逻辑">
+<meta property="og:type" content="article">
+<meta property="og:title" content="演化基因组学中的算法确信与统计盲区-审视Heliconiinae蝶类群居行为的趋同推断">
+<meta property="og:url" content="https://vooooooodga.github.io/comparative%20genomics/2026/04/17/Francesco-2026-MBE-%E7%BE%A4%E5%B1%85%E8%A1%8C%E4%B8%BA%E7%9A%84%E5%88%86%E5%AD%90%E8%B6%8B%E5%90%8C-%E6%BC%94%E5%8C%96%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6%E4%B8%AD%E7%9A%84%E7%AE%97%E6%B3%95%E7%A1%AE%E4%BF%A1%E4%B8%8E%E7%BB%9F%E8%AE%A1%E7%9B%B2%E5%8C%BA/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="在这项研究中，作者们借助多维度的基因组学扫描，为我们细致地梳理出了一系列可能与蝶类群居行为演化相关的候选分子印记。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="演化基因组学中的算法确信与统计盲区-审视Heliconiinae蝶类群居行为的趋同推断">
+<meta name="twitter:description" content="在这项研究中，作者们借助多维度的基因组学扫描，为我们细致地梳理出了一系列可能与蝶类群居行为演化相关的候选分子印记。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>演化基因组学中的算法确信与统计盲区-审视Heliconiinae蝶类群居行为的趋同推断 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/comparative%20genomics/2026/04/17/Francesco-2026-MBE-%E7%BE%A4%E5%B1%85%E8%A1%8C%E4%B8%BA%E7%9A%84%E5%88%86%E5%AD%90%E8%B6%8B%E5%90%8C-%E6%BC%94%E5%8C%96%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6%E4%B8%AD%E7%9A%84%E7%AE%97%E6%B3%95%E7%A1%AE%E4%BF%A1%E4%B8%8E%E7%BB%9F%E8%AE%A1%E7%9B%B2%E5%8C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            演化基因组学中的算法确信与统计盲区-审视Heliconiinae蝶类群居行为的趋同推断
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-04-17T17:49:58+08:00">
+                2026-04-17
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-04-27T15:35:54+08:00">
+                  2026-04-27
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Comparative%20genomics" itemprop="url" rel="index">
+                    <span itemprop="name">Comparative genomics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <blockquote>
+  <p>在这项研究中，作者们借助多维度的基因组学扫描，为我们细致地梳理出了一系列可能与蝶类群居行为演化相关的候选分子印记。</p>
+</blockquote>
+
+<h4 id="研究核心与推断逻辑概述">研究核心与推断逻辑概述</h4>
+
+<p>该研究旨在评估 Heliconiinae 蝶类的蛋白质编码基因（PCGs）演化模式，以期发现分子层面的变化与群居表型之间的统计关联。为了区分由于共同环境压力导致的真实适应演化与纯粹的系统发育噪音，作者对 3,393 个单拷贝直系同源基因群采用了多层次的计算分析。</p>
+
+<p>整体逻辑框架结合了极大似然估计与贝叶斯推断，其核心工作流如下：首先利用 BUSTED-PH 和 RELAX 算法，基于同义突变与非同义突变的绝对比值（$\omega$），检验群居与独居谱系之间是否存在选择体制的定向转移（阵发正选择）或选择强度的标量偏离（放松或强化）。为了进一步确认这种宏观选择压力的改变是否落实为确切的分子状态趋同，研究引入了 CSUBST 算法，评估观测到的非同义趋同比率与同义趋同比率的相对值（$\omega_C = dN_C / dS_C$）。
+在针对非编码区保守元件（CNEEs）的分析中，研究者则转向 PhyloAcc-GT 贝叶斯模型，通过计算双重贝叶斯因子（Bayes Factor），评估目标谱系演化加速的排他条件。</p>
+
+<p>该套研究方案有效地纠正了序列级别的突变噪音。然而，在判定特定基因的趋同演化是否确由“群居表型”驱动时，当前的逻辑链条仍缺少一层关键的统计控制。CSUBST 建立的同义突变基准仅能排除分子事件背景层面的假阳性信号，但在表型关联层面，研究缺少置换检验（Permutation test）来评估随机指定前景支时的预期检出数量。</p>
+
+<hr />
+
+<h4 id="研究方法与计算策略细节解析">研究方法与计算策略细节解析</h4>
+
+<p>作者的核心假定是： 如果一个基因在 BUSTED-PH/RELAX 中表现出与群居谱系对齐的选择体制差异，并且在 CSUBST 中表现出 ωC&gt;1，那么该基因的演化就是由群居表型驱动的趋同演化。</p>
+
+<p><strong>1. 宏观选择压力转移检验（BUSTED-PH 与 RELAX）</strong></p>
+
+<p>这两种基于密码子替换模型的方法，依赖频率学派的似然比检验（LRT）来进行推断。</p>
+
+<ul>
+  <li>
+    <p><strong>BUSTED-PH：</strong> 评估指定的测试分支（群居谱系）是否发生阵发正选择。。 假设基因序列上的位点属于不同的 ω 类别（通常分为 ω1≤ω2≤1 且 ω3&gt;1）。它通过极大似然法拟合模型，计算在测试分支上被分配到 ω 3&gt;1 类别的位点比例（Proportion）是否显著大于零。如果似然比检验（LRT）显著，结论是：“该基因在测试分支上的某个或某些未知位点经历了阵发性正选择”。它只报告基因级别的 P-value，不识别也不输出具体是哪一个氨基酸位点发生了突变。作者在处理中运用了严格的布尔逻辑进行过滤：如果某个基因在独居谱系（背景分支）中也表现出受选择信号，则将其剔除。这种处理旨在寻找群居表型与正选择之间的充要条件关联。</p>
+  </li>
+  <li>
+    <p><strong>RELAX：</strong> 进一步评估测试分支相对参考分支其整体选择压力是经历了松弛（Relaxation）还是强化（Intensification）。它评估是纯化选择变弱了（放松选择，k&lt;1），还是正选择/纯化选择变强了（强化选择，k&gt;1）。如果 LRT 显著，结论是：“该基因在测试分支上整体的选择约束力发生了改变”。它评估的是整条序列的统计分布形状变化，与具体位点无关。</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>这两种方法建立的是基因选择约束强度与宏观物种分类的初步关联，并不涉及具体发生突变的氨基酸位点定位。</p>
+</blockquote>
+
+<p><strong>2. 基于内部同义突变基线的确切状态趋同检验（CSUBST）</strong></p>
+
+<p>为了探清氨基酸级别的分子状态趋同，或者说，作者为了控制假阳性，引入了一种内置基线对照（Internal baseline control）。
+研究采用了 CSUBST 算法。该方法不仅要求选择压力改变，还要求不同物种在特定基因位点发生相同氨基酸替换。
+其计算指标为非同义趋同与期望值的比率（$dN_C$）以及同义趋同比率（$dS_C$）。
+算法将同义突变（假定为中立演化）作为分子事件的基准指标：$\omega_C = dN_C / dS_C$。
+CSUBST 的核心逻辑是使用同义突变作为内部参照系： 
+它计算观测到的非同义趋同与<strong>期望非同义趋同</strong>的比值（$dN_C$），同时计算观测到的同义趋同与<strong>期望同义趋同</strong>的比值（$dS_C$）。
+这种设计的防线在于： 
+如果一个基因在前景支上表现出氨基酸突变，纯粹是因为这些分支刚好经历了群体瓶颈效应（导致整体突变率上升）或者存在系统发育的拓扑学噪音，那么中性的同义突变（$dS_C$）理应以同等比例上升。此时，ωC的值将维持在 1 左右。 
+只有当非同义趋同的增长显著剥离了同义趋同的增长背景时（ωC&gt;1），CSUBST 才将其判定为自适应的分子趋同。</p>
+
+<p><strong>3. 应对短序列推断的贝叶斯控制框架（PhyloAcc-GT）</strong></p>
+
+<p>由于非编码保守元件（CNEEs）序列极短且缺乏同义突变作为内生基准，传统的极大似然点估计容易产生严重过拟合。作者采用 PhyloAcc-GT 建立隐马尔可夫模型，利用贝叶斯推断对各分支状态（保守、中性、加速）进行马尔可夫链蒙特卡洛（MCMC）采样。</p>
+
+<p>其推断逻辑通过比对三个模型完成：</p>
+
+<ul>
+  <li>
+    <p><strong>M0（零模型）：</strong> 全树绝对保守。</p>
+  </li>
+  <li>
+    <p><strong>M1（测试模型）：</strong> 仅在具有群居表型的分支发生加速。</p>
+  </li>
+  <li>
+    <p><strong>M2（全模型）：</strong> 允许树上任意分支加速。</p>
+  </li>
+</ul>
+
+<p>在此框架下，Bayes Factor 1 ($M1$ vs $M0$) 确认目标谱系确实存在演化加速；而 Bayes Factor 2 ($M1$ vs $M2$) 则执行核心的诊断检验。如果 $BF2 &gt; 1$，说明限定只在群居分支加速的解释效力优于无限制的全局随机加速，从而逼近目标特征与演化加速的排他关联。作者同时要求加速事件至少分布于三个独立单系群（Arity $\ge 3$），以物理方式阻断历史偶然事件造成的系统发育偏差。</p>
+
+<hr />
+
+<h4 id="统计推断批判基线控制层级的错位">统计推断批判：基线控制层级的错位</h4>
+
+<p>该研究的逻辑假设是：若某基因在 BUSTED-PH/RELAX 分析中显现与群居谱系对齐的选择差异，并在 CSUBST 中达到 $\omega_C &gt; 1$，即可判定该基因由群居表型驱动发生趋同演化。这一推断未能客观区分两类截然不同的零假设（Null Hypotheses）。</p>
+
+<p><strong>1. CSUBST 控制的范畴：分子事件层面的测序噪音</strong></p>
+
+<p>CSUBST 的内置基线对照是为了判断观测到的氨基酸替换是自然选择所致，还是随机巧合。当多个独立谱系由于突变偏倚（如 GC 含量改变）、极快演化速率导致的随机碰撞，或祖先多态保留而表现出相同突变时，作为中立基准的 $dS_C$ 会与 $dN_C$ 维持同等比例的升高，使 $\omega_C$ 维持在 1 左右。因此，$\omega_C &gt; 1$ 客观上抵消了底层突变率波动带来的平行改变，证明非同义突变的富集突破了中性突变基准。</p>
+
+<p><strong>2. 方法局限与推断缺失：表型关联层面的背景期望</strong></p>
+
+<p>即便 CSUBST 能够准确剥离分子级别的系统噪音并筛选出真实发生适应趋同的基因，它也无法确证这些演化事件完全是由“群居行为”带来的选择压力所致。</p>
+
+<p>如果在进化树上随机抽取 3 个或更多独居物种建立“伪前景支”进行运算，由于基因多效作用（Pleiotropy）、未观测的共享环境协变量（如相似的气候条件、海拔高度、病原微生物负荷），或是纯粹的统计极值分布特征，这组随机物种群中依然会检出一定规模表现为 $\omega_C &gt; 1$ 的基因。</p>
+
+<p>由于 CSUBST 计算的基线（$dS_C$）仅作用于单一基因在给定树拓扑上的演化状态验证，它与整个基因组规模下随机关联产生的阳性信号期望值无关。缺少基于随机重抽样的置换检验，研究者便无法知晓由“群居表型”筛选出的趋同基因数量，是否显著高于随机指定谱系组合所带来的背景数量。</p>
+
+<hr />
+
+<h4 id="总结">总结</h4>
+
+<p>该文献在探究群居行为相关的分子演化机制时，组合运用了频率学派模型与贝叶斯双重因子比较，并在位点状态分析中引入了 CSUBST 算法以同义突变剥离系统发育的底层随机噪音。这套分析流程在判定序列级别的定向与加速演化方面具备严谨的数理逻辑。然而，在将找到的分子特征直接归因于特定表型时，研究采用了简单的“逻辑与”操作（满足特定算法阈值的交集）。由于未利用置换检验建立表型关联在随机状态下的零分布基准，当前结论中依然混杂着由基因多效作用和未知环境协变量带来的假阳性风险。建立针对目标宏观特征的随机抽样比较控制，是验证该假说不可或缺的统计环节。</p>
+
+<h4 id="reference">Reference</h4>
+<p><a href="https://doi.org/10.1093/molbev/msaf179">Convergent Molecular Evolution Associated With Repeated Transitions to Gregarious Larval Behavior in Heliconiini</a></p>
+
+<p><a href="https://www.biorxiv.org/content/10.64898/2026.01.29.702612v1">BUSTED-PH: Isolating the genomic signatures of convergent phenotypes</a></p>
+
+<p><a href="https://doi.org/10.1093/molbev/msu400">RELAX: Detecting Relaxed Selection in a Phylogenetic Framework</a></p>
+
+<p><a href="https://doi.org/10.1093/molbev/msad195">PhyloAcc-GT: A Bayesian Method for Inferring Patterns of Substitution Rate Shifts on Targeted Lineages Accounting for Gene Tree Discordance</a></p>
+
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/%E9%80%BB%E8%BE%91" rel="tag"># 逻辑</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/comparative%20genomics/2026/04/17/BUSTED-PH/" rel="next" title="BUSTED-PH">
+                <i class="fa fa-chevron-left"></i> BUSTED-PH
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/comparative%20genomics/2026/04/16/%E5%91%BD%E9%A2%98%E4%B8%8E%E6%9D%A1%E4%BB%B6/" rel="prev" title="命题与条件">
+                命题与条件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-4"> <a class="nav-link" href="#研究核心与推断逻辑概述"> <span class="nav-number">1</span> <span class="nav-text">研究核心与推断逻辑概述</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#研究方法与计算策略细节解析"> <span class="nav-number">2</span> <span class="nav-text">研究方法与计算策略细节解析</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#统计推断批判基线控制层级的错位"> <span class="nav-number">3</span> <span class="nav-text">统计推断批判：基线控制层级的错位</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#总结"> <span class="nav-number">4</span> <span class="nav-text">总结</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#reference"> <span class="nav-number">5</span> <span class="nav-text">Reference</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

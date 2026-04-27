@@ -1,0 +1,1541 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Coreset selection,总览," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="摘要：核心种质（Core Set）是“从海量种质中挑出一个小而精、却能在遗传/表型空间上代表整体”的子集，本质是一个在给定成本约束下的多目标优化问题：在代表性（coverage）、内部多样性（diversity）以及业务结构约束（PC/MC 等）之间做权衡。本篇重点说明核心种质筛选的技术背景。">
+<meta name="keywords" content="Coreset selection, 总览">
+<meta property="og:type" content="article">
+<meta property="og:title" content="核心种质筛选-01总览">
+<meta property="og:url" content="https://vooooooodga.github.io/wgs/2026/03/12/%E6%A0%B8%E5%BF%83%E7%A7%8D%E8%B4%A8%E7%AD%9B%E9%80%89-01%E6%80%BB%E8%A7%88/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="摘要：核心种质（Core Set）是“从海量种质中挑出一个小而精、却能在遗传/表型空间上代表整体”的子集，本质是一个在给定成本约束下的多目标优化问题：在代表性（coverage）、内部多样性（diversity）以及业务结构约束（PC/MC 等）之间做权衡。本篇重点说明核心种质筛选的技术背景。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="/assets/images/repsentative_sampling.png">
+<meta property="og:image" content="/assets/images/llustration-of-the-coreset-construction-for-example-data-set-a-b-c-show-two.png">
+<meta property="og:image" content="/assets/images/ScreenShot_2026-03-16_152852_153.png">
+<meta property="og:image" content="/assets/images/ScreenShot_2026-03-16_154818_573.png">
+<meta property="og:image" content="https://www.novogene.cn/TemplatePage/novogene/uploads/20240902.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="核心种质筛选-01总览">
+<meta name="twitter:description" content="摘要：核心种质（Core Set）是“从海量种质中挑出一个小而精、却能在遗传/表型空间上代表整体”的子集，本质是一个在给定成本约束下的多目标优化问题：在代表性（coverage）、内部多样性（diversity）以及业务结构约束（PC/MC 等）之间做权衡。本篇重点说明核心种质筛选的技术背景。">
+<meta name="twitter:image" content="/assets/images/repsentative_sampling.png">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>核心种质筛选-01总览 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/wgs/2026/03/12/%E6%A0%B8%E5%BF%83%E7%A7%8D%E8%B4%A8%E7%AD%9B%E9%80%89-01%E6%80%BB%E8%A7%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            核心种质筛选-01总览
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-03-12T17:34:13+08:00">
+                2026-03-12
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-03-23T17:17:04+08:00">
+                  2026-03-23
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/WGS" itemprop="url" rel="index">
+                    <span itemprop="name">WGS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <div id="protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-01-e6-80-bb-e8-a7-88-form" class="post-protect-form">
+      <p>本页面已设置访问密码，请输入密码查看全文：</p>
+      <input type="password" id="protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-01-e6-80-bb-e8-a7-88-input" />
+      <button type="button" onclick="window.checkPassword_protect_wgs_2026_03_12_e6_a0_b8_e5_bf_83_e7_a7_8d_e8_b4_a8_e7_ad_9b_e9_80_89_01_e6_80_bb_e8_a7_88 && window.checkPassword_protect_wgs_2026_03_12_e6_a0_b8_e5_bf_83_e7_a7_8d_e8_b4_a8_e7_ad_9b_e9_80_89_01_e6_80_bb_e8_a7_88()">确认</button>
+      <p id="protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-01-e6-80-bb-e8-a7-88-message" style="color:red;"></p>
+    </div>
+    <div id="protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-01-e6-80-bb-e8-a7-88-content" style="display:none;">
+      <blockquote>
+  <p>摘要：核心种质（Core Set）是“从海量种质中挑出一个小而精、却能在遗传/表型空间上代表整体”的子集，本质是一个在给定成本约束下的多目标优化问题：在<strong>代表性（coverage）</strong>、<strong>内部多样性（diversity）</strong>以及<strong>业务结构约束（PC/MC 等）</strong>之间做权衡。本篇重点说明核心种质筛选的技术背景。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="这个分析要解决什么问题">这个分析要解决什么问题</h3>
+
+<p>在实际项目里，我们经常会遇到这些场景：</p>
+
+<ul>
+  <li>种质库里有成百上千甚至上万份材料，但下游实验、深度测序或田间试验的预算只能覆盖几百份。</li>
+  <li>客户希望我们帮忙“先筛一批代表性强的材料”，后续这批材料会被频繁使用（功能研究、育种亲本、指纹图谱等）。</li>
+  <li>原始基因型数据质量参差不齐，如果不先梳理、压缩成一个结构清晰的小集合，后续分析很难稳定复用。</li>
+</ul>
+
+<p>所以，核心种质筛选要解决的核心矛盾是：</p>
+
+<ul>
+  <li><strong>样本太多</strong>：不可能对所有材料都做高成本、长周期的深度研究；</li>
+  <li><strong>又不能随便删</strong>：乱删会丢掉关键变异、重要亚群或稀有等位基因，后面想补救就很难。</li>
+</ul>
+
+<p>核心种质筛选做的事情，用一句不那么严谨的话说就是：<br />
+<strong>“在不把‘重要信息’丢掉的前提下，把样本数压到一个可操作的规模”。</strong></p>
+
+<p><img src="/assets/images/repsentative_sampling.png" alt="" />
+Source: <a href="https://www.blitzllama.com/blog/sampling-errors">https://www.blitzllama.com/blog/sampling-errors</a></p>
+
+<hr />
+
+<h3 id="从数据视角看核心种质筛选到底在干嘛">从数据视角看：核心种质筛选到底在干嘛</h3>
+
+<p>可以把这件事拆成三个直观的问题：</p>
+<ul>
+  <li><strong>问题 1：数据长什么样？</strong>
+    <ul>
+      <li>通常我们会拿到 VCF/PLINK 或 SNP 矩阵，再配上样本的品种类型、地理来源、育种阶段、表型等信息。</li>
+      <li>第一步是做常规 QC：缺失率过滤、深度/HWE 检查、去掉明显异常样本，得到一个“稳定可用”的基因型矩阵。</li>
+    </ul>
+  </li>
+  <li><strong>问题 2：群体是什么结构？</strong>
+    <ul>
+      <li>用 PCA、亲缘关系矩阵、<code class="language-plaintext highlighter-rouge">ADMIXTURE</code> 等手段，看一下群体有没有明显的亚群、地理结构或批次效应。</li>
+      <li>这一步的结果，会直接影响后面“每个亚群要保留多少材料”这类决策。</li>
+    </ul>
+  </li>
+  <li><strong>问题 3：在这个基础上挑一批“既能代表整体，又不太冗余”的样本</strong>
+    <ul>
+      <li>直观理解：
+        <ul>
+          <li>不希望核心集中所有材料都挤在 PCA 图的某一个角落；</li>
+          <li>也不希望核心集内部高度重复（几乎是同一个基因型反复出现）。</li>
+        </ul>
+      </li>
+      <li>为了达到这个效果，我们会用一些量化指标和专门的软件（如 Core Hunter 3）来帮忙做选择，而不是“肉眼挑样本”。
+<img src="/assets/images/llustration-of-the-coreset-construction-for-example-data-set-a-b-c-show-two.png" alt="" />
+Source: <a href="https://www.researchgate.net/publication/265147365_Scalable_Training_of_Mixture_Models_via_Coresets?_tp=eyJjb250ZXh0Ijp7ImZpcnN0UGFnZSI6Il9kaXJlY3QiLCJwYWdlIjoiX2RpcmVjdCJ9fQ">Dan Feldman et al. 2011</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>先把基因型矩阵整理干净 + 看清楚群体长相，再在这个空间里“画圈选代表”</strong>。</p>
+
+<hr />
+
+<h3 id="一些必须知道的技术概念简化版">一些必须知道的技术概念（简化版）</h3>
+
+<ul>
+  <li><strong>种质资源（Germplasm Resources）</strong>：携带可遗传信息、可用于研究与育种的生物材料集合。</li>
+  <li><strong>核心种质（Core Set）</strong>：从原始种质集合中抽取的一批“代表材料”，希望在更小规模下尽量保留总体的遗传/表型多样性。</li>
+  <li><strong>代表性（Representativeness/Coverage）</strong>：
+    <ul>
+      <li>核心集合对原始集合的覆盖程度；强调“原始集合里的每个个体/类型，都能被核心集合中的某个个体较好地代表”。</li>
+      <li>常见做法是看“全集中每个样本，到核心集中最近样本的距离”的平均值（如A-NE）。</li>
+      <li>距离越小，说明“全集里的样本，都能在核心集中找到一个挺像的邻居”，代表性就越好。</li>
+    </ul>
+  </li>
+  <li><strong>内部多样性（Internal Diversity）</strong>：
+    <ul>
+      <li>核心集合内部个体彼此差异的程度。</li>
+      <li>希望核心集内部的样本彼此不要太相似，避免浪费配额。</li>
+      <li>实际上会用一些多样性指标（等位基因数目、稀有等位基因比例、多样性指数等）来衡量。</li>
+    </ul>
+  </li>
+  <li><strong>结构约束（让结果“可解释、可交付”）</strong>：
+    <ul>
+      <li>很多项目会有类似“每个地理区域/品种类型都要有代表”的需求。</li>
+      <li>技术上可以通过设定“各亚群的大致占比”和“每个亚群至少要选几个”来实现（很多工具里用 PC/MC 这类术语表达）。</li>
+    </ul>
+  </li>
+  <li><strong>DNA 指纹图谱（DNA Fingerprint Map）</strong>：使用分子标记（常见为 SNP/SSR）为样本群体建立的“身份标识”，用于鉴定、保护与追溯。</li>
+</ul>
+
+<p><strong>选核心集时，不是只看一个指标，而是在“代表性、内部多样性和结构均衡”三件事之间做平衡。</strong></p>
+
+<hr />
+
+<h3 id="一个典型的技术流程">一个典型的技术流程</h3>
+
+<ol>
+  <li><strong>整理输入数据</strong>
+    <ul>
+      <li>收集样本列表、元数据（地理来源、品种类型、育种阶段、表型等）；</li>
+      <li>准备好对应的 VCF/PLINK/基因型矩阵和参考基因组信息。</li>
+    </ul>
+  </li>
+  <li><strong>做一轮必要的 QC 和结构分析</strong>
+    <ul>
+      <li>用 <code class="language-plaintext highlighter-rouge">vcftools</code> / <code class="language-plaintext highlighter-rouge">PLINK</code> 过滤掉质量明显不合格的样本和位点；</li>
+      <li>用 PCA/亲缘关系/<code class="language-plaintext highlighter-rouge">ADMIXTURE</code> 看清楚群体结构和亚群分布。</li>
+    </ul>
+  </li>
+  <li><strong>根据甲方要求确定“选谁”的基本原则</strong>
+    <ul>
+      <li>允许的核心集规模大致区间（比如先看 5%、10%、20%）；</li>
+      <li>哪些亚群/地区/类型必须被覆盖，哪些可以适度压缩；</li>
+      <li>更看重“代表全集”还是“多样性最大化”，或者两者都要兼顾。</li>
+    </ul>
+  </li>
+  <li><strong>用专业工具跑出一个或一组候选核心集</strong>
+    <ul>
+      <li>常见工具包括 <code class="language-plaintext highlighter-rouge">Core Hunter 3</code>、<code class="language-plaintext highlighter-rouge">GenoCore</code> 等；</li>
+      <li>尝试不同规模、不同参数组合，<strong>看指标和结构表现的变化趋势</strong>。
+<img src="/assets/images/ScreenShot_2026-03-16_152852_153.png" alt="" /></li>
+    </ul>
+  </li>
+  <li><strong>对候选核心集做“体检”和可视化</strong>
+    <ul>
+      <li>对比核心集 vs 全集的多样性、代表性、结构覆盖情况；</li>
+      <li>用 PCA/树图/聚类图等方式，直观展示“有没有缩小样本但保留整体结构”。
+<img src="/assets/images/ScreenShot_2026-03-16_154818_573.png" alt="" /></li>
+    </ul>
+  </li>
+  <li><strong>承接下游分析</strong>
+    <ul>
+      <li>固定住核心集名单、关键参数、工具版本和随机种子；</li>
+      <li>为后续 GWAS/QTL/GS、DNA 指纹图谱开发、资源库优化等分析打一个统一的数据基础。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>以 <strong>DNA 指纹图谱</strong> 为例，可以粗略理解为：</p>
+<ul>
+  <li>从Coreset筛选出一小批<strong>质量高、分布均匀、多态性强、区分度高</strong>的代表性位点标记；</li>
+  <li>这些标记组合形成“指纹”，可以在同种内稳定地区分不同材料，且不受环境影响，适合用于品种鉴定、种子纯度检测、资源多样性研究和品种产权保护等场景。</li>
+</ul>
+
+<hr />
+
+<h3 id="核心种质筛选一般怎么被使用">核心种质筛选一般怎么被使用</h3>
+
+<p>在实际项目里，核心种质筛选很少是“做完就结束”的一次性分析，更常见的是作为<strong>一块可复用的基础组件</strong>，长期服务于不同的下游应用。大致可以分成四类典型用法：</p>
+
+<ol>
+  <li><strong>面向科研与功能解析的“前置压缩”</strong>
+    <ul>
+      <li>先从大群体中筛出一批代表性材料，再在这批材料上做 GWAS/QTL/GS、转录组/代谢组、候选基因精细解析等。</li>
+      <li>目的：在可控样本规模内提升统计功效和发现效率，让后续复杂分析既“算得动”，又更容易解释与复现。</li>
+    </ul>
+  </li>
+  <li><strong>面向资源管理的“去冗余”</strong>
+    <ul>
+      <li>帮资源库管理方识别高度冗余的材料，以及“必须保留”的多样性代表。</li>
+      <li>核心集可以被视为当前阶段的“物种/群体基准面板”，用于指导入库、扩繁、更新和淘汰决策，降低长期维护成本。</li>
+    </ul>
+  </li>
+  <li><strong>面向品种鉴定与审定流程的“ID”</strong>
+    <ul>
+      <li>许多指纹图谱或 SNP/INDEL 位点面板项目，会优先在核心集中设计和评估标记，再将同一套位点扩展到更大规模的样本。</li>
+      <li>典型应用包括：品种真实身份鉴定、侵权与纠纷取证、种子/种苗质量追踪（二维码/条码化交付）等。</li>
+    </ul>
+  </li>
+  <li><strong>面向保护与长期监测的“核心监测群体”</strong>
+    <ul>
+      <li>对濒危物种、小群体或重要育种材料，核心集可以作为“重点跟踪的一批个体”，用于监测遗传多样性随时间的变化。</li>
+      <li>在保护遗传学/保护基因组学和泛基因组研究中，也常用核心集来覆盖主要结构单倍型/变异，为后续扩展测序和结构变异分析提供代表性样本框架。</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="友商产品情况">友商产品情况</h3>
+
+<p>友商通常以“群体遗传分析报告 + 指纹图谱标准产品 + 位点开发/育种决策支持”的组合交付：</p>
+
+<ul>
+  <li>
+    <p><strong>综合型服务商</strong>：强调从下机数据质控、变异检测、群体结构分析的一站式。 如美吉生物或诺禾致源将其作为群体遗传业务的其中一项服务。
+<img src="https://www.novogene.cn/TemplatePage/novogene/uploads/20240902.png" alt="" /></p>
+  </li>
+  <li>
+    <p><strong>垂直领域厂商</strong>：更强调把核心种质与功能基因组/育种决策（亲本选择、材料分层）绑定在一起。</p>
+  </li>
+</ul>
+
+    </div>
+    <script>
+      (function() {
+        var CORRECT = "LC2434";
+        var formId = "protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-01-e6-80-bb-e8-a7-88-form";
+        var contentId = "protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-01-e6-80-bb-e8-a7-88-content";
+        var inputId = "protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-01-e6-80-bb-e8-a7-88-input";
+        var msgId = "protect-wgs-2026-03-12-e6-a0-b8-e5-bf-83-e7-a7-8d-e8-b4-a8-e7-ad-9b-e9-80-89-01-e6-80-bb-e8-a7-88-message";
+
+        function check() {
+          var input = document.getElementById(inputId);
+          var msg = document.getElementById(msgId);
+          if (!input) return;
+          if (input.value === CORRECT) {
+            var form = document.getElementById(formId);
+            var content = document.getElementById(contentId);
+            if (form) form.style.display = "none";
+            if (content) content.style.display = "block";
+          } else {
+            if (msg) msg.textContent = "密码错误，请重试。";
+          }
+        }
+
+        window.checkPassword_protect_wgs_2026_03_12_e6_a0_b8_e5_bf_83_e7_a7_8d_e8_b4_a8_e7_ad_9b_e9_80_89_01_e6_80_bb_e8_a7_88 = check;
+      })();
+    </script>
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/Coreset%20selection" rel="tag"># Coreset selection</a>
+          
+            
+            <a href="/tag/#/%E6%80%BB%E8%A7%88" rel="tag"># 总览</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/wgs/2026/03/12/%E6%A0%B8%E5%BF%83%E7%A7%8D%E8%B4%A8%E7%AD%9B%E9%80%89-02%E5%8F%AF%E8%A1%8C%E6%80%A7%E8%AF%84%E4%BC%B0/" rel="next" title="核心种质筛选-02可行性评估">
+                <i class="fa fa-chevron-left"></i> 核心种质筛选-02可行性评估
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/wgs/2026/03/11/GWAS-%E6%96%87%E4%BB%B6-%E7%BB%93%E6%9E%9C%E8%A7%A3%E8%AF%BB/" rel="prev" title="GWAS关联分析-文件、常见结果与可视化解读">
+                GWAS关联分析-文件、常见结果与可视化解读 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-3"> <a class="nav-link" href="#这个分析要解决什么问题"> <span class="nav-number">1</span> <span class="nav-text">这个分析要解决什么问题</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#从数据视角看核心种质筛选到底在干嘛"> <span class="nav-number">2</span> <span class="nav-text">从数据视角看：核心种质筛选到底在干嘛</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#一些必须知道的技术概念简化版"> <span class="nav-number">3</span> <span class="nav-text">一些必须知道的技术概念（简化版）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#一个典型的技术流程"> <span class="nav-number">4</span> <span class="nav-text">一个典型的技术流程</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#核心种质筛选一般怎么被使用"> <span class="nav-number">5</span> <span class="nav-text">核心种质筛选一般怎么被使用</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#友商产品情况"> <span class="nav-number">6</span> <span class="nav-text">友商产品情况</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

@@ -1,0 +1,1433 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="原理,软件,算法," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简单来说，这个软件的原理是：两个位点之间的“连锁不平衡”程度，就像是记录它们在过去某段时间里共同历史的“快照”。通过分析不同距离的位点对的LD程度，我们就能像拼拼图一样，重建出不同历史时期的有效群体大小。">
+<meta name="keywords" content="原理, 软件, 算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SNeP估算Ne历史曲线的原理">
+<meta property="og:url" content="https://vooooooodga.github.io/conserved%20genomics/2026/03/24/SNeP%E4%BC%B0%E7%AE%97Ne%E5%8E%86%E5%8F%B2%E6%9B%B2%E7%BA%BF%E7%9A%84%E5%8E%9F%E7%90%86/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="简单来说，这个软件的原理是：两个位点之间的“连锁不平衡”程度，就像是记录它们在过去某段时间里共同历史的“快照”。通过分析不同距离的位点对的LD程度，我们就能像拼拼图一样，重建出不同历史时期的有效群体大小。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SNeP估算Ne历史曲线的原理">
+<meta name="twitter:description" content="简单来说，这个软件的原理是：两个位点之间的“连锁不平衡”程度，就像是记录它们在过去某段时间里共同历史的“快照”。通过分析不同距离的位点对的LD程度，我们就能像拼拼图一样，重建出不同历史时期的有效群体大小。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>SNeP估算Ne历史曲线的原理 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/conserved%20genomics/2026/03/24/SNeP%E4%BC%B0%E7%AE%97Ne%E5%8E%86%E5%8F%B2%E6%9B%B2%E7%BA%BF%E7%9A%84%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            SNeP估算Ne历史曲线的原理
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-03-24T17:54:30+08:00">
+                2026-03-24
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-03-25T10:16:46+08:00">
+                  2026-03-25
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Conserved%20genomics" itemprop="url" rel="index">
+                    <span itemprop="name">Conserved genomics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <blockquote>
+  <p>简单来说，<strong>这个软件的原理是：两个位点之间的“连锁不平衡”程度，就像是记录它们在过去某段时间里共同历史的“快照”。通过分析不同距离的位点对的LD程度，我们就能像拼拼图一样，重建出不同历史时期的有效群体大小。</strong></p>
+</blockquote>
+
+<h3 id="为什么ld能反映ne">为什么LD能反映Ne？</h3>
+
+<h4 id="核心概念辨析ld的本质是什么-不是物理连锁而是统计关联">核心概念辨析：LD的本质是什么？—— 不是物理连锁，而是统计关联</h4>
+<ul>
+  <li><strong>物理连锁</strong> 是一个<strong>固定的、结构性的</strong>概念。它指两个位点在<strong>同一条染色体上</strong>，且物理位置靠得很近。只要它们没被重组事件分开，它们就始终“连锁”在一起。这是染色体的一种物理状态。</li>
+  <li><strong>连锁不平衡（LD）</strong> 是一个<strong>动态的、统计性的</strong>概念。它衡量的是两个位点的<strong>等位基因</strong>在种群中<strong>共同出现</strong>的非随机性。它描述的是基因频率分布的模式。简单说，就是两个在染色体上位置相近的遗传位点（比如两个SNP），它们的等位基因不是随机组合的。例如，如果位点A的“A”等位基因总是和位点B的“T”等位基因一起出现，而很少和“C”一起出现，那么这两个位点就处于LD状态。
+<strong>关键区别</strong>：即使两个位点紧密连锁（物理上很近），如果它们的等位基因是随机组合的（比如A总是50%概率和T在一起，50%和C在一起），那么它们的LD值也为0，即处于“连锁平衡”状态。</li>
+</ul>
+
+<h4 id="ld如何产生和衰减">LD如何产生和衰减？</h4>
+<ul>
+  <li><strong>产生</strong>：一次新的突变产生时，它必然与它所在那条染色体上周围的所有位点处于<strong>完全LD</strong>状态。</li>
+  <li><strong>衰减</strong>：主要靠两个过程：
+    <ul>
+      <li><strong>重组</strong>：在减数分裂中，染色体之间的交叉互换（重组）会打断位点之间的联系。<strong>两个位点物理距离越远，发生重组把它们分开的概率就越大。</strong></li>
+      <li><strong>遗传漂变</strong>：在小群体中，等位基因频率的随机波动也会改变它们之间的关联模式。<strong>群体越小（Ne越小），遗传漂变的力量越强。</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="关键公式hill-1981与ld期望值er">关键公式（Hill, 1981）与“LD期望值（E(r²)）”</h4>
+<p>理论推导出一个简洁的关系：在一个理想的随机交配群体中，两位点间的LD期望值（通常用 <strong>r²</strong> 衡量）与<strong>过去的有效群体大小（Ne）</strong> 和<strong>重组率（c）</strong> 相关：
+<code class="language-plaintext highlighter-rouge">E(r²) ≈ 1 / (1 + 4Ne * c)</code>
+这里 <code class="language-plaintext highlighter-rouge">c</code> 就是两位点间的重组率，与物理距离成正比。</p>
+
+<p><strong>如何理解 “LD期望值（E(r²)）”？</strong>
+需要澄清的是，<strong>LD期望值（E(r²)）不等于两个位点“物理联锁”的概率。</strong> <code class="language-plaintext highlighter-rouge">E(r²)</code> 中的 <code class="language-plaintext highlighter-rouge">E</code> 代表 <strong>期望</strong>，这是一个概率论和统计学概念。它指的是：在一个符合特定理论假设（如随机交配、无选择、恒定群体大小等）的理想群体中，<strong>对于给定重组率 <code class="language-plaintext highlighter-rouge">c</code> 的两个位点，我们预期能观察到的平均关联强度（r²值）是多少。</strong>
+可以这样类比：</p>
+<ul>
+  <li><strong>抛一次硬币</strong>：得到正面或反面，这是<strong>一次观测结果</strong>。</li>
+  <li><strong>抛无穷多次硬币</strong>：正面向上的<strong>比例期望值</strong>是50%。这个“50%”就是期望值。</li>
+  <li>同理，在真实数据中，我们<strong>观测到</strong>的是成千上万对特定距离的SNP的具体r²值（这些值有高有低）。而 <code class="language-plaintext highlighter-rouge">E(r²)</code> 是理论告诉我们，在理想情况下，这些r²值<strong>应该围绕哪个平均水平上下波动</strong>。
+<strong>所以，<code class="language-plaintext highlighter-rouge">E(r²)</code> 是关于“等位基因关联强度”的理论预期值，而不是“物理联锁的概率”。</strong></li>
+</ul>
+
+<p><strong>为什么 <code class="language-plaintext highlighter-rouge">E(r²)</code> 与 <code class="language-plaintext highlighter-rouge">Ne</code> 和 <code class="language-plaintext highlighter-rouge">c</code> 有关？—— 一个动力学比喻</strong>
+想象一个住满人的（Ne）大广场，每个人手上都拿着两根长度不同的绳子（代表染色体上两个位点）：</p>
+<ul>
+  <li><strong>短绳子（c小）</strong>： 两根绳子离得很近，很容易被绑在一起或保持在一起。</li>
+  <li><strong>长绳子（c大）</strong>： 两根绳子离得远，很容易被分开。</li>
+  <li><strong>广场上的人（Ne）</strong>： 人越多，环境越复杂，随机走动时绳子被意外缠住或解开的方式就越多。
+<code class="language-plaintext highlighter-rouge">E(r²)</code> 衡量的是，<strong>在广场上随机找两个人，观察他们手上那两根绳子被“绑在一起”的比例的期望值</strong>。</li>
+  <li><strong>如果广场人很少（Ne小）</strong>：随机性（漂变）很强。可能纯粹因为运气，大部分人的短绳子都刚好被同一种方式绑住了，那么你观察到的“绑在一起”的比例（r²）就会<strong>很高</strong>。<code class="language-plaintext highlighter-rouge">E(r²)</code> 理论值也就高。</li>
+  <li><strong>如果广场人很多（Ne大）</strong>：随机性很弱。绳子是否绑在一起主要看它们本身的特性（距离c）。长绳子很难绑在一起，所以观察到的比例（r²）就<strong>很低</strong>。<code class="language-plaintext highlighter-rouge">E(r²)</code> 理论值也就低。</li>
+  <li><strong>重组率c</strong>： 它直接决定了绳子“被解开”的难易程度。c越大（绳子越长/距离越远），天生就越容易被解开，所以<code class="language-plaintext highlighter-rouge">E(r²)</code>的期望值就越低。</li>
+</ul>
+
+<p>通过以上的动力学过程，公式 <code class="language-plaintext highlighter-rouge">E(r²) ≈ 1 / (1 + 4Ne * c)</code> 进行了数学上的精炼表达。它的直觉是：如果历史上Ne很大，遗传漂变弱，打破LD主要靠重组。那么，对于同样距离（c值相同）的位点对，它们在过去经历的重组次数相对固定，所以LD水平（r²）会<strong>较低</strong>。反之，如果历史上Ne很小，遗传漂变很强，它会更快地改变等位基因组合，使得LD水平（r²）<strong>较高</strong>。</p>
+
+<h3 id="snep如何操作--从数据到历史">SNeP如何操作 —— 从数据到历史</h3>
+
+<p>软件的核心算法就是基于上述理论，但需要处理真实数据的复杂性。过程如下：</p>
+
+<ol>
+  <li><strong>按距离分组</strong>：
+    <ul>
+      <li>软件计算全基因组上<strong>数百万对SNP</strong>之间的物理距离和LD值（r²）。</li>
+      <li>它不会一对一对地看，而是将所有SNP对按<strong>物理距离（比如0-0.1 cM, 0.1-0.2 cM…）分组</strong>。每个距离区间代表一个<strong>特定历史时期</strong>。
+        <ul>
+          <li><strong>为什么？</strong> 因为距离≈重组率≈时间。两个位点越近，在过去发生重组从而断开联系所需的世代数就越<strong>多</strong>（即它们反映的是<strong>更近</strong>的历史）。位点越远，重组更容易发生，它们反映的是<strong>更久远</strong>的历史。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>为每个距离区间计算一个“平均r²”</strong>：
+    <ul>
+      <li>对于每个距离区间（比如代表过去~50世代的区间），软件计算该区间内所有SNP对的平均r²值。这个“平均r²”就被视为该历史时期LD水平的一个估计。</li>
+    </ul>
+  </li>
+  <li><strong>代入公式，反向求解Ne</strong>：
+    <ul>
+      <li>对于第 <code class="language-plaintext highlighter-rouge">i</code> 个距离区间，软件知道：
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">r²_i</code>（观察到的平均LD）</li>
+          <li><code class="language-plaintext highlighter-rouge">c_i</code>（该区间中心点对应的重组率，由物理距离通过映射函数换算而来）</li>
+        </ul>
+      </li>
+      <li>将 <code class="language-plaintext highlighter-rouge">r²_i</code> 和 <code class="language-plaintext highlighter-rouge">c_i</code> 代入修改后的理论公式（经过多种校正，见下文），就可以反解出 <strong>Ne(t)</strong>。这里的 <code class="language-plaintext highlighter-rouge">t</code> 就是这个距离区间所代表的<strong>历史世代数</strong>，通常用 <code class="language-plaintext highlighter-rouge">t = 1/(2c)</code> 来近似估计（意思是大约从 <code class="language-plaintext highlighter-rouge">t</code> 代以前开始，重组有显著机会打断这两个位点）。</li>
+    </ul>
+  </li>
+  <li><strong>绘制Ne随时间变化的曲线</strong>：
+    <ul>
+      <li>对每一个距离区间重复上述步骤，我们就得到了一系列点：<code class="language-plaintext highlighter-rouge">(世代数t, 有效群体大小Ne(t))</code>。</li>
+      <li>将这些点连接起来，就形成了一条 <strong>“Ne历史变化曲线”</strong>，X轴是回溯的世代数，Y轴是该时期的估计有效群体大小。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="重要的校正snep的改进之处">重要的校正（SNeP的改进之处）</h3>
+
+<p>原始理论公式很简洁，但现实数据有偏差，所以SNeP引入了关键校正：</p>
+
+<ol>
+  <li><strong>样本量校正</strong>：用小样本计算的r²会系统性偏高。软件使用 <code class="language-plaintext highlighter-rouge">r²_adjusted = r²_observed - 1/(2 * 样本数)</code> 进行校正。</li>
+  <li><strong>突变校正</strong>：古老的突变会降低观察到的LD。软件引入了一个参数α来校正。</li>
+  <li><strong>单倍型相位不确定性校正</strong>：当基因型数据未被定相（即不知道等位基因在同一条染色体上的排列）时，LD估计会偏低。软件对此进行补偿。</li>
+  <li><strong>灵活的分箱策略</strong>：确保每个时间区间内有足够多的SNP对，使平均r²更稳定。</li>
+</ol>
+
+<h3 id="总结与直觉比喻">总结与直觉比喻</h3>
+
+<p>整个过程好比是：</p>
+<ul>
+  <li><strong>基因组</strong>是一本厚重的、由无数个字母（SNP）写成的历史书。</li>
+  <li><strong>LD（r²）</strong> 是测量<strong>相邻两个字母</strong>在抄写传承过程中，保持原样的“关联强度”。</li>
+  <li><strong>距离</strong>决定了你读的是书的哪一章：读<strong>紧密相邻</strong>的字母（距离近），你看到的是<strong>最近几页</strong>（近期历史）的抄写错误和关联；读<strong>隔得很远</strong>的字母（距离远），你看到的是<strong>很久以前章节</strong>（远古历史）的关联。</li>
+  <li><strong>SNeP</strong> 就像一个聪明的统计学家，它<strong>测量整本书中所有不同距离的字母对之间的平均关联强度</strong>，然后利用一个已知的物理定律（重组和漂变如何影响关联），反推出<strong>在书写这本书的不同历史时期，抄写员团队的大小（Ne）是如何变化的</strong>。</li>
+</ul>
+
+<p><strong>对于SNeP软件而言</strong>：</p>
+<ol>
+  <li><strong>它观测</strong>：全基因组上数百万对SNP在<strong>当前群体</strong>中的实际LD水平（观测到的r²）。</li>
+  <li><strong>它利用理论</strong>：这个理论（公式）描述了<strong>在过去特定历史条件下</strong>（由Ne和c决定），LD的<strong>期望水平</strong> <code class="language-plaintext highlighter-rouge">E(r²)</code> 应该是多少。</li>
+  <li><strong>它反向求解</strong>：既然我现在知道了结果（观测r²），也知道了距离c，我就能倒推出导致这个结果的<strong>历史原因之一——过去的有效群体大小Ne</strong>。
+<strong>简而言之</strong>：LD期望值 <code class="language-plaintext highlighter-rouge">E(r²)</code> 不是物理概率，而是一个<strong>将“群体历史参数（Ne）”与“可观测的遗传统计量（r²）”连接起来的理论桥梁</strong>。SNeP正是走过了这座桥，从我们今日所见的数据，回溯了种群的历史。</li>
+</ol>
+
+<p><strong>最重要的一点是</strong>：这个方法估算的<strong>远古Ne（曲线的左端）和近期Ne（曲线的右端）误差较大</strong>，但整个曲线的<strong>变化趋势</strong>（是上升、下降还是瓶颈）通常是可靠且有极高生物学意义的。这正是该工具的强大之处。</p>
+
+<p>Ref：https://www.frontiersin.org/journals/genetics/articles/10.3389/fgene.2015.00109/full</p>
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/%E5%8E%9F%E7%90%86" rel="tag"># 原理</a>
+          
+            
+            <a href="/tag/#/%E8%BD%AF%E4%BB%B6" rel="tag"># 软件</a>
+          
+            
+            <a href="/tag/#/%E7%AE%97%E6%B3%95" rel="tag"># 算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/wgs/2026/04/01/dup%E7%8E%87%E5%BC%82%E5%B8%B8/" rel="next" title="甜瓜重测序项目高重复率异常排查与定量归因报告">
+                <i class="fa fa-chevron-left"></i> 甜瓜重测序项目高重复率异常排查与定量归因报告
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/wgs/2026/03/19/GenomeSurvey/" rel="prev" title="Genome Survey">
+                Genome Survey <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-3"> <a class="nav-link" href="#为什么ld能反映ne"> <span class="nav-number">1</span> <span class="nav-text">为什么LD能反映Ne？</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#核心概念辨析ld的本质是什么-不是物理连锁而是统计关联"> <span class="nav-number">1.1</span> <span class="nav-text">核心概念辨析：LD的本质是什么？—— 不是物理连锁，而是统计关联</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#ld如何产生和衰减"> <span class="nav-number">1.2</span> <span class="nav-text">LD如何产生和衰减？</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#关键公式hill-1981与ld期望值er"> <span class="nav-number">1.3</span> <span class="nav-text">关键公式（Hill, 1981）与“LD期望值（E(r²)）”</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#snep如何操作--从数据到历史"> <span class="nav-number">2</span> <span class="nav-text">SNeP如何操作 —— 从数据到历史</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#重要的校正snep的改进之处"> <span class="nav-number">3</span> <span class="nav-text">重要的校正（SNeP的改进之处）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#总结与直觉比喻"> <span class="nav-number">4</span> <span class="nav-text">总结与直觉比喻</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

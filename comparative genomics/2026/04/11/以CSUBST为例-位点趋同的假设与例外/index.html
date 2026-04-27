@@ -1,0 +1,1531 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="CSUBST,趋同进化,方法学,troubleshooting," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="CSUBST（及其同类方法）虽然强大，但存在一系列重要的模型假设、数据依赖和场景限制。理解这些局限性，对于正确使用和合理解读其结果至关重要。">
+<meta name="keywords" content="CSUBST, 趋同进化, 方法学, troubleshooting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="以CSUBST为例：位点趋同的假设与例外">
+<meta property="og:url" content="https://vooooooodga.github.io/comparative%20genomics/2026/04/11/%E4%BB%A5CSUBST%E4%B8%BA%E4%BE%8B-%E4%BD%8D%E7%82%B9%E8%B6%8B%E5%90%8C%E7%9A%84%E5%81%87%E8%AE%BE%E4%B8%8E%E4%BE%8B%E5%A4%96/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="CSUBST（及其同类方法）虽然强大，但存在一系列重要的模型假设、数据依赖和场景限制。理解这些局限性，对于正确使用和合理解读其结果至关重要。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="以CSUBST为例：位点趋同的假设与例外">
+<meta name="twitter:description" content="CSUBST（及其同类方法）虽然强大，但存在一系列重要的模型假设、数据依赖和场景限制。理解这些局限性，对于正确使用和合理解读其结果至关重要。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>以CSUBST为例：位点趋同的假设与例外 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/comparative%20genomics/2026/04/11/%E4%BB%A5CSUBST%E4%B8%BA%E4%BE%8B-%E4%BD%8D%E7%82%B9%E8%B6%8B%E5%90%8C%E7%9A%84%E5%81%87%E8%AE%BE%E4%B8%8E%E4%BE%8B%E5%A4%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            以CSUBST为例：位点趋同的假设与例外
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-04-11T19:39:46+08:00">
+                2026-04-11
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-04-17T13:37:30+08:00">
+                  2026-04-17
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Comparative%20genomics" itemprop="url" rel="index">
+                    <span itemprop="name">Comparative genomics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <p>CSUBST（及其同类方法）虽然强大，但存在一系列重要的<strong>模型假设、数据依赖和场景限制</strong>。理解这些局限性，对于正确使用和合理解读其结果至关重要。</p>
+
+<h2 id="框架总览主要局限性适用范围及影响因素">框架总览：主要局限性、适用范围及影响因素</h2>
+
+<h3 id="核心模型假设的局限性">核心模型假设的局限性</h3>
+
+<ol>
+  <li><strong>「同义突变绝对中性」假设的脆弱性</strong>
+    <ul>
+      <li><strong>问题</strong>：模型的校准基础是同义突变作为完美的中性「标尺」。但大量研究表明，同义突变<strong>并非完全中性</strong>。它们可能受到<strong>密码子使用偏好</strong>、<strong>mRNA稳定性</strong>、<strong>剪接调控</strong>或<strong>翻译效率</strong>等选择压力的影响。</li>
+      <li><strong>影响</strong>：如果同义突变在目标谱系中也受到了选择（无论是正向还是净化选择），那么分母 <code class="language-plaintext highlighter-rouge">(Obs_Syn / Exp_Syn)</code> 就不再是「1」，而是偏离的。这会直接扭曲 ωc 值，可能导致：
+        <ul>
+          <li><strong>假阳性</strong>：如果同义突变受到<strong>净化选择</strong>（观察值 &lt; 期望值），分母变小，即使分子正常，ωc 也会被<strong>人为抬高</strong>。</li>
+          <li><strong>假阴性</strong>：如果同义突变受到<strong>正向选择</strong>（观察值 &gt; 期望值），分母变大，可能掩盖真实的非同义趋同信号。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>「独立进化」与「单一替代」假设</strong>
+    <ul>
+      <li><strong>问题</strong>：模型通常假设趋同事件是<strong>独立的</strong>，且每个位点仅发生<strong>一次</strong>趋同替代。但在长分支上，同一个位点可能经历多次突变（包括逆转），最终「偶然」呈现出趋同状态。模型可能高估了这种「简单趋同」事件的中性概率。</li>
+      <li><strong>影响</strong>：在亲缘关系<strong>较远</strong>的物种比较中（长分支），会<strong>系统性高估</strong>中性趋同的期望值，从而导致<strong>检测效力下降</strong>（更难发现真正的选择信号）。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="数据与输入依赖的局限性">数据与输入依赖的局限性</h3>
+
+<ol>
+  <li><strong>对系统发育树和分支长度极度敏感</strong>
+    <ul>
+      <li><strong>问题</strong>：期望值的计算完全依赖于输入的物种<strong>系统发育树拓扑结构</strong>和<strong>分支长度</strong>（代表进化时间）。如果树不正确或分支长度不准，期望值的计算基础就错了。</li>
+      <li><strong>影响</strong>：这是最大的误差来源之一。特别是在分析<strong>快速辐射演化</strong>的类群时，物种树本身存在不确定性（不完全谱系分选），会导致计算结果极不可靠。</li>
+    </ul>
+  </li>
+  <li><strong>需要准确的序列比对与同源性判断</strong>
+    <ul>
+      <li><strong>问题</strong>：方法的前提是能准确识别出<strong>真正的直系同源位点</strong>。如果序列比对存在错误（特别是在非编码区），或将平行同源基因误判为直系同源，所谓的「趋同位点」根本就是无效的。</li>
+      <li><strong>影响</strong>：直接导致<strong>假阳性</strong>。垃圾进，垃圾出。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="生物学场景的适用范围限制">生物学场景的适用范围限制</h3>
+
+<ol>
+  <li><strong>仅适用于「位点相同替代」型趋同</strong>
+    <ul>
+      <li><strong>问题</strong>：CSUBST 只能检测在<strong>精确的相同氨基酸位点</strong>上发生的趋同替代。它完全<strong>无法检测</strong>其他可能更普遍的趋同机制，例如：
+        <ul>
+          <li><strong>不同位点</strong>产生相同功能。</li>
+          <li><strong>整个基因或调控元件的进化速率</strong>发生趋同性改变（RERconverge的领域）。</li>
+          <li><strong>调控元件的模块化重组</strong>（phyloConverge的领域）。</li>
+          <li>pathway或者GRN水平的趋同。</li>
+        </ul>
+      </li>
+      <li><strong>影响</strong>：对于由<strong>复杂性状</strong>或<strong>基因调控网络</strong>变化驱动的表型趋同，CSUBST的检测能力<strong>非常有限</strong>，可能只揭示了冰山一角。</li>
+    </ul>
+  </li>
+  <li><strong>统计功效受限于谱系数与表型分布</strong>
+    <ul>
+      <li><strong>问题</strong>：方法的统计效力高度依赖于<strong>具有目标表型的独立谱系数量</strong>和<strong>趋同事件的绝对数量</strong>。</li>
+      <li><strong>影响</strong>：
+        <ul>
+          <li><strong>案例稀少时</strong>：如果只有一个或两个独立起源（如蝙蝠与鲸豚的回声定位），即使有真实趋同，统计上也很难达到显著（样本量太小）。</li>
+          <li><strong>近期趋同时</strong>：如果表型是近期才独立演化的，积累的替代变化很少，信号太弱，难以检测。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="深入讨论同义突变作为标尺的例外">深入讨论：同义突变作为「标尺」的例外</h2>
+
+<p>在蛋白质编码区内，同义突变的「近中性」假设通常被认为是相对稳健的，而模型的简化假设也是出于必要性。但现实生物学总是更复杂。下面逐一拆解。</p>
+
+<h3 id="同义突变在编码区内真的不受选择吗">同义突变在编码区内，真的不受选择吗？</h3>
+
+<p>即使在明确的编码区物理限制下，同义突变仍可能通过以下几种机制受到<strong>非中性选择</strong>，从而影响模型校准：</p>
+
+<ol>
+  <li><strong>密码子使用偏好</strong>
+    <ul>
+      <li><strong>机制</strong>：不同生物体、甚至同一生物体的不同基因，对编码同一氨基酸的多个「同义密码子」有强烈的使用偏好。最优密码子通常与更丰富的tRNA配对，能实现<strong>更快、更准确的翻译</strong>。</li>
+      <li><strong>影响</strong>：如果一个趋同谱系（如两种哺乳动物）共享了相同的密码子优化方向（例如，向高表达基因的偏好密码子趋同），那么在同义位点就会观察到<strong>趋同性的净化选择</strong>（清除非最优密码子）或<strong>正向选择</strong>（向最优密码子转变）。这会使 <code class="language-plaintext highlighter-rouge">Obs_Syn / Exp_Syn</code> 显著偏离1，扭曲 ωc。</li>
+    </ul>
+  </li>
+  <li><strong>mRNA二级结构与稳定性</strong>
+    <ul>
+      <li><strong>机制</strong>：同义突变可以改变mRNA的局部二级结构（如茎环），影响其<strong>稳定性、核输出效率和翻译起始效率</strong>。</li>
+      <li><strong>影响</strong>：如果某种mRNA结构对特定细胞环境（如低温、高氧化应激）有利，那么趋同谱系可能在该基因的同义位点发生趋同突变，以优化此结构。这同样是一种适应性趋同。</li>
+    </ul>
+  </li>
+  <li><strong>剪接调控</strong>
+    <ul>
+      <li><strong>机制</strong>：外显子-内含子边界附近的同义突变，可能破坏或创建<strong>剪接增强子/沉默子</strong>序列，导致可变剪接模式的改变。</li>
+      <li><strong>影响</strong>：如果特定的剪接异构体在趋同表型中具有功能优势，驱动其产生的同义突变就会受到选择。这完全超出了「编码氨基酸」的范畴。</li>
+    </ul>
+  </li>
+  <li><strong>共翻译折叠与翻译速率</strong>
+    <ul>
+      <li><strong>机制</strong>：某些同义密码子会引起核糖体<strong>暂停</strong>，从而影响蛋白质<strong>共翻译折叠</strong>的正确性。最优的翻译节奏有助于形成正确的三维结构。</li>
+      <li><strong>影响</strong>：在需要精确折叠的蛋白质（如酶、结构蛋白）中，可能发生同义位点的趋同，以优化翻译动力学。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="如何应对同义标尺可能失效">如何应对同义标尺可能失效</h3>
+
+<p>审慎的研究者会在分析前或分析后检查：</p>
+
+<ul>
+  <li><strong>密码子使用偏好的强度</strong>：计算目标基因或基因组在相关谱系中的<strong>有效密码子使用数</strong>或<strong>密码子适应指数</strong>。如果偏好性很强，则需对同义突变的「中性标尺」角色持怀疑态度。</li>
+  <li><strong>功能基因组学证据</strong>：如果发现一组基因在非同义位点显示趋同信号，应检查它们的同义突变模式是否也异常（如 <code class="language-plaintext highlighter-rouge">Obs_Syn / Exp_Syn</code> 系统性偏离1）。如果是，则需要更保守地解读结果。</li>
+</ul>
+
+<h2 id="深入讨论何时应怀疑独立进化单一替代假设">深入讨论：何时应怀疑「独立进化、单一替代」假设</h2>
+
+<p>当出现以下<strong>生物信息学迹象或进化情景</strong>时，就必须警惕简化假设可能已失效：</p>
+
+<h3 id="需要警惕的五类迹象">需要警惕的五类迹象</h3>
+
+<ol>
+  <li><strong>迹象一：信号集中于「突变热点」或「超变位点」</strong>
+    <ul>
+      <li><strong>表现</strong>：检测到的显著趋同位点，高度集中于已知的<strong>CpG二核苷酸位点</strong>（易发生C→T转换）或具有特定序列背景（如甲基化区域）的位点。</li>
+      <li><strong>推理</strong>：这表明观察到的趋同，很可能只是该位点<strong>极高的本底突变率</strong>导致其在多个谱系中独立、反复突变的结果，而非适应性选择。这本质上是<strong>将趋同性的「原因」误判为适应性，而其实只是突变偏好的副产物</strong>。</li>
+    </ul>
+  </li>
+  <li><strong>迹象二：趋同谱系间存在长分支</strong>
+    <ul>
+      <li><strong>表现</strong>：显示趋同信号的物种对，在系统发育树上<strong>亲缘关系很远</strong>（即连接它们的分支很长）。</li>
+      <li><strong>推理</strong>：在漫长的时间里，同一个氨基酸位点可能经历了<strong>多次替换</strong>（A→B→A→C…），最终状态只是漫长随机游走的偶然结果。更复杂的是，可能出现「<strong>长分支吸引</strong>」现象，系统发育重建本身可能已出错，使趋同判断失去基础。</li>
+    </ul>
+  </li>
+  <li><strong>迹象三：趋同性状本身是「弱约束」或「退化」性状</strong>
+    <ul>
+      <li><strong>表现</strong>：研究的表型是某种功能的<strong>丧失或减弱</strong>，例如地下动物的视觉退化、寄生生物代谢途径的丢失。</li>
+      <li><strong>推理</strong>：这通常对应着进化<strong>约束的放松</strong>（净化选择压力减弱）。在这种情况下，许多位点可能变得近乎中性，允许随机突变积累。多个谱系在同一个位点积累相同突变，可能只是因为该位点在功能丧失后<strong>突变率增高且不受惩罚</strong>，而不是正向选择驱动。</li>
+    </ul>
+  </li>
+  <li><strong>迹象四：基因或位点处于强烈的持续选择压力下</strong>
+    <ul>
+      <li><strong>表现</strong>：目标基因是已知的<strong>宿主-病原体军备竞赛</strong>基因（如免疫相关基因、病毒受体），或处于强烈的<strong>环境选择压力</strong>下（如抗毒素基因）。</li>
+      <li><strong>推理</strong>：这些位点可能处于<strong>反复的「选择-漂变-再选择」循环</strong>中。观察到的「趋同」状态，可能是该位点在两个谱系中<strong>各自经历了多次适应性替换后，恰好收敛于同一氨基酸</strong>，而非一次性独立事件。</li>
+    </ul>
+  </li>
+  <li><strong>迹象五：系统发育信号矛盾或位点特异性速率差异极大</strong>
+    <ul>
+      <li><strong>表现</strong>：使用不同的进化模型或数据分区时，该位点所属的基因树拓扑<strong>剧烈变动</strong>；或者该位点的进化速率<strong>显著高于或低于基因平均水平</strong>。</li>
+      <li><strong>推理</strong>：这提示该位点的进化历史极其复杂，可能涉及<strong>非同寻常的选择压力、功能约束的改变或甚至基因转换事件</strong>，简单的独立单次替代模型无法描述。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="如何应对假设可能失效">如何应对假设可能失效</h3>
+
+<p>当出现上述迹象时，应采取以下策略：</p>
+
+<ol>
+  <li><strong>模型检验与对比</strong>：使用更复杂的、允许<strong>位点特异性速率变化</strong>或<strong>多次替换</strong>的模型重新分析，看信号是否依然稳健。</li>
+  <li><strong>模拟研究</strong>：进行<strong>协方差模拟</strong>，在已知的中性进化或特定选择场景下，评估您的方法产生假阳性信号的频率。</li>
+  <li><strong>寻求一致性</strong>：不依赖单一方法。如果CSUBST检测到的趋同位点，也能被<strong>基于群体的选择扫描</strong>（如PAML的位点模型）或<strong>功能实验</strong>（如定点突变验证功能影响）所支持，那么其可信度将大大增加。</li>
+  <li><strong>聚焦生物学合理性</strong>：最终，最强大的证据来自生物学逻辑：该趋同位点是否位于<strong>蛋白质的关键功能域</strong>？其物化性质的改变是否<strong>与表型适应有联系</strong>？</li>
+</ol>
+
+<h2 id="影响因素速查表">影响因素速查表</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">影响因素</th>
+      <th style="text-align: left">可能导致的后果</th>
+      <th style="text-align: left">应对或检查思路</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>1. 同义突变非中性</strong></td>
+      <td style="text-align: left">ωc 值系统性地扭曲（假阳性/假阴性）</td>
+      <td style="text-align: left">检查目标谱系是否存在强烈的密码子使用偏好；使用更稳健的模型（如考虑突变频谱的模型）。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>2. 系统发育树误差</strong></td>
+      <td style="text-align: left">中性期望值计算错误，统计推断失效</td>
+      <td style="text-align: left">使用高质量、多方法支持的物种树；进行敏感性分析（换不同的树看结果是否稳定）。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>3. 长分支干扰</strong></td>
+      <td style="text-align: left">高估中性趋同概率，检测效力降低</td>
+      <td style="text-align: left">谨慎解释长分支物种间的趋同信号；结合其他证据（如功能实验）。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>4. 性状复杂性</strong></td>
+      <td style="text-align: left">漏检大多数趋同信号（因为非位点型趋同）</td>
+      <td style="text-align: left">明确研究问题：如果关注<strong>关键蛋白的关键残基</strong>，CSUBST很合适；如果关注<strong>复杂性状的整体遗传基础</strong>，必须结合RERconverge、PhyloAcc等工具。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>5. 独立起源数少</strong></td>
+      <td style="text-align: left">统计功效不足，难以得到显著结果</td>
+      <td style="text-align: left">接受其探索性，将结果视为「候选线索」而非结论，需后续验证。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="结论与最佳实践">结论与最佳实践</h2>
+
+<p>CSUBST是一个<strong>强大的「显微镜」</strong>，非常适合在<strong>蛋白质关键功能域</strong>中寻找由<strong>少数关键氨基酸残基</strong>改变驱动的、清晰的适应性趋同信号（例如视觉色素、毒素蛋白的进化）。</p>
+
+<p>然而，它<strong>不是一个「广角镜」</strong>，不能用来全面揭示复杂性状的趋同遗传基础。因此，在当代研究中，<strong>最佳实践是</strong>：</p>
+
+<ol>
+  <li><strong>明确问题</strong>：你的性状很可能由关键位点驱动吗？</li>
+  <li><strong>多方法交叉验证</strong>：将CSUBST的结果与 <strong>RERconverge（速率）</strong>、<strong>PhyloAcc（调控元件）</strong> 的结果进行比较。真正的强信号往往在多个维度上都有体现。</li>
+  <li><strong>警惕假设</strong>：永远记住其核心假设，并对输入数据（系统发育树、比对质量）保持最高要求。</li>
+  <li><strong>功能验证</strong>：计算发现的任何候选趋同位点，最终都需要<strong>实验生物学</strong>的验证才能确认为因果性信号。</li>
+</ol>
+
+<p>简而言之，<strong>了解其局限性，就是正确使用它的开始。</strong> 它是一把锋利的解剖刀，但你不能用它来砍树。</p>
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/CSUBST" rel="tag"># CSUBST</a>
+          
+            
+            <a href="/tag/#/%E8%B6%8B%E5%90%8C%E8%BF%9B%E5%8C%96" rel="tag"># 趋同进化</a>
+          
+            
+            <a href="/tag/#/%E6%96%B9%E6%B3%95%E5%AD%A6" rel="tag"># 方法学</a>
+          
+            
+            <a href="/tag/#/troubleshooting" rel="tag"># troubleshooting</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/wgs/2026/04/14/SV%E7%9A%84%E6%A3%80%E6%B5%8B%E5%8E%9F%E7%90%86%E5%92%8C%E6%B5%81%E7%A8%8B/" rel="next" title="SV的检测原理和流程">
+                <i class="fa fa-chevron-left"></i> SV的检测原理和流程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/%E6%96%87%E7%8C%AE%E7%A0%94%E8%AF%BB/2026/04/08/Vizueta-2025-Cell-%E7%A4%BE%E4%BC%9A%E6%80%A7%E9%A2%84%E9%80%82%E5%BA%94-%E5%9F%BA%E5%9B%A0%E5%AE%B6%E6%97%8F%E6%89%A9%E5%BC%A0-%E6%96%B9%E6%B3%95%E5%AD%A6%E7%A0%94%E8%AF%BB/" rel="prev" title="Vizueta et. al.（2025）Cell：Adaptive radiation and social evolution of the ants——整合性方法学与论证链条笔记">
+                Vizueta et. al.（2025）Cell：Adaptive radiation and social evolution of the ants——整合性方法学与论证链条笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#框架总览主要局限性适用范围及影响因素"> <span class="nav-number">1</span> <span class="nav-text">框架总览：主要局限性、适用范围及影响因素</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#核心模型假设的局限性"> <span class="nav-number">1.1</span> <span class="nav-text">核心模型假设的局限性</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#数据与输入依赖的局限性"> <span class="nav-number">1.2</span> <span class="nav-text">数据与输入依赖的局限性</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#生物学场景的适用范围限制"> <span class="nav-number">1.3</span> <span class="nav-text">生物学场景的适用范围限制</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#深入讨论同义突变作为标尺的例外"> <span class="nav-number">2</span> <span class="nav-text">深入讨论：同义突变作为「标尺」的例外</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#同义突变在编码区内真的不受选择吗"> <span class="nav-number">2.1</span> <span class="nav-text">同义突变在编码区内，真的不受选择吗？</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#如何应对同义标尺可能失效"> <span class="nav-number">2.2</span> <span class="nav-text">如何应对同义标尺可能失效</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#深入讨论何时应怀疑独立进化单一替代假设"> <span class="nav-number">3</span> <span class="nav-text">深入讨论：何时应怀疑「独立进化、单一替代」假设</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#需要警惕的五类迹象"> <span class="nav-number">3.1</span> <span class="nav-text">需要警惕的五类迹象</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#如何应对假设可能失效"> <span class="nav-number">3.2</span> <span class="nav-text">如何应对假设可能失效</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#影响因素速查表"> <span class="nav-number">4</span> <span class="nav-text">影响因素速查表</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#结论与最佳实践"> <span class="nav-number">5</span> <span class="nav-text">结论与最佳实践</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

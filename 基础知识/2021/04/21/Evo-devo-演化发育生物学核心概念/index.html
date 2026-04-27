@@ -1,0 +1,1659 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="传统进化论（新达尔文主义）告诉我们：基因突变 → 自然选择 → 适应性演化。但这个模型省略了一个关键环节——发育（Development）。">
+<meta name="keywords" content="Jia, Bioinformatics, Genomics, Evolution">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evo-devo核心概念梳理">
+<meta property="og:url" content="https://vooooooodga.github.io/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/2021/04/21/Evo-devo-%E6%BC%94%E5%8C%96%E5%8F%91%E8%82%B2%E7%94%9F%E7%89%A9%E5%AD%A6%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="传统进化论（新达尔文主义）告诉我们：基因突变 → 自然选择 → 适应性演化。但这个模型省略了一个关键环节——发育（Development）。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evo-devo核心概念梳理">
+<meta name="twitter:description" content="传统进化论（新达尔文主义）告诉我们：基因突变 → 自然选择 → 适应性演化。但这个模型省略了一个关键环节——发育（Development）。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>Evo-devo核心概念梳理 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/2021/04/21/Evo-devo-%E6%BC%94%E5%8C%96%E5%8F%91%E8%82%B2%E7%94%9F%E7%89%A9%E5%AD%A6%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            Evo-devo核心概念梳理
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-21T15:02:11+08:00">
+                2021-04-21
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-04-27T15:35:54+08:00">
+                  2026-04-27
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86" itemprop="url" rel="index">
+                    <span itemprop="name">基础知识</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <p>传统进化论（新达尔文主义）告诉我们：基因突变 → 自然选择 → 适应性演化。但这个模型省略了一个关键环节——<strong>发育（Development）</strong>。</p>
+
+<p><strong>Evo-devo（演化发育生物学, Evolutionary Developmental Biology）</strong> 正是填补这一空白的交叉学科。它研究的核心问题是：<strong>基因如何通过控制胚胎发育来决定物种形态？发育机制本身又是如何演化的？</strong></p>
+
+<p>基因型 → <strong>发育过程</strong> → 表型</p>
+
+<p>Evo-devo 关注的是中间的”发育过程”如何调控表型的产生。</p>
+
+<hr />
+
+<h2 id="一核心概念框架">一、核心概念框架</h2>
+
+<h3 id="1-高度保守的发育工具箱developmental-toolbox">1. 高度保守的发育工具箱（Developmental Toolbox）</h3>
+
+<p>科学家发现，极度不同的物种（如昆虫和脊椎动物）共享一套非常相似的控制发育的<strong>“工具箱基因”</strong>。</p>
+
+<p><strong>Hox基因</strong>：控制身体分节和器官定位的转录因子家族。果蝇和人类的Hox基因具有惊人的序列相似性，调控逻辑也高度保守。</p>
+
+<p><strong>意义</strong>：演化并非从零创造新结构，而是对既有发育程序的”改装”和”重组”。</p>
+
+<hr />
+
+<h3 id="2-发育约束developmental-constraints">2. 发育约束（Developmental Constraints）</h3>
+
+<p>发育约束是指由于发育机制的结构、化学或生理限制，导致某些表型变异无法产生或被限制的现象。它就像是一条”禁止通行”的红线。</p>
+
+<h4 id="约束类型">约束类型</h4>
+
+<p><strong>物理/机械约束</strong>：受物理定律限制，某些形态无法实现。</p>
+
+<ul>
+  <li><em>例子</em>：昆虫通过气管呼吸，这种方式依赖气体扩散，因此限制了昆虫的体型上限（你不可能看到5英尺高的巨型蚊子）。</li>
+</ul>
+
+<p><strong>多效性约束（Pleiotropy）</strong>：一个基因往往控制多个发育过程。</p>
+
+<ul>
+  <li><em>例子</em>：为什么几乎所有哺乳动物（甚至长颈鹿）都只有7节颈椎？因为改变颈椎数量的突变通常会导致严重的胸廓发育异常或更高的癌症风险。</li>
+</ul>
+
+<p><strong>系统发育约束</strong>：生物过去的演化历史留下的”发育模版”限制了未来的可能性。</p>
+
+<ul>
+  <li><em>例子</em>：马虽然只有单蹄，但其胚胎早期仍会出现五个手指的芽状结构。它不能”直接”长出蹄子，必须经过这个祖先留下的发育阶段。</li>
+</ul>
+
+<hr />
+
+<h3 id="3-发育偏见developmental-bias">3. 发育偏见（Developmental Bias）</h3>
+
+<p>发育偏见强调发育系统让某些方向的变异”更容易发生”。这就像是在进化的道路上铺设了”轨道”，让生物倾向于沿着特定的路径演化。</p>
+
+<p><strong>变异的非各向同性</strong>：变异并不是在所有方向上随机发生的。发育系统对基因突变的响应是有倾向性的。</p>
+
+<ul>
+  <li><em>例子</em>：某些蝴蝶品种的翅膀斑点。通过实验发现，增加斑点的大小比改变斑点的位置要容易得多，因为其发育通路中控制”大小”的信号反馈更敏感。</li>
+</ul>
+
+<p><strong>促进演化（Evolvability）</strong>：发育偏见有时会帮助生物快速适应。</p>
+
+<ul>
+  <li><em>例子</em>：脊椎动物的左右肢共享一套发育机制。如果环境需要更长的腿，一个突变就能让左右腿同时变长，而不需要两套独立的突变。</li>
+</ul>
+
+<hr />
+
+<h3 id="4-渠化canalization瓦丁顿的运河">4. 渠化（Canalization）——瓦丁顿的”运河”</h3>
+
+<p>由英国生物学家康拉德·瓦丁顿（C. H. Waddington）提出。它指的是：<strong>无论基因发生微小突变，还是环境发生波动，生物的发育过程都能排除干扰，产生出稳定、正常的表型。</strong></p>
+
+<h4 id="表观遗传景观图epigenetic-landscape">表观遗传景观图（Epigenetic Landscape）</h4>
+
+<p>想象发育过程是一个起伏的山坡：</p>
+
+<ul>
+  <li><strong>小球</strong>：代表一个未分化的细胞（如受精卵）。</li>
+  <li><strong>向下滚动</strong>：代表发育的过程。</li>
+  <li><strong>山谷（沟壑）</strong>：这就是Canalization。沟壑的深度代表发育的稳定性。</li>
+</ul>
+
+<p>一旦球进入了这条沟，即便外界有风吹（环境压力）或球本身有点不圆（基因突变），它也会被紧紧束缚在谷底，最终滚向预定的终点。</p>
+
+<h4 id="关键机制">关键机制</h4>
+
+<p><strong>分子伴侣（如Hsp90）</strong>：帮助突变蛋白正确折叠。只要Hsp90够多，突变就不会表现出性状（这就是Canalization）。当环境剧变，Hsp90去处理压力损伤时，突变蛋白就会折叠错误，性状瞬间爆发。</p>
+
+<p><strong>基因冗余（Redundancy）</strong>：功能重复的基因（旁系同源基因）作为”备份系统”。</p>
+
+<p><strong>负反馈调节（Negative Feedback Loops）</strong>：维持分子浓度的恒定，确保发育不跑偏。</p>
+
+<hr />
+
+<h2 id="二演化动力从可塑性到固化">二、演化动力：从可塑性到固化</h2>
+
+<h3 id="5-隐性遗传变异cryptic-genetic-variation">5. 隐性遗传变异（Cryptic Genetic Variation）</h3>
+
+<p>由于发育系统非常稳健（Canalization），它可以”容忍”很多细小的基因突变而不表现出异常。这些突变会在群体中默默积累，被称为<strong>隐性遗传变异</strong>。</p>
+
+<p><strong>蓄水池效应</strong>：当环境发生剧烈变化（超越了堤坝的承受极限）时，这种稳健性会崩溃，原本隐藏的大量变异会瞬间爆发出来。这被认为是生物实现快速演化或产生新物种的一种潜在机制。</p>
+
+<hr />
+
+<h3 id="6-遗传同化genetic-assimilation">6. 遗传同化（Genetic Assimilation）</h3>
+
+<p><strong>定义</strong>：一个原本由环境诱导产生的表型（性状），经过多代自然选择后，变成了由基因决定、不再依赖环境刺激就能稳定产生的性状。</p>
+
+<h4 id="经典案例蝌蚪的肉食性转变">经典案例：蝌蚪的肉食性转变</h4>
+
+<p><strong>第一阶段</strong>：环境诱导（表型可塑性）</p>
+<ul>
+  <li>原本吃水藻的蝌蚪因为吃了虾肉或同类，发育系统感应到了外界压力。</li>
+  <li>小球被推出了原来的山谷，滚入了一条临时的、因环境诱导而产生的新路径，长成了肉食型（大嘴、强咬合力）。</li>
+</ul>
+
+<p><strong>第二阶段</strong>：隐藏变异的释放</p>
+<ul>
+  <li>当环境压力极大，原有的发育路径”崩了”，能让嘴巴变大的基因变异突然有了表现的机会。</li>
+</ul>
+
+<p><strong>第三阶段</strong>：固化（遗传同化）</p>
+<ul>
+  <li>那些在没有环境刺激下也能发育出”肉食表型”的个体拥有更高的生存率。</li>
+  <li>经过多代选择，原本需要”吃肉”才能诱导出来的特征，现在变成了只要出生就自带的特征。</li>
+</ul>
+
+<p><strong>本质</strong>：为新的性状建立了一套新的Canalization。发育系统在新的位置”挖”出了一道深沟，使得”肉食表型”从一种临时的应激状态，变成了一种稳健的、被铁轨固定下来的发育程序。</p>
+
+<hr />
+
+<h3 id="7-鲍德温效应baldwin-effect">7. 鲍德温效应（Baldwin Effect）</h3>
+
+<p>早于瓦丁顿提出的概念。<strong>如果一个个体拥有学习能力或表型可塑性，能让它在环境中活下来，那么它就为后续的基因突变争取了时间。最终，基因突变替代了学习/可塑性，直接产生了这种优势性状。</strong></p>
+
+<p><strong>与遗传同化的区别</strong>：鲍德温效应最初更强调”学习和行为”的作用，而遗传同化更强调”发育系统”的分子机制。</p>
+
+<hr />
+
+<h3 id="8-遗传适应genetic-accommodation">8. 遗传适应（Genetic Accommodation）</h3>
+
+<p>由Mary Jane West-Eberhard普及的广义术语。它包含所有由于环境诱导引发的基因频率改变。</p>
+
+<ul>
+  <li>不仅包括性状固化（遗传同化）</li>
+  <li>也包括让可塑性变得更强或调节得更精准</li>
+</ul>
+
+<hr />
+
+<h3 id="9-表型先导假说phenotype-first-hypothesis">9. 表型先导假说（Phenotype-first Hypothesis）</h3>
+
+<p>Evo-devo里的一个重要假说，认为<strong>演化往往是表型走在基因前面</strong>。</p>
+
+<p><strong>逻辑链条</strong>：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>环境改变 
+    ↓
+产生新的表型（可塑性）
+    ↓
+产生选择压力
+    ↓
+基因层面进行"遗传同化"固化性状
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>这颠覆了”先有基因突变，再有表型改变”的传统看法。</p>
+
+<hr />
+
+<h2 id="三分子层面的机制">三、分子层面的机制</h2>
+
+<h3 id="10-基因调控网络gene-regulatory-networks-grn">10. 基因调控网络（Gene Regulatory Networks, GRN）</h3>
+
+<p>在分子水平上，发育约束和Canalization表现为具体的蛋白质相互作用、基因调控网络和分子伴侣。</p>
+
+<p><strong>Canalization的分子基础</strong>：</p>
+<ul>
+  <li>分子伴侣（如Hsp90）作为”电容”</li>
+  <li>基因冗余作为”备份系统”</li>
+  <li>负反馈调节维持分子浓度恒定</li>
+</ul>
+
+<p><strong>发育约束的分子基础</strong>：</p>
+<ul>
+  <li><strong>顺式调控元件（Cis-regulatory elements）的布线限制</strong>：如果某个复杂的性状需要5个开关同时开启，而基因组的结构使得这5个开关物理上无法相互靠近，那么这个性状就永远不会演化出来。</li>
+  <li><strong>蛋白质的多效性（Pleiotropy）</strong>：同一个信号蛋白（如BMP或Wnt）在胚胎发育中往往身兼数职。改变一个功能可能会影响其他功能。</li>
+  <li><strong>化学扩散规律（Turing Patterns）</strong>：斑马的条纹、动物的五指，是由分子在胚胎组织中的扩散形成的，受物理化学定律控制。</li>
+</ul>
+
+<hr />
+
+<h2 id="四概念关系图谱">四、概念关系图谱</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21</pre></td><td class="code"><pre class="highlight"><code>                    Evo-devo 演化发育生物学
+                           │
+        ┌──────────────────┼──────────────────┐
+        │                  │                  │
+   发育约束          发育偏见           Canalization
+ (结构性限制)        (倾向性引导)         (稳健性维持)
+        │                  │                  │
+        └──────────────────┼──────────────────┘
+                           │
+                    隐性遗传变异
+                    (积累与释放)
+                           │
+        ┌──────────────────┼──────────────────┐
+        │                  │                  │
+  遗传同化          鲍德温效应          遗传适应
+ (性状固化)        (行为到基因)         (广义调节)
+        │                  │                  │
+        └──────────────────┼──────────────────┘
+                           │
+                   表型先导假说
+                   (表型走在基因前)
+</code></pre></td></tr></tbody></table></div></div>
+
+<hr />
+
+<h2 id="五形态创新的分子起源用旧砖块盖新房子">五、形态创新的分子起源：用旧砖块盖新房子</h2>
+
+<p>在Evo-devo的视角下，形态创新（Morphological Innovation）的起源被认为不是由于产生了全新的基因，而是由于旧基因调控网络（GRN）的”重新布线”。这被称为”用旧砖块盖新房子”。</p>
+
+<h3 id="1-异时发育heterochrony改变发育的时间">1. 异时发育（Heterochrony）：改变发育的时间</h3>
+
+<p>这是最简单的创新方式：不改变基因本身，只改变某个器官发育的开始时间、结束时间或发育速率。</p>
+
+<p><strong>例子</strong>：脊椎动物的脖子长短。长颈鹿和人类一样只有7节颈椎，但长颈鹿的颈椎发育开关开启时间极长，导致单块骨头长得巨大。</p>
+
+<p><strong>幼态持续（Paedomorphosis）</strong>：成体保留了祖先幼体的特征（如墨西哥蝾螈终生保留外鳃），这往往能开辟全新的生存生态位。</p>
+
+<h3 id="2-异位表达heterotopy改变发育的空间">2. 异位表达（Heterotopy）：改变发育的空间</h3>
+
+<p>某个基因在胚胎的新位置被激活，从而长出原本不属于这里的结构。</p>
+
+<p><strong>例子</strong>：昆虫的翅膀。一种假说认为翅膀起源于水生昆虫祖先用于呼吸的鳃。通过调控基因的异位表达，原本长在侧面的鳃状结构在背部发育，最终演化成滑翔和飞行器官。</p>
+
+<p><strong>例子</strong>：仙人掌的刺。刺实际上是异位发育的”叶子”，其发育程序从制造光合组织转向了制造木质化保护结构。</p>
+
+<h3 id="3-顺式调控元件的演化cis-regulatory-evolution">3. 顺式调控元件的演化（Cis-regulatory Evolution）</h3>
+
+<p>这是形态创新最核心的机制。大多数发育基因（如Hox基因）是”多面手”，如果在蛋白质水平上变异，往往是致命的（发育约束）。</p>
+
+<p><strong>创新方式</strong>：基因蛋白本身不变，但其上游的开关（增强子）发生变异。</p>
+
+<p><strong>效果</strong>：这允许生物在不改变身体其他部位的情况下，只在某个特定部位”开启”或”关闭”某个功能。</p>
+
+<p><strong>例子</strong>：蝙蝠的手指变长成翅膀。这并非因为蝙蝠有了新基因，而是控制手指生长信号的增强子活性增强，延长了生长期。</p>
+
+<h3 id="4-基因复制与功能分化gene-duplication--divergence">4. 基因复制与功能分化（Gene Duplication &amp; Divergence）</h3>
+
+<p>当一个关键的发育调控基因发生复制（变成两个），约束就解除了。</p>
+
+<p><strong>逻辑</strong>：其中一个拷贝可以继续维持原有的生存必须功能（满足约束），而另一个拷贝则可以自由地发生突变，探索新的形态可能性。</p>
+
+<p><strong>例子</strong>：Hox基因群的倍增。脊椎动物比无脊椎动物拥有更多组Hox基因，这直接支撑了脊椎动物更复杂的身体构型（如精细的脊柱分化和四肢）。</p>
+
+<h3 id="5-共同选择co-option旧工具的新用途">5. 共同选择（Co-option）：旧工具的新用途</h3>
+
+<p>进化非常”懒惰”，它倾向于直接搬用已经成熟的分子模块来完成新任务。</p>
+
+<p><strong>例子</strong>：蝴蝶翅膀上的眼斑。研究发现，形成眼斑的基因网络，其实就是原本用于发育足部或触角的同一套调控模块。进化只是把这套”绘图程序”复制粘贴到了翅膀表面。</p>
+
+<h3 id="形态创新的演化路径">形态创新的演化路径</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>打破原有的Canalization（通过突变或环境压力）
+           ↓
+利用表型可塑性探索新形态
+           ↓
+通过调控网络的重组（异时、异位、共选）将新形态固化
+</code></pre></td></tr></tbody></table></div></div>
+
+<p><strong>总结</strong>：形态创新的起源通常不是”发明”，而是”拼贴”和”调频”。</p>
+
+<hr />
+
+<h2 id="六性状丢失与趋同演化弄坏比发明容易">六、性状丢失与趋同演化：弄坏比发明容易</h2>
+
+<p>性状的丢失（Character Loss）是Evo-devo研究趋同演化最理想的模型。在Evo-devo看来，”弄坏一个东西”远比”发明一个东西”要容易得多，而且这种”弄坏”的方式在分子水平上往往表现出惊人的趋同性。</p>
+
+<h3 id="1-顺式调控元件cre的模块化丢失">1. 顺式调控元件（CRE）的”模块化丢失”</h3>
+
+<p>这是Evo-devo解释性状丢失的核心逻辑。如果一个基因蛋白本身非常重要（多效性约束），演化就不能直接删掉这个基因，而是通过关闭特定部位的开关（增强子）来实现局部丢失。</p>
+
+<h4 id="案例鲸类后肢的消失">案例：鲸类后肢的消失</h4>
+
+<p><strong>现象</strong>：鲸鱼和海豚的祖先是有四肢的陆生哺乳动物，但在入水过程中后肢完全退化。</p>
+
+<p><strong>Evo-devo解释</strong>：研究发现，这主要是因为控制后肢发育的关键信号基因（如Sonic Hedgehog, Shh）在后肢芽位置的增强子失效了。</p>
+
+<p><strong>趋同性</strong>：海牛（近缘关系很远）也发生了类似的后肢丢失，研究发现其分子机制高度相似。这种”局部关闭开关”的策略避免了影响Shh基因在神经系统和前肢发育中的其他重要功能。</p>
+
+<h3 id="2-演化阻力最小路径least-resistance">2. 演化阻力最小路径（Least Resistance）</h3>
+
+<p>当环境不再需要某个性状时（比如进入黑暗洞穴），发育系统会倾向于通过最简单、最不破坏系统稳定性的方式将其丢弃。</p>
+
+<h4 id="案例洞穴鱼墨西哥盲鱼的眼睛退化">案例：洞穴鱼（墨西哥盲鱼）的眼睛退化</h4>
+
+<p><strong>现象</strong>：在多个独立的洞穴水系中，鱼类都趋同演化出了眼睛退化。</p>
+
+<p><strong>Evo-devo解释</strong>：这不仅仅是随机突变。发育研究显示，为了加强触觉和味觉（在黑暗中更有用），胚胎中线的正中信号（如Hedgehog信号）会增强。</p>
+
+<p><strong>联系</strong>：这种增强会拮抗眼睛的发育路径。也就是说，为了增强A功能，发育系统会自动”牺牲”B功能。这种基于发育逻辑的平衡，导致不同地点的洞穴鱼都”默契”地丢掉了眼睛。</p>
+
+<h3 id="3-性状丢失的不可逆性与残留残遗器官">3. 性状丢失的”不可逆性”与残留（残遗器官）</h3>
+
+<p>Evo-devo解释了为什么性状丢失了，但胚胎里往往还会”闪现”一下。</p>
+
+<h4 id="案例鸟类的牙齿">案例：鸟类的牙齿</h4>
+
+<p><strong>现象</strong>：现代鸟类都没有牙齿，但其祖先恐龙有。</p>
+
+<p><strong>Evo-devo解释</strong>：科学家发现，鸟类其实依然保留着生成牙齿的基础基因工具箱，只是由于关键调控基因（如Dspp）发生了失活突变。</p>
+
+<p><strong>有趣的研究</strong>：在实验室里通过改变BMP信号通路，科学家可以诱导鸡的胚胎长出类似鳄鱼的牙齿结构。这证明了发育程序并没有完全消失，只是被”运河化”的稳健机制给屏蔽了。</p>
+
+<h3 id="4-总结丢失的规律性">4. 总结：丢失的规律性</h3>
+
+<p>从Evo-devo角度看，性状的趋同丢失通常遵循以下规律：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>原则</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>多效性最小化</strong></td>
+      <td>优先破坏只负责该性状的调控开关，不破坏基因本身</td>
+    </tr>
+    <tr>
+      <td><strong>能量分配偏见</strong></td>
+      <td>如果丢掉A能让发育资源流向B，那么这种丢失在演化中会反复出现</td>
+    </tr>
+    <tr>
+      <td><strong>程序重用</strong></td>
+      <td>退化往往是发育程序的”早剥”或”异时发育”（提前停止）</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="七结语扩展演化综合">七、结语：扩展演化综合</h2>
+
+<p>Evo-devo填补了宏观演化（物种间的巨大差异）与微观演化（基因频率的微小变化）之间的鸿沟，被认为是现代生物学中<strong>“扩展演化综合”（Extended Evolutionary Synthesis）</strong>运动的重要组成部分。</p>
+
+<p>进化不再仅仅是环境（自然选择）在”捏泥巴”，<strong>生物自身的发育系统就是这块”泥巴”的质地</strong>。有的泥巴容易拉长，有的容易拍扁。发育约束与偏见共同决定了生命演化的”可能性空间”。</p>
+
+<hr />
+
+<h2 id="参考文献与扩展阅读">参考文献与扩展阅读</h2>
+
+<ol>
+  <li>Waddington, C. H. (1942). Canalization of development and the inheritance of acquired characters.</li>
+  <li>West-Eberhard, M. J. (2003). Developmental Plasticity and Evolution.</li>
+  <li>Carroll, S. B. (2005). Endless Forms Most Beautiful: The New Science of Evo Devo.</li>
+  <li>Wagner, G. P. (2014). Homology, Genes, and Evolutionary Innovation.</li>
+</ol>
+
+<p><strong>关键词</strong>：Evo-devo, Developmental Constraint, Canalization, Genetic Assimilation, Baldwin Effect, Phenotype-first, Cryptic Genetic Variation</p>
+
+<hr />
+
+<p><em>本文整理自网络资料与学术文献，仅供科普学习使用。</em></p>
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/%E6%B5%8B%E5%BA%8F%E5%8E%9F%E7%90%86/2026/03/05/%E6%B5%8B%E5%BA%8F%E6%A0%B7%E5%93%81%E5%BB%BA%E5%BA%93/" rel="next" title="测序样品建库">
+                <i class="fa fa-chevron-left"></i> 测序样品建库
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/2021/04/21/%E7%BE%A4%E4%BD%93%E7%BB%93%E6%9E%84/" rel="prev" title="群体结构">
+                群体结构 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#一核心概念框架"> <span class="nav-number">1</span> <span class="nav-text">一、核心概念框架</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#1-高度保守的发育工具箱developmental-toolbox"> <span class="nav-number">1.1</span> <span class="nav-text">1. 高度保守的发育工具箱（Developmental Toolbox）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#2-发育约束developmental-constraints"> <span class="nav-number">1.2</span> <span class="nav-text">2. 发育约束（Developmental Constraints）</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#约束类型"> <span class="nav-number">1.2.1</span> <span class="nav-text">约束类型</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#3-发育偏见developmental-bias"> <span class="nav-number">1.3</span> <span class="nav-text">3. 发育偏见（Developmental Bias）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#4-渠化canalization瓦丁顿的运河"> <span class="nav-number">1.4</span> <span class="nav-text">4. 渠化（Canalization）——瓦丁顿的”运河”</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#表观遗传景观图epigenetic-landscape"> <span class="nav-number">1.4.1</span> <span class="nav-text">表观遗传景观图（Epigenetic Landscape）</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#关键机制"> <span class="nav-number">1.4.2</span> <span class="nav-text">关键机制</span> </a> </li> </ol> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#二演化动力从可塑性到固化"> <span class="nav-number">2</span> <span class="nav-text">二、演化动力：从可塑性到固化</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#5-隐性遗传变异cryptic-genetic-variation"> <span class="nav-number">2.1</span> <span class="nav-text">5. 隐性遗传变异（Cryptic Genetic Variation）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#6-遗传同化genetic-assimilation"> <span class="nav-number">2.2</span> <span class="nav-text">6. 遗传同化（Genetic Assimilation）</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#经典案例蝌蚪的肉食性转变"> <span class="nav-number">2.2.1</span> <span class="nav-text">经典案例：蝌蚪的肉食性转变</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#7-鲍德温效应baldwin-effect"> <span class="nav-number">2.3</span> <span class="nav-text">7. 鲍德温效应（Baldwin Effect）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#8-遗传适应genetic-accommodation"> <span class="nav-number">2.4</span> <span class="nav-text">8. 遗传适应（Genetic Accommodation）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#9-表型先导假说phenotype-first-hypothesis"> <span class="nav-number">2.5</span> <span class="nav-text">9. 表型先导假说（Phenotype-first Hypothesis）</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#三分子层面的机制"> <span class="nav-number">3</span> <span class="nav-text">三、分子层面的机制</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#10-基因调控网络gene-regulatory-networks-grn"> <span class="nav-number">3.1</span> <span class="nav-text">10. 基因调控网络（Gene Regulatory Networks, GRN）</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#四概念关系图谱"> <span class="nav-number">4</span> <span class="nav-text">四、概念关系图谱</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#五形态创新的分子起源用旧砖块盖新房子"> <span class="nav-number">5</span> <span class="nav-text">五、形态创新的分子起源：用旧砖块盖新房子</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#1-异时发育heterochrony改变发育的时间"> <span class="nav-number">5.1</span> <span class="nav-text">1. 异时发育（Heterochrony）：改变发育的时间</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#2-异位表达heterotopy改变发育的空间"> <span class="nav-number">5.2</span> <span class="nav-text">2. 异位表达（Heterotopy）：改变发育的空间</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#3-顺式调控元件的演化cis-regulatory-evolution"> <span class="nav-number">5.3</span> <span class="nav-text">3. 顺式调控元件的演化（Cis-regulatory Evolution）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#4-基因复制与功能分化gene-duplication--divergence"> <span class="nav-number">5.4</span> <span class="nav-text">4. 基因复制与功能分化（Gene Duplication &amp; Divergence）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#5-共同选择co-option旧工具的新用途"> <span class="nav-number">5.5</span> <span class="nav-text">5. 共同选择（Co-option）：旧工具的新用途</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#形态创新的演化路径"> <span class="nav-number">5.6</span> <span class="nav-text">形态创新的演化路径</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#六性状丢失与趋同演化弄坏比发明容易"> <span class="nav-number">6</span> <span class="nav-text">六、性状丢失与趋同演化：弄坏比发明容易</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#1-顺式调控元件cre的模块化丢失"> <span class="nav-number">6.1</span> <span class="nav-text">1. 顺式调控元件（CRE）的”模块化丢失”</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#案例鲸类后肢的消失"> <span class="nav-number">6.1.1</span> <span class="nav-text">案例：鲸类后肢的消失</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#2-演化阻力最小路径least-resistance"> <span class="nav-number">6.2</span> <span class="nav-text">2. 演化阻力最小路径（Least Resistance）</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#案例洞穴鱼墨西哥盲鱼的眼睛退化"> <span class="nav-number">6.2.1</span> <span class="nav-text">案例：洞穴鱼（墨西哥盲鱼）的眼睛退化</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#3-性状丢失的不可逆性与残留残遗器官"> <span class="nav-number">6.3</span> <span class="nav-text">3. 性状丢失的”不可逆性”与残留（残遗器官）</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#案例鸟类的牙齿"> <span class="nav-number">6.3.1</span> <span class="nav-text">案例：鸟类的牙齿</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#4-总结丢失的规律性"> <span class="nav-number">6.4</span> <span class="nav-text">4. 总结：丢失的规律性</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#七结语扩展演化综合"> <span class="nav-number">7</span> <span class="nav-text">七、结语：扩展演化综合</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#参考文献与扩展阅读"> <span class="nav-number">8</span> <span class="nav-text">参考文献与扩展阅读</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

@@ -1,0 +1,1447 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RERconverge,比较基因组学,方法学,趋同进化," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="算法的基本思想是：如果一个基因（或保守非编码元件）与某个表型（如水生适应、地下生活）的功能相关，那么在该表型独立演化的多个谱系（称为“前景支”）上，该基因所承受的选择压力会发生趋同性的改变。这种改变会体现在其进化速率上——约束放松或正选择可能导致速率加快，而约束加强可能导致速率减慢。算法通过量化并检测这种速率变化的趋同性，来推断基因-表型关联。">
+<meta name="keywords" content="RERconverge, 比较基因组学, 方法学, 趋同进化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RERconverge的几种用法">
+<meta property="og:url" content="https://vooooooodga.github.io/comparative%20genomics/2026/04/07/RERconverge%E7%9A%84%E5%87%A0%E7%A7%8D%E7%94%A8%E6%B3%95/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="算法的基本思想是：如果一个基因（或保守非编码元件）与某个表型（如水生适应、地下生活）的功能相关，那么在该表型独立演化的多个谱系（称为“前景支”）上，该基因所承受的选择压力会发生趋同性的改变。这种改变会体现在其进化速率上——约束放松或正选择可能导致速率加快，而约束加强可能导致速率减慢。算法通过量化并检测这种速率变化的趋同性，来推断基因-表型关联。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RERconverge的几种用法">
+<meta name="twitter:description" content="算法的基本思想是：如果一个基因（或保守非编码元件）与某个表型（如水生适应、地下生活）的功能相关，那么在该表型独立演化的多个谱系（称为“前景支”）上，该基因所承受的选择压力会发生趋同性的改变。这种改变会体现在其进化速率上——约束放松或正选择可能导致速率加快，而约束加强可能导致速率减慢。算法通过量化并检测这种速率变化的趋同性，来推断基因-表型关联。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>RERconverge的几种用法 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/comparative%20genomics/2026/04/07/RERconverge%E7%9A%84%E5%87%A0%E7%A7%8D%E7%94%A8%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            RERconverge的几种用法
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-04-07T22:36:48+08:00">
+                2026-04-07
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-04-17T13:37:30+08:00">
+                  2026-04-17
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Comparative%20genomics" itemprop="url" rel="index">
+                    <span itemprop="name">Comparative genomics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <div id="protect-comparative-20genomics-2026-04-07-rerconverge-e7-9a-84-e5-87-a0-e7-a7-8d-e7-94-a8-e6-b3-95-form" class="post-protect-form">
+      <p>本页面已设置访问密码，请输入密码查看全文：</p>
+      <input type="password" id="protect-comparative-20genomics-2026-04-07-rerconverge-e7-9a-84-e5-87-a0-e7-a7-8d-e7-94-a8-e6-b3-95-input" />
+      <button type="button" onclick="window.checkPassword_protect_comparative_20genomics_2026_04_07_rerconverge_e7_9a_84_e5_87_a0_e7_a7_8d_e7_94_a8_e6_b3_95 && window.checkPassword_protect_comparative_20genomics_2026_04_07_rerconverge_e7_9a_84_e5_87_a0_e7_a7_8d_e7_94_a8_e6_b3_95()">确认</button>
+      <p id="protect-comparative-20genomics-2026-04-07-rerconverge-e7-9a-84-e5-87-a0-e7-a7-8d-e7-94-a8-e6-b3-95-message" style="color:red;"></p>
+    </div>
+    <div id="protect-comparative-20genomics-2026-04-07-rerconverge-e7-9a-84-e5-87-a0-e7-a7-8d-e7-94-a8-e6-b3-95-content" style="display:none;">
+      <blockquote>
+  <p>算法的基本思想是：如果一个基因（或保守非编码元件）与某个表型（如水生适应、地下生活）的功能相关，那么在该表型独立演化的多个谱系（称为“前景支”）上，该基因所承受的选择压力会发生趋同性的改变。这种改变会体现在其进化速率上——约束放松或正选择可能导致速率加快，而约束加强可能导致速率减慢。算法通过量化并检测这种速率变化的趋同性，来推断基因-表型关联。</p>
+</blockquote>
+
+<p>结合 Kowalczyk 等（2019）的软件发布与 Partha 等（2019）的稳健性改进，RERconverge 的核心目标可以概括为：在系统发育框架下，检测<strong>与趋同表型相关的谱系</strong>是否在某些基因（或保守非编码元件）上呈现<strong>趋同的进化速率变化</strong>。直观地说，如果某个遗传元件与表型适应有关，那么当该表型在多个谱系中独立出现时，这些谱系上该元件的选择约束可能会以相似方向改变，从而导致分支长度（替换率）相对背景出现一致的“加速”或“减速”信号。</p>
+
+<p>下面按算法流程把其逻辑拆成四步（输入 → 速率校正 → 关联检验 → 解释与下游分析）。</p>
+
+<h3 id="算法逻辑总览"><strong>算法逻辑总览</strong></h3>
+
+<ul>
+  <li><strong>基本假设</strong>：各基因树共享相同的物种拓扑（至少在分析时被映射到同一物种树的对应分支上），分支长度可视为该遗传元件在该谱系上的进化速率指标（如每个位点替换数）。</li>
+  <li><strong>核心思想</strong>：先将每个基因的分支长度“扣除”物种层面的背景速率，得到可跨基因比较的<strong>相对进化速率（RER）</strong>；再检验 RER 在“前景支”（表现出目标表型的分支）是否系统性偏高/偏低，从而推断基因-表型关联。</li>
+</ul>
+
+<hr />
+
+<h3 id="第一步输入与数据准备"><strong>第一步：输入与数据准备</strong></h3>
+
+<p>RERconverge 需要两类输入：</p>
+
+<ol>
+  <li><strong>系统发育信息（按基因/元件）</strong>
+    <ul>
+      <li>每个基因（或保守非编码元件）对应一棵带分支长度的树；分支长度代表该元件在该谱系上的演化量（速率 × 时间的综合表现）。</li>
+    </ul>
+  </li>
+  <li><strong>性状信息（按分支或谱系）</strong>
+    <ul>
+      <li><strong>二元性状</strong>：例如“水生/非水生”“地下/地上”等，通常用来定义哪些分支属于“前景支”。</li>
+      <li><strong>连续性状</strong>：例如体重、代谢率等，以连续值形式映射到谱系/分支上。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>实践中，关键是把“基因树的分支”与“物种树的分支/性状编码”对齐：只有对齐后，才能比较同一分支在不同基因上的相对速率变化。</p>
+
+<hr />
+
+<h3 id="第二步计算相对进化速率rers核心计算与-partha-等2019的关键改进"><strong>第二步：计算相对进化速率（RERs）——核心计算与 Partha 等（2019）的关键改进</strong></h3>
+
+<p>这一步的目的，是把“物种层面共同的背景因素”（如分化时间差异、基因组总体突变率差异）从每个基因的分支长度中剥离出来，得到<strong>基因特异、可比尺度</strong>的速率指标。</p>
+
+<ul>
+  <li><strong>基本做法（概念层面）</strong>：<br />
+对于每个基因，将其在各分支上的长度与“背景期望长度”进行比较。背景通常由全基因组层面的平均趋势来代表；将基因分支长度对背景分支长度做回归后，<strong>回归残差</strong>即可解释为该基因在该分支上相对于背景的“偏快/偏慢”（即 RER）：
+    <ul>
+      <li>残差 &gt;0：相对加速</li>
+      <li>残差 &lt;0：相对减速</li>
+    </ul>
+  </li>
+  <li><strong>为什么要改进（异方差问题）</strong>：<br />
+原始残差在统计上常出现<strong>异方差性</strong>：背景分支越长（通常意味着更深分化或更高演化量），对应残差的波动也越大。这会让长分支对回归与后续检验产生不成比例的影响，进而降低稳健性并可能引入假阳性/假阴性。</li>
+  <li><strong>改进后的逻辑（Partha 等，2019）</strong>：<br />
+为了让不同长度分支上的 RER 具有更一致的方差结构，改进版引入了“变换 + 加权”的稳健估计流程：
+    <ol>
+      <li><strong>平方根变换</strong>：先对分支长度做平方根变换以稳定方差。</li>
+      <li><strong>权重估计与加权回归</strong>：初步回归后，用平滑方法（如 LOWESS）拟合“残差方差—背景分支长度”的关系，为每条分支分配权重（长分支权重更低，短分支权重更高），再做加权最小二乘回归。</li>
+      <li><strong>标准化</strong>：将加权回归得到的残差进一步标准化，使其在跨基因比较时处于统一尺度。</li>
+    </ol>
+  </li>
+</ul>
+
+<p><strong>这一步的本质收益</strong>：让最终 RER 更接近同方差假设下的“可比较残差”，从而提升下游关联检验的可靠性，尤其是在树上同时包含很短与很长分支的情况下。</p>
+
+<hr />
+
+<h3 id="第三步基因-性状关联分析convergence-test"><strong>第三步：基因-性状关联分析（convergence test）</strong></h3>
+
+<p>得到每个基因在各分支上的 RER 后，需要检验这些相对速率是否与目标性状一致变化。</p>
+
+<ul>
+  <li><strong>二元性状</strong>：<br />
+将分支划分为“前景支/背景支”，检验前景支上的 RER 是否整体偏高或偏低。常见做法是使用<strong>曼-惠特尼 U 检验</strong>比较两组 RER 分布差异，并输出关联强度（例如基于 P 值的分数）。</li>
+  <li><strong>连续性状</strong>：<br />
+将性状值映射到分支/谱系上，计算每个基因的 RER 与性状之间的相关性（如皮尔逊相关或其他相关度量），以评估速率变化是否随性状连续变化而一致改变。</li>
+</ul>
+
+<p>这一阶段的输出是：<strong>每个基因/元件一个统计量</strong>，表示其“速率变化与性状的匹配程度”。</p>
+
+<hr />
+
+<h3 id="第四步结果解释与下游分析"><strong>第四步：结果解释与下游分析</strong></h3>
+
+<ul>
+  <li><strong>候选列表与排序</strong>：按显著性或分数对基因排序，得到最可能与趋同表型相关的候选集合。</li>
+  <li><strong>功能层面解释</strong>：对候选基因做通路/GO 富集等分析，观察哪些生物学过程被系统性重塑（例如地下生活相关谱系中视觉相关通路的普遍退化）。</li>
+</ul>
+
+<hr />
+
+<h3 id="小结rerconverge-的方法学贡献"><strong>小结：RERconverge 的方法学贡献</strong></h3>
+
+<p>综合上述两篇关键文献，RERconverge 的优势可以概括为：</p>
+
+<ul>
+  <li><strong>概念直观</strong>：用“相对速率”直接连接分子进化信号与趋同表型。</li>
+  <li><strong>流程完整</strong>：从树与性状输入，到稳健的 RER 估计，再到统计检验与功能解释，形成端到端分析框架。</li>
+  <li><strong>统计更稳健</strong>：Partha 等（2019）针对异方差问题的“变换 + 加权”显著提升了在复杂分支长度分布下的推断可靠性与检出力。</li>
+  <li><strong>适用面广</strong>：既可用于蛋白编码基因，也可扩展到保守非编码元件，并支持二元与连续性状。</li>
+</ul>
+
+
+    </div>
+    <script>
+      (function() {
+        var CORRECT = "temp";
+        var formId = "protect-comparative-20genomics-2026-04-07-rerconverge-e7-9a-84-e5-87-a0-e7-a7-8d-e7-94-a8-e6-b3-95-form";
+        var contentId = "protect-comparative-20genomics-2026-04-07-rerconverge-e7-9a-84-e5-87-a0-e7-a7-8d-e7-94-a8-e6-b3-95-content";
+        var inputId = "protect-comparative-20genomics-2026-04-07-rerconverge-e7-9a-84-e5-87-a0-e7-a7-8d-e7-94-a8-e6-b3-95-input";
+        var msgId = "protect-comparative-20genomics-2026-04-07-rerconverge-e7-9a-84-e5-87-a0-e7-a7-8d-e7-94-a8-e6-b3-95-message";
+
+        function check() {
+          var input = document.getElementById(inputId);
+          var msg = document.getElementById(msgId);
+          if (!input) return;
+          if (input.value === CORRECT) {
+            var form = document.getElementById(formId);
+            var content = document.getElementById(contentId);
+            if (form) form.style.display = "none";
+            if (content) content.style.display = "block";
+          } else {
+            if (msg) msg.textContent = "密码错误，请重试。";
+          }
+        }
+
+        window.checkPassword_protect_comparative_20genomics_2026_04_07_rerconverge_e7_9a_84_e5_87_a0_e7_a7_8d_e7_94_a8_e6_b3_95 = check;
+      })();
+    </script>
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/RERconverge" rel="tag"># RERconverge</a>
+          
+            
+            <a href="/tag/#/%E6%AF%94%E8%BE%83%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6" rel="tag"># 比较基因组学</a>
+          
+            
+            <a href="/tag/#/%E6%96%B9%E6%B3%95%E5%AD%A6" rel="tag"># 方法学</a>
+          
+            
+            <a href="/tag/#/%E8%B6%8B%E5%90%8C%E8%BF%9B%E5%8C%96" rel="tag"># 趋同进化</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/comparative%20genomics/2026/04/07/PHAST/" rel="next" title="PHAST">
+                <i class="fa fa-chevron-left"></i> PHAST
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/%E7%A7%91%E6%99%AE/2026/04/07/How-optical-genome-mapping-works/" rel="prev" title="How optical genome mapping works">
+                How optical genome mapping works <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-3"> <a class="nav-link" href="#算法逻辑总览"> <span class="nav-number">1</span> <span class="nav-text">算法逻辑总览</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#第一步输入与数据准备"> <span class="nav-number">2</span> <span class="nav-text">第一步：输入与数据准备</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#第二步计算相对进化速率rers核心计算与-partha-等2019的关键改进"> <span class="nav-number">3</span> <span class="nav-text">第二步：计算相对进化速率（RERs）——核心计算与 Partha 等（2019）的关键改进</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#第三步基因-性状关联分析convergence-test"> <span class="nav-number">4</span> <span class="nav-text">第三步：基因-性状关联分析（convergence test）</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#第四步结果解释与下游分析"> <span class="nav-number">5</span> <span class="nav-text">第四步：结果解释与下游分析</strong</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#小结rerconverge-的方法学贡献"> <span class="nav-number">6</span> <span class="nav-text">小结：RERconverge 的方法学贡献</strong</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+

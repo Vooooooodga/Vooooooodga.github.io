@@ -1,0 +1,1562 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jia | Research & Insights" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="统计上看到多条分支“同时加速”，并不等于它们因为同一个表型发生了因果趋同。">
+<meta name="keywords" content="Jia, Bioinformatics, Genomics, Evolution">
+<meta property="og:type" content="article">
+<meta property="og:title" content="比较基因组学的统计第一类错误">
+<meta property="og:url" content="https://vooooooodga.github.io/comparative%20genomics/2026/04/14/%E6%AF%94%E8%BE%83%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6%E7%9A%84%E7%BB%9F%E8%AE%A1%E7%AC%AC%E4%B8%80%E7%B1%BB%E9%94%99%E8%AF%AF/">
+<meta property="og:site_name" content="Jia | Research &amp; Insights">
+<meta property="og:description" content="统计上看到多条分支“同时加速”，并不等于它们因为同一个表型发生了因果趋同。">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="比较基因组学的统计第一类错误">
+<meta name="twitter:description" content="统计上看到多条分支“同时加速”，并不等于它们因为同一个表型发生了因果趋同。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://vooooooodga.github.io/"/>
+
+
+
+
+
+  <title>比较基因组学的统计第一类错误 | Jia | Research & Insights</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jia | Research & Insights</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Literature, Technology, and Thoughts</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://vooooooodga.github.io/comparative%20genomics/2026/04/14/%E6%AF%94%E8%BE%83%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%AD%A6%E7%9A%84%E7%BB%9F%E8%AE%A1%E7%AC%AC%E4%B8%80%E7%B1%BB%E9%94%99%E8%AF%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jia | Research & Insights">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            比较基因组学的统计第一类错误
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-04-14T17:30:14+08:00">
+                2026-04-14
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Post modified</span>
+                
+                <time title="Post modified" itemprop="dateModified" datetime="2026-04-17T13:37:30+08:00">
+                  2026-04-17
+                </time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Comparative%20genomics" itemprop="url" rel="index">
+                    <span itemprop="name">Comparative genomics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <blockquote>
+  <p>统计上看到多条分支“同时加速”，并不等于它们因为同一个表型发生了因果趋同。</p>
+</blockquote>
+
+<p>我梳理了两件事：第一，像 <code class="language-plaintext highlighter-rouge">RERconverge</code> 这种把“基因速率信号”直接和离散表型做关联的框架，为什么在真实数据里很容易被树上的过程变异误导；第二，以隐藏状态/贝叶斯层级模型为思路的方法，如何把分支背景变异（例如 $\beta_l^2$）放进模型里，从而把这类误导压下去。</p>
+
+<p>看这么一个例子。假设我们想检验“水生生活是否会出现分子层面的趋同”，于是在树上给物种打标签：鲸豚是水生，海豹和海牛也水生，其他哺乳动物多数陆生。跑完 <code class="language-plaintext highlighter-rouge">RERconverge</code>，很容易看到一个看起来很顺的结果：鲸豚这一大支系的 OR9Q2 都很“快”，和“水生 = 1”的标签对得很整齐，似乎有相关性，是这样吗？</p>
+
+<p>但这个显著性也许不是“水生”的整体效应，而是鲸豚祖先分支上发生过一次背景变化，后代整支系继承了它。我们看到的是“继承 + 很多后代点”，软件读到的却是“很多次独立重复”。</p>
+
+<p>如果用 <code class="language-plaintext highlighter-rouge">RERconverge</code> 这类“速率—性状直接关联”的框架去问：</p>
+
+<blockquote>
+  <p><strong>离散表型（如水生/陆生）是否会在整体上改变某个基因的演化速率？</strong></p>
+</blockquote>
+
+<p>最容易踩到的坑是 <strong>系统发育伪重复（phylogenetic pseudoreplication）</strong>：祖先分支上只发生过<strong>一次</strong>的过程变异，被后代整支系继承；到了相关性检验里，却被当成<strong>很多次独立证据</strong>，再和表型标签对齐，于是 P 值看起来漂亮得不真实。</p>
+
+<p><code class="language-plaintext highlighter-rouge">MuSSCRat</code>（May &amp; Moore 2020）走的是另一条路：把“沿树传递的背景差异”显式写成（祖先或分支上的）$\beta_l^2$（分支背景速率），再和状态效应 $\zeta^2$（离散状态对应的相对速率）一起做后验推断。这样一来：</p>
+
+<ul>
+  <li>单系群里“继承下来的一次加速”，更倾向被解释为<strong>祖先分支的 $\beta^2$</strong>，而不是被写成“表型导致的整体效应（$\zeta^2$）”</li>
+  <li>$\zeta^2$ 不再被“同一事件在很多后代里的拷贝”虚假抬高</li>
+</ul>
+
+<p>我们能看到，在这里不同的方法其实考虑到的“先验概率”是不同的。换句话说，前者有考虑的不全面的地方。但实际情况里，当我们试图建立一个模型，可能还是会有没考虑到的因素。这类因素又被叫做“过程变异”。</p>
+
+<hr />
+
+<h2 id="什么是过程变异">什么是过程变异</h2>
+<p>根据文献Tribble et. al. 2026：
+过程变异是指影响目标性状进化过程的、未被明确纳入统计模型的变异来源。</p>
+
+<p>在系统发育比较方法中：</p>
+
+<ul>
+  <li><strong>过程（Process）</strong>：指生成数据的演化机制及其数学参数（如基因的核苷酸替代率、插入/缺失率）。</li>
+  <li><strong>变异（Variation）</strong>：指这些参数在系统发育树不同分支上存在的异质性或非恒定性。</li>
+</ul>
+
+<p>“过程变异”的严格定义是：模型中未被显式包含的变量所引起的演化速率或模式的改变。</p>
+
+<p>为了理清过程变异的来源，我们可以首先将其分为两种常见的情况：</p>
+
+<ol>
+  <li><strong>Focal Dependency</strong>：这是研究直接关注的因素。例如，在研究染色体数目变化如何影响物种形成速率时，染色体数目与物种形成的关系就是焦点依赖。</li>
+  <li><strong>Nuisance Dependency</strong>：这是影响目标变量但本身并非研究核心的因素。例如，在上述例子中，多倍体亚基因组的归属可能就是一个干扰依赖——研究者不一定对亚基因组本身感兴趣，但忽略它会影响拓扑结构的推断。</li>
+</ol>
+
+<p>过程变异普遍存在且来源复杂。在实际的比较基因组学与演化分析中，常见的过程变异具体情况包括：</p>
+
+<ol>
+  <li><strong>多重未建模因素的影响</strong>：一个性状（如体型、分子演化速率）的进化可能同时依赖于地理分布、环境、有效种群大小波动、与其他性状的遗传或功能连锁等诸多未包含在模型中的因素。</li>
+  <li><strong>系统发育相关模型中的“非重复事件”问题（伪重复）</strong>：当性状进化在系统发育树上只发生了一次（即“非重复事件”），传统的相关性状进化检验（如 Pagel 的离散性状相关模型）极易产生虚假的关联信号。这是因为缺乏统计重复，任何未被建模的背景过程变异都可能导致误判。</li>
+  <li><strong>性状与多样化过程的相互影响</strong>：如果一个性状影响了物种形成或灭绝速率（即存在状态依赖的多样化），那么在推断该性状的进化历史（如祖先状态重建）时，就必须联合推断多样化过程，否则结果将不准确。这是 Maddison (2006) 提出的核心观点。</li>
+  <li><strong>分子与基因组层面的中性偏置</strong>：如局部重组率的改变、GC 偏向性基因转换（gBGC）的增强，或者 DNA 修复机制效率的波动。它们能在纯中性或接近中性的条件下制造出强烈的“速率加速”信号。</li>
+  <li><strong>网状演化与拓扑冲突</strong>：如不完全谱系分流（ILS）或历史上的基因渗入（Introgression）。当模型强制用固定的物种树去拟合具有冲突历史的序列时，拓扑错配的部分会被算法用“异常的分支长度（速率）”来强行补偿。</li>
+</ol>
+
+<p>当分析框架（如 <code class="language-plaintext highlighter-rouge">RERconverge</code>）默认背景演化过程恒定，而没有提供参数去吸收这些客观存在的过程变异时，算法就无处安放由“未知变量”带来的异质性方差。最终，这些波动会被强制归因在模型里唯一标记出来的变量（即观测表型），从而制造出极具欺骗性的假阳性。</p>
+
+<p>既然忽略过程变异会导致如此严重的统计偏差，我们就需要在模型构建中正视并处理它。为了避免上述的强制归因问题，研究者们在系统发育比较方法中开发了多种策略，试图吸收或隔离这些未知的背景异质性。</p>
+
+<hr />
+
+<h2 id="考虑过程变异的几种方法">考虑过程变异的几种方法</h2>
+
+<p>这些方案主要通过引入隐藏状态或修正方差结构来实现。</p>
+
+<h3 id="隐藏状态模型-hidden-state-models">隐藏状态模型 (Hidden-State Models)</h3>
+
+<p>这是目前处理离散性状最主流的方法。该方法起源于分子演化中的共变模型（covarion model），随后被引入表型演化与物种分化模型中（如 HiSSE 等）。</p>
+
+<ul>
+  <li><strong>机制</strong>：模型在标准的马尔可夫（Mk）模型状态空间之上，人工引入一个或多个未观测到的离散变量（隐藏状态）。焦点特征的转移速率被设定为条件依赖于这些隐藏状态。</li>
+  <li><strong>作用</strong>：在似然函数的计算中，任何无法被焦点特征解释的系统发育异质性，都可以被数学分配给这些隐藏状态的转移概率。</li>
+  <li><strong>局限性</strong>：设定单一的隐藏特征或隐藏状态通常是出于计算效率的妥协，缺乏真实的生物学先验支撑。此外，对于系统发育树上仅发生过一次的“未重复事件（unreplicated events）”，标准的隐藏状态模型难以进行准确估计。</li>
+</ul>
+
+<h3 id="连续速率异质性与端点迷雾-tip-fog">连续速率异质性与“端点迷雾” (Tip Fog)</h3>
+
+<p>针对连续性状，研究者无法直接使用分类变量扩展状态空间，因此提出了针对方差-协方差结构的修正方案。</p>
+
+<ul>
+  <li><strong>端点迷雾 (Tip Fog)</strong>：Beaulieu 和 O’Meara 提出在布朗运动 (BM) 模型的方差-协方差矩阵中引入一个独立参数 $\zeta$。该参数专门用于吸收模型主体演化过程未能涵盖的残余方差或观测端点的数据误差。</li>
+  <li><strong>宽松分子钟模拟 (Relaxed Clock Models)</strong>：在如 MuSSCRat 这样的模型中，研究者利用宽松分子钟的架构来处理连续性状的隐藏速率异质性。模型允许连续性状的演化速率在不同的分支上发生服从特定概率分布的偏离。</li>
+</ul>
+
+<h3 id="贝叶斯混合模型-bayesian-mixture-modeling">贝叶斯混合模型 (Bayesian Mixture Modeling)</h3>
+
+<p>为了处理上述方法难以应对的未重复事件（例如全树上仅在某一个单系群发生的演化模式剧变），部分研究者提出了混合模型的思路。</p>
+
+<ul>
+  <li><strong>机制</strong>：Uyeda 等人建议使用贝叶斯混合模型，允许系统发育树的不同部分服从完全不同的演化过程或参数空间。</li>
+  <li><strong>作用</strong>：通过在不同的树结构区间分配不同的子模型，该方法可以隔离局部特异性的过程变异，防止单一分支的特异性事件干扰对全局统计相关性的评估。</li>
+</ul>
+
+<p>在上述各种旨在解决过程变异的尝试中，<code class="language-plaintext highlighter-rouge">MuSSCRat</code> 模型提供了一个非常具体且极具启发性的思路。它巧妙地结合了贝叶斯推断与分支特异性速率的架构，向我们展示了如何在系统发育分析中同步估计背景速率变异并检验目标性状的效应。</p>
+
+<hr />
+
+<h2 id="musscrat检验离散性状对连续性状进化速率的影响">MuSSCRat：检验离散性状对连续性状进化速率的影响</h2>
+<p>MuSSCRat被设计解决一个经典的宏观进化问题：评估一个离散性状（例如，栖息地类型）是否影响了一个或多个连续性状（例如，形态测量值）的进化速率。</p>
+
+<p>文献指出，传统检验此问题的方法是比较两个竞争模型的拟合优度：</p>
+
+<p>零模型：假设连续性状在所有谱系中以单一、恒定的速率（布朗运动） 进化，与离散性状的状态无关。</p>
+
+<p>备择模型：假设连续性状的进化速率依赖于离散性状的状态（即速率可变）。</p>
+
+<p>May和Moore（2020）发现，这种传统方法的零模型（M0）是一个不切实际的“假人”。它假设不存在任何其他原因导致的速率变异。然而在现实中，由于未建模的生态、遗传或历史因素（即 “过程变异”），进化速率在谱系间存在广泛的背景速率变异。当存在未被建模的背景速率变异时，使用过于简单的M0作为基准，会系统性夸大对备择模型（M1，状态依赖模型）的支持，导致假阳性推断。文献将此称为推断中的一种偏差。</p>
+
+<p>MuSSCRat 的突破在于，在推断离散性状（如栖息地）对速率的影响时，明确地允许并估计谱系间存在的、与离散性状无关的背景速率变异。</p>
+
+<p>该方法采用了一种贝叶斯数据增强框架。它为系统发育树上的每个分支都赋予一个潜在（隐藏）的速率乘数。这个乘数捕获了由未知因素导致的背景速率变异。</p>
+
+<p>模型同时估计 1) 背景速率变异（通过分支特异性乘数），和 2) 离散性状状态对速率的额外效应。这样，对状态依赖效应的估计是在控制背景变异的前提下进行的。</p>
+
+<p>在 <code class="language-plaintext highlighter-rouge">MuSSCRat</code> 里，面对“鲸豚类整支系一致加速、但海豹/海牛并不如此”的数据，<strong>“鲸豚类后代普遍高”不必被解释成“水生整体更快”</strong>。模型允许我们说：高方差来自<strong>鲸豚类祖先分支</strong>的一次局部背景跃升，并沿树向下游传递。</p>
+
+<p>其解决背景变异的具体机制可以拆解为以下三个步骤：</p>
+
+<h3 id="1-参数显式分离explicit-parameter-separation">1. 参数显式分离（Explicit Parameter Separation）</h3>
+
+<p>文献指出，传统模型在评估此类问题时，默认背景演化速率是绝对恒定的。这是一个不切实际的“假人”设定。这种极端的零模型（M0）会导致数据中存在的任何由于过程变异引起的异质性方差，最终都被算法强制归因于模型中唯一被允许变动的参数——即观测到的离散状态，导致假阳性推断。</p>
+
+<p>MuSSCRat 的突破在于，在推断离散性状对速率的影响时，明确地允许并估计谱系间存在的、与离散性状无关的背景速率变异。它在连续性状的布朗运动协方差矩阵中引入了两组相互独立的速率乘数：</p>
+
+<ul>
+  <li><strong>状态特异性乘数 ($\zeta_i^2$)</strong>：全局参数，用于捕获连续性状在处于离散状态 $i$ 时演化速率的相对变化。</li>
+  <li><strong>分支特异性乘数 ($\beta_l^2$)</strong>：局部参数，为系统发育树上的每一条分支 $l$ 赋予一个潜在（隐藏）的、独立的基础演化速率乘数。这个乘数正是用来吸收由未知过程变异导致的背景速率波动。</li>
+</ul>
+
+<p>对于系统发育树上的任意分支 $l$，总方差矩阵 $\Sigma_l$ 被严格定义为：</p>
+
+\[\Sigma_l = \beta_l^2 \left[ \tau(\kappa_l,0)\zeta_0^2 + \tau(\kappa_l,1)\zeta_1^2 \right] \Sigma\]
+
+<p>其中，$\tau(\kappa_l,i)$ 代表分支 $l$ 处于离散状态 $i$ 的时间比例。此方程在数学上确立了模型同时估计：1) 背景速率变异（通过分支特异性乘数 $\beta$），和 2) 离散性状状态对速率的额外效应（全局状态依赖效应 $\zeta$）。这样，对状态依赖效应的估计是在控制背景变异的前提下进行的。</p>
+
+<h3 id="2-贝叶斯先验约束bayesian-prior-constraints">2. 贝叶斯先验约束（Bayesian Prior Constraints）</h3>
+
+<p>当同时估计全局状态效应 $\zeta^2$ 和每个分支的潜在背景速率乘数 $\beta_l^2$ 时，模型在数学上会面临严重的不可识别性（Nonidentifiability）：即无穷多种参数组合都可以产生完全相同的似然值。这使得传统的极大似然法失效。</p>
+
+<p>为了解决这一问题，MuSSCRat 采用了一种贝叶斯数据增强框架，通过引入先验分布提供诊断性约束。模型假设所有分支的背景速率乘数 $\beta_l^2$ 均服从一个不相关的对数正态分布（Uncorrelated Lognormal, UCLN）。该分布由一个标准差参数 $\nu$ 控制。</p>
+
+<ul>
+  <li>当真实数据不存在背景速率变异时，后验推断会将 $\nu$ 压缩至趋近于 0，此时模型自动“缩减”为传统的恒定背景速率模型；</li>
+  <li>当数据中存在导致演化速率波动的未建模过程变异时，$\nu$ 增大，允许不同分支的 $\beta_l^2$ 自行吸收这些变异。</li>
+</ul>
+
+<h3 id="3-后验竞争posterior-competition">3. 后验竞争（Posterior Competition）</h3>
+
+<p>在马尔可夫链蒙特卡洛（MCMC）的采样迭代中，模型同时对离散性状的演化历史与连续性状的速率进行联合评估。</p>
+
+<p>在后验拟合里，当模型发现鲸豚类内部许多叶节点的演化速率信号都偏高时，推断算法面临两条竞争性路径：</p>
+
+<ul>
+  <li><strong>路线 A（状态依赖）</strong>：提高全局的 $\zeta_1^2$（解释成“水生整体更快”）。这要求<strong>所有</strong>处于该离散状态（水生）的谱系都必须表现出更快的速率。因此，像海豹、海牛这些同为水生但速率不高的分支，会在似然函数上引发严重的错配惩罚。</li>
+  <li><strong>路线 B（背景变异）</strong>：仅提高鲸豚类共同祖先分支的潜在乘数 $\beta_l^2$。联合拟合会拒绝路线 A 的错配，转而走路线 B：<strong>只调整一个祖先分支的 $\beta^2$</strong>，就能完美吸收残差方差，解释整条鲸豚类支系的高信号。</li>
+</ul>
+
+<p>最终，后验分布往往更倾向路线 B：<strong>把局部的“单系群继承”客观地归因到祖先分支的背景乘数 $\beta^2$ 上</strong>，让全局的 $\zeta^2$ 不至于被伪重复堆高。通过这种贝叶斯竞争机制，模型成功避免了全局状态效应参数被伪重复信号虚假抬高，从而客观地排除了假阳性推断。</p>
+
+<p>回顾从 <code class="language-plaintext highlighter-rouge">RERconverge</code> 的相关性检验到 <code class="language-plaintext highlighter-rouge">MuSSCRat</code> 的处理过程，我们会发现，这不仅是模型里多了几个背景参数，更是底层统计思维的转变。传统框架往往依赖单一的 P 值来下结论，而 <code class="language-plaintext highlighter-rouge">MuSSCRat</code> 则利用后验概率的竞争来分配信号。这就促使我们重新思考一个根本问题：我们在处理这些系统发育数据时，到底想从统计检验里得到什么？这正好也是频率学派与贝叶斯学派分歧的核心。</p>
+
+<hr />
+
+<h2 id="频率-vs-贝叶斯">频率 vs 贝叶斯</h2>
+
+<p>这两种方法在根本上回答不同的问题：</p>
+
+<ol>
+  <li><strong>频率学派</strong>：$P(\text{Data}\mid H_0)$ —— 解释的是：如果零假设为真，看到当前数据（或更极端）的概率多大。</li>
+  <li><strong>贝叶斯</strong>：$P(H\mid \text{Data})$ —— 解释的是：看到当前数据后，我们的假设为真的概率分布是什么。</li>
+</ol>
+
+<p>问题通常不在工具，而在误用。我们在做“离散表型 vs 连续速率”的比较分析时，如果观察到以下情况，就要警惕显著性可能是由伪重复撑起来的：</p>
+
+<ul>
+  <li><strong>显著性由某个单系群内部“整齐一致”的信号驱动</strong>（多个物种同高/同低，像同一祖先事件的后遗症），而不是多个彼此独立的水生类群各自独立复现同一模式。</li>
+  <li><strong>把离散状态当作独立重复</strong>：表型标签相同，但速率信号在系统发育上高度相关（伪重复），检验却把它们当作独立的数据点。</li>
+</ul>
+
+<p>这往往说明我们面对的是 <strong>过程变异 + 树上的非独立性</strong>，更合适的处理方式是把它显式写进模型（例如用 $\beta_l^2$ 吸收单系群背景），而不是采用“标准化并忽略拓扑”的方式去强行解释。</p>
+
+<hr />
+
+<h2 id="另一类看似假阳性的强信号统计学并发加速--生物学因果趋同">另一类“看似假阳性”的强信号：统计学并发加速 ≠ 生物学因果趋同</h2>
+
+<p>Tribble et al. 2026 提到“缺少联合建模会放大过程变异”的时候，我还想到另一种更常见的错位：贝叶斯竞争模型（例如 <code class="language-plaintext highlighter-rouge">PhyloAcc</code> 这类把前景分支组合当成候选并比较 $H_0/H_1/H_2$ 的框架）在某些数据格局下会给出很强的统计支持，但统计支持不等于因果解释成立。</p>
+
+<h3 id="阳性信号可能来自哪些层面">阳性信号可能来自哪些层面</h3>
+
+<p>像“鲸豚 + 海牛”这种互不相近、但都属于水生谱系的前景组合，如果在某个基因上被模型判为并发加速，首先要分清：模型给出的结论，回答的是“这些分支是否都变快了”，不是“它们为什么一起变快”。把统计学上的并发直接翻译成“水生带来的趋同适应”，很容易把因果说错；问题通常出在解释，而不在模型。</p>
+
+<p>另外，分支背景项（例如 $\beta_l^2$）能把“单条分支异常快”的信号吸收到背景里，避免它污染成表型效应；但如果确实有多条分支同时加速，模型不会、也没法替我们判断它们背后是不是同一个动因。</p>
+
+<p>把“阳性信号从哪来”按层面拆开，通常可以按下面几类去排查。</p>
+
+<h4 id="数据层输入序列与同源关系">数据层：输入序列与同源关系</h4>
+
+<ul>
+  <li><strong>隐性旁系同源与比对错误（Hidden Paralogy and Misalignment）</strong>：速率模型默认输入序列是直系同源（ortholog）。如果组装/注释把海牛的序列误取成一个更古老的旁系同源拷贝（paralog），把它塞进物种树对应叶节点时，模型只能靠把海牛分支拉长来解释“多出来的差异”。再叠加鲸豚端的比对问题（例如低质量 reads 引入假突变），两条分支就会同时显得“特别快”。</li>
+</ul>
+
+<h4 id="系统发育层基因树与物种树不一致">系统发育层：基因树与物种树不一致</h4>
+
+<ul>
+  <li><strong>基因树不一致下的枝长扭曲（Branch Length Distortion due to Gene Tree Discordance）</strong>：ILS 或历史基因渗入（introgression）会让该基因的真实拓扑偏离物种树。像 <code class="language-plaintext highlighter-rouge">RERconverge</code> 这类流程通常固定拓扑为物种树；当真实历史被强行拟合进错误拓扑时，速率会被错误地分配到某些分支，用来“补偿”拓扑冲突，于是出现看似异常的加速。这也是 <code class="language-plaintext highlighter-rouge">PhyloAcc-GT</code> 试图用多物种合并模型（MSC）去缓解的问题。</li>
+</ul>
+
+<h4 id="序列统计层替代速率变快但不指向同一表型">序列统计层：替代速率变快，但不指向同一表型</h4>
+
+<ul>
+  <li><strong>净化选择放松与假基因化（parallel relaxation of purifying selection / pseudogenization）</strong>：功能变得可有可无时，净化选择减弱，突变更容易累积，看起来像速率上升。多个谱系都加速时，可能是并行退化，不必指向同一“适应性故事”。</li>
+  <li><strong>基因多效性下的不同选择压力</strong>：同一基因牵涉多条生理通路，不同谱系在不同结构域承受选择，但在“全长速率”统计量里都会被记成“加速”，把它直接归因到某个离散表型很危险。</li>
+  <li><strong>gBGC 等中性偏置</strong>：重组率高的区域，GC 偏向性基因转换会推动固定突变累积，使局部替代率看起来升高；信号可以很强，但和关注的表型无关。</li>
+</ul>
+
+<h4 id="生物学层信号真实但我们没标记出关键变量">生物学层：信号真实，但我们没标记出关键变量</h4>
+
+<ul>
+  <li><strong>未观测表型上的趋同（Convergence on Hidden Traits）</strong>：我们标记的是“水生/陆生”，但该基因真正对应的可能是更具体的生理维度，例如嗅觉依赖下降、特定代谢通路的重排，或某类组织表达的长期下调。鲸豚和海牛都在这些维度上发生了趋同，于是基因加速看起来像“水生效应”。这里缺的是我们给的标签，而不是速率信号。</li>
+  <li><strong>宿主—病原体共演化下的持续正向选择（Continuous Positive Selection driven by Co-evolution）</strong>：免疫相关基因常处在持续选择之下。病原体不同也能把同一类免疫/受体基因推向高替换率；趋同的是“演化模式”，不必指向同一个外部环境因子。</li>
+  <li><strong>上位效应与代偿性演化（Epistasis and Compensatory Evolution）</strong>：网络里存在上位性时，A 上的轻微有害突变会把压力转移到 B，促使 B 在不同谱系里都更快积累代偿突变；扫 B 的速率时，就会看到平行加速。</li>
+</ul>
+
+<h3 id="面对真实存在的随机并行加速应该怎么处理">面对真实存在的随机并行加速，应该怎么处理</h3>
+
+<p>检测到“强支持 $H_2$”之后，更稳妥的做法是把“统计学并发”和“生物学因果”拆开验证。</p>
+
+<p>1) <strong>经验零分布（permulations 思路）</strong>：如果某个前景组合（例如“鲸豚 + 海牛”）在 <code class="language-plaintext highlighter-rouge">PhyloAcc</code> 输出极高 BF，一个自然的问题是：这种程度的并发加速，是否显著超出“该基因在全树上随机出现并发加速”的本底概率？做法是：在物种树上随机生成大量与真实前景在拓扑性质上匹配的伪前景组合（例如保持前景数量与拓扑距离），对同一基因重复计算 BF，得到经验零分布。只有当真实前景的 BF 明显高于该零分布（例如超过 95% 分位数），才更有把握拒绝“随机并行加速”这一类零解释。</p>
+
+<p>2) <strong>拆解速率来源：正向选择 vs 功能丧失</strong>：仅知道“RER 升高/速率加快”并不足以支持适应性趋同。一个常用的后验鉴别是用密码子模型（例如 PAML 的分支-位点模型）去看加速来自哪里：$\omega$ 若趋近 1 并伴随提前终止密码子，更像平行假基因化（功能丧失）；$\omega&gt;1$ 才更像正向选择。即便 $\omega&gt;1$，也需要进一步看加速位点是否集中在相同功能结构域：如果不同前景的加速位点落在不同结构域，更像多效性下的独立事件，而不是同一离散表型驱动的同一因果路径。</p>
+
+<h2 id="附录术语与必要的数学思维卡壳时再读">附录：术语与必要的数学思维（卡壳时再读）</h2>
+
+<h3 id="1-ctmc不是生物学理论而是计算概率的引擎">1) CTMC：不是生物学理论，而是“计算概率的引擎”</h3>
+
+<p>文献里说一个模型在 <strong>CTMC（连续时间马尔可夫链）框架</strong>下，通常只意味着：</p>
+
+<blockquote>
+  <p>给定“状态”与“瞬时转移速率”，算法能在任意枝长 $t$ 上计算从起点状态到终点状态的概率。</p>
+</blockquote>
+
+<p>CTMC 需要三个前提：</p>
+<ol>
+  <li><strong>离散状态</strong>：对象是有限分类。</li>
+  <li><strong>连续时间</strong>：枝长是时间，状态改变可发生在任意瞬间。</li>
+  <li><strong>无后效性（马尔可夫性）</strong>：未来只依赖“当前状态 + 固定速率”。</li>
+</ol>
+
+<h3 id="2-边缘化marginalization把不可观测的维度加总消掉">2) 边缘化（Marginalization）：把不可观测的维度“加总消掉”</h3>
+
+<p>隐藏状态模型里只能观测到 $O$，但内部会引入不可直接观测的 $H$。想要观测层面的概率 $P(O)$，就把所有可能的 $H$ 加总：$P(O) = \sum_H P(O,H)$。直觉翻译：<strong>我不知道隐藏状态是哪一个，但我可以把“所有可能历史”的概率都算进去，再加起来。</strong></p>
+
+<h3 id="3-直接关联-vs-层级建模">3) 直接关联 vs 层级建模</h3>
+
+<p>差别不在“更复杂”，而在“背景异质性有没有显式进模型”。
+“直接做关联”先把树与信号处理成可用于检验的观测量，再做条件推断。层级/隐藏状态类模型则是在概率模型内部显式加入异质性维度（例如 $\beta_l^2$），在后验里让数据分配解释权：哪些归“状态效应”，哪些归“分支背景异质性”。</p>
+
+<h3 id="4-mcmc不是求一个最优解而是在后验里采样">4) MCMC：不是“求一个最优解”，而是“在后验里采样”</h3>
+
+<p>当参数很多时，MCMC 用随机游走的方式在后验分布里采样，得到一整个分布（这也是为什么 MuSSCRat 更自然地表达不确定性）。</p>
+
+<hr />
+
+  
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/comparative%20genomics/2026/04/16/%E4%BC%BC%E7%84%B6%E6%AF%94%E6%A3%80%E9%AA%8C%E7%9A%84%E5%B1%80%E9%99%90%E4%B8%8E%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%9B%A0%E5%AD%90/" rel="next" title="似然比检验的局限与贝叶斯因子">
+                <i class="fa fa-chevron-left"></i> 似然比检验的局限与贝叶斯因子
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/wgs/2026/04/14/SV%E7%9A%84%E6%A3%80%E6%B5%8B%E5%8E%9F%E7%90%86%E5%92%8C%E6%B5%81%E7%A8%8B/" rel="prev" title="SV的检测原理和流程">
+                SV的检测原理和流程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <script src="https://giscus.app/client.js"
+        data-repo="Vooooooodga/Vooooooodga.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkyMjE0MTg3NDI="
+        data-category="General"
+        data-category-id="DIC_kwDODTKU9s4C4Dwy"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Jia" />
+          <p class="site-author-name" itemprop="name">Jia</p>
+           
+              <p class="site-description motion-element" itemprop="description">Nothing in life is to be feared, it is only to be understood. — Marie Curie</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/Vooooooodga/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#什么是过程变异"> <span class="nav-number">1</span> <span class="nav-text">什么是过程变异</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#考虑过程变异的几种方法"> <span class="nav-number">2</span> <span class="nav-text">考虑过程变异的几种方法</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#隐藏状态模型-hidden-state-models"> <span class="nav-number">2.1</span> <span class="nav-text">隐藏状态模型 (Hidden-State Models)</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#连续速率异质性与端点迷雾-tip-fog"> <span class="nav-number">2.2</span> <span class="nav-text">连续速率异质性与“端点迷雾” (Tip Fog)</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#贝叶斯混合模型-bayesian-mixture-modeling"> <span class="nav-number">2.3</span> <span class="nav-text">贝叶斯混合模型 (Bayesian Mixture Modeling)</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#musscrat检验离散性状对连续性状进化速率的影响"> <span class="nav-number">3</span> <span class="nav-text">MuSSCRat：检验离散性状对连续性状进化速率的影响</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#1-参数显式分离explicit-parameter-separation"> <span class="nav-number">3.1</span> <span class="nav-text">1. 参数显式分离（Explicit Parameter Separation）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#2-贝叶斯先验约束bayesian-prior-constraints"> <span class="nav-number">3.2</span> <span class="nav-text">2. 贝叶斯先验约束（Bayesian Prior Constraints）</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#3-后验竞争posterior-competition"> <span class="nav-number">3.3</span> <span class="nav-text">3. 后验竞争（Posterior Competition）</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#频率-vs-贝叶斯"> <span class="nav-number">4</span> <span class="nav-text">频率 vs 贝叶斯</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#另一类看似假阳性的强信号统计学并发加速--生物学因果趋同"> <span class="nav-number">5</span> <span class="nav-text">另一类“看似假阳性”的强信号：统计学并发加速 ≠ 生物学因果趋同</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#阳性信号可能来自哪些层面"> <span class="nav-number">5.1</span> <span class="nav-text">阳性信号可能来自哪些层面</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#数据层输入序列与同源关系"> <span class="nav-number">5.1.1</span> <span class="nav-text">数据层：输入序列与同源关系</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#系统发育层基因树与物种树不一致"> <span class="nav-number">5.1.2</span> <span class="nav-text">系统发育层：基因树与物种树不一致</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#序列统计层替代速率变快但不指向同一表型"> <span class="nav-number">5.1.3</span> <span class="nav-text">序列统计层：替代速率变快，但不指向同一表型</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#生物学层信号真实但我们没标记出关键变量"> <span class="nav-number">5.1.4</span> <span class="nav-text">生物学层：信号真实，但我们没标记出关键变量</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#面对真实存在的随机并行加速应该怎么处理"> <span class="nav-number">5.2</span> <span class="nav-text">面对真实存在的随机并行加速，应该怎么处理</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#附录术语与必要的数学思维卡壳时再读"> <span class="nav-number">6</span> <span class="nav-text">附录：术语与必要的数学思维（卡壳时再读）</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#1-ctmc不是生物学理论而是计算概率的引擎"> <span class="nav-number">6.1</span> <span class="nav-text">1) CTMC：不是生物学理论，而是“计算概率的引擎”</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#2-边缘化marginalization把不可观测的维度加总消掉"> <span class="nav-number">6.2</span> <span class="nav-text">2) 边缘化（Marginalization）：把不可观测的维度“加总消掉”</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#3-直接关联-vs-层级建模"> <span class="nav-number">6.3</span> <span class="nav-text">3) 直接关联 vs 层级建模</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#4-mcmc不是求一个最优解而是在后验里采样"> <span class="nav-number">6.4</span> <span class="nav-text">4) MCMC：不是“求一个最优解”，而是“在后验里采样”</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jia</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://jekyllrb.com">Jekyll</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/three.min.js"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/assets/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.4"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
+
